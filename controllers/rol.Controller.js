@@ -1,7 +1,7 @@
 const {response} = require('express')
-const Usuario = require('../models/user.Model')
+const Rol = require('../models/role.Model')
 
-const UsuariosGet = (req,res = response)=>{
+const RolGet = (req,res = response)=>{
 
     const query = req.query
 
@@ -11,22 +11,22 @@ const UsuariosGet = (req,res = response)=>{
         query
     })
 }
-const UsuariosPost = async(req,res = response)=>{
+const RolPost = async(req,res = response)=>{
     
     const body = req.body
-    const usuario = new Usuario(body)
+    const rol = new Rol(body)
 
-    await usuario.save()
+    await rol.save()
     
     res.json({
         msg: 'QRUD API POST controller',
         body,
-        usuario
+        rol
     })
 }
 
 
-const UsuariosPut = (req,res = response)=>{
+const RolPut = (req,res = response)=>{
     
     const id = req.params.id    
     res.json({
@@ -38,7 +38,7 @@ const UsuariosPut = (req,res = response)=>{
 
 
 module.exports = {
-    UsuariosGet,
-    UsuariosPost,
-    UsuariosPut
+    RolGet,
+    RolPost,
+    RolPut
 };
