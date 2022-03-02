@@ -13,14 +13,13 @@ const UsuariosGet = (req,res = response)=>{
 }
 const UsuariosPost = async(req,res = response)=>{
     
-    const body = req.body
-    const usuario = new Usuario(body)
+    const {nombre, rfc,direccion,telefono,email} = req.body
+    const usuario = new Usuario({nombre,rfc,direccion,telefono,email})
 
     await usuario.save()
     
     res.json({
-        msg: 'QRUD API POST controller',
-        body,
+        msg: 'QRUD API User POST controller',
         usuario
     })
 }
