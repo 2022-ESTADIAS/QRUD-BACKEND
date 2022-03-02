@@ -1,11 +1,11 @@
 const { Router } = require('express')
 const { check } = require('express-validator')
-const { PersonalGet, PersonalPost, PersonalPut, PersonalDelete } = require('../controllers/personal.Controller')
+const { PersonalGet, PersonalPost, PersonalPut, PersonalDelete, PersonalGetAll } = require('../controllers/personal.Controller')
 const { validarCampos } = require('../middlewares/validarCampos')
 const router = Router()
 
-
-router.get('/',PersonalGet)
+router.get('/:id',PersonalGet)
+router.get('/',PersonalGetAll)
 router.post('/',[
     check('email', 'El correo no es válido').isEmail(),
     check('nombre', 'El Nombre es obligatorio').not().isEmpty(),
