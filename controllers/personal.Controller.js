@@ -3,21 +3,21 @@ const Personal = require('../models/personal.Model')
 const bcryptjs = require('bcryptjs')
 
 const PersonalGetAll = async (req = request, res = response) => {
-    const { limite = 5, desde = 0 } = req.query;
+    // const { limite = 5, desde = 0 } = req.query;
     //IMPLEMENTACION OPCIONAL PARA VERIFICAR NUMEROS
-    if (isNaN(limite) || isNaN(desde)) {
-      return res.status(400).json({msg : "peticion invalida"})
-    } else {
+    // if (isNaN(limite) || isNaN(desde)) {
+    //   return res.status(400).json({msg : "peticion invalida"})
+    // } else {
   
       const [total, personal] = await Promise.all([
         Personal.countDocuments({isActivo: true}),
         Personal.find({isActivo: true})
-        .skip(Number(desde))
-        .limit(Number(limite))
+        // .skip(Number(desde))
+        // .limit(Number(limite))
       ])
   
       res.json({ total,personal });
-    }
+    // }
   };
 //un solo personal
 const PersonalGet = async (req = request, res = response) => {
@@ -49,10 +49,9 @@ const PersonalPost = async(req,res = response)=>{
 
     await personal.save()
 
-    
+    //TODO: isActive = False para el Personal unicamente. Validación por correo isActive =true
     res.json({
-        msg: 'QRUD API Personal POST controller',
-        personal
+        msg: 'Personal creado exitosamente',
     })
 }
 
