@@ -42,7 +42,7 @@ const usuariosPost = async (req, res = response) => {
 
   //GUARDA DB
   await usuario.save();
-  res.json({ usuario });
+  res.json({ msg : "Usuario Creado Exitosamente" });
 };
 
 const usuariosPut = async (req, res = response) => {
