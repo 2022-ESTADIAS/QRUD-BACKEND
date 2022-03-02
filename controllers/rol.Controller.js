@@ -13,15 +13,14 @@ const RolGet = (req,res = response)=>{
 }
 const RolPost = async(req,res = response)=>{
     
-    const body = req.body
-    const rol = new Rol(body)
+    const {rol,description} = req.body
+    const role = new Rol( {rol,description} )
 
-    await rol.save()
+    await role.save()
     
     res.json({
-        msg: 'QRUD API POST controller',
-        body,
-        rol
+        msg: 'QRUD API Rol POST controller',
+        role
     })
 }
 
