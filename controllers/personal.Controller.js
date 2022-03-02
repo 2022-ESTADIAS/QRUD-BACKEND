@@ -2,7 +2,7 @@ const {response} = require('express')
 const Personal = require('../models/personal.Model')
 const bcryptjs = require('bcryptjs')
 
-const PersonalGet = async (req = request, res = response) => {
+const PersonalGetAll = async (req = request, res = response) => {
     const { limite = 5, desde = 0 } = req.query;
     //IMPLEMENTACION OPCIONAL PARA VERIFICAR NUMEROS
     if (isNaN(limite) || isNaN(desde)) {
@@ -19,6 +19,17 @@ const PersonalGet = async (req = request, res = response) => {
       res.json({ total,personal });
     }
   };
+//un solo personal
+const PersonalGet = async (req = request, res = response) => {
+  const {id} = req.params
+  const personal = await Personal.findById(id)
+
+    res.json({ personal });
+};
+
+
+
+
 const PersonalPost = async(req,res = response)=>{ 
     const {nombre,telefono,email,password,rol} = req.body
     const personal = new Personal({nombre,telefono,email,password,rol})
@@ -78,6 +89,7 @@ const PersonalDelete = async(req, res = response) => {
 
 
 module.exports = {
+    PersonalGetAll,
     PersonalGet,
     PersonalPost,
     PersonalPut,
