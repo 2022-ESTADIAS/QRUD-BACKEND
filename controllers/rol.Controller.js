@@ -1,16 +1,27 @@
 const {response} = require('express')
 const Rol = require('../models/role.Model')
 
-const RolGet = (req,res = response)=>{
+const RolGetAll = async (req = request, res = response) => {
 
-    const query = req.query
+  
+    const [total, personal] = await Promise.all([
+      Rol.countDocuments(),
+      Rol.find()
+    ])
 
-    res.json({
-        ok: true,
-        msg: 'QRUD API',
-        query
-    })
+    res.json({ total,personal });
+  // }
+};
+
+const RolGet = async(req, res = response) => {
+    const {id} = req.params
+    const role = await Rol.findById(id)
+  
+      res.json({ role });
 }
+
+
+
 const RolPost = async(req,res = response)=>{
     
     const {rol,description} = req.body
@@ -38,6 +49,7 @@ const RolPut = (req,res = response)=>{
 
 module.exports = {
     RolGet,
+    RolGetAll,
     RolPost,
     RolPut
 };
