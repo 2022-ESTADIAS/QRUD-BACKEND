@@ -3,15 +3,11 @@ const Usuario = require("../models/user.Model");
 // const bcryptjs = require("bcryptjs");
 
 const usuariosGetAll = async (req = request, res = response) => {
-//   const { limite = 5, desde = 0 } = req.query;
-//   //IMPLEMENTACION OPCIONAL PARA VERIFICAR NUMEROS
-//   if (isNaN(limite) || isNaN(desde)) {
-//     return res.status(400).json({msg : "peticion invalida"})
-//   } else {
+
 
     const [total, usuarios] = await Promise.all([
       Usuario.countDocuments({isActivo: true}),
-      Usuario.find({estado: true})
+      Usuario.find({isActivo: true})
     //   .skip(Number(desde))
     //   .limit(Number(limite))
     ])
@@ -32,14 +28,6 @@ const usuariosGet = async (req = request, res = response) => {
 const usuariosPost = async (req, res = response) => {
   const { nombre,rfc,direccion,telefono,email } = req.body;
   const usuario = new Usuario({ nombre,rfc,direccion,telefono,email });
-  //verificar correo existe
-  const existeEmail = await Usuario.findOne({email})
-  if(existeEmail){
-      return res.status(400).json({
-          msg: 'El correo ya existe'
-      })
-  }
-
   //GUARDA DB
   await usuario.save();
   res.json({ msg : "Usuario Creado Exitosamente" });
