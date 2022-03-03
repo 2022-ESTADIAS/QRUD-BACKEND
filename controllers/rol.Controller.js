@@ -36,14 +36,15 @@ const RolPost = async(req,res = response)=>{
 }
 
 
-const RolPut = (req,res = response)=>{
-    
-    const id = req.params.id    
-    res.json({
-        msg: 'QRUD API POST controller',
-        id
-    })
-}
+const RolPut = async (req, res = response) => {
+    //Params es lo que trae la request
+    const { id } = req.params;
+    const {rol , description} = req.body;
+  
+    const role = await Rol.findByIdAndUpdate(id,{rol,description});
+  
+    res.json(role);
+};
 
 
 

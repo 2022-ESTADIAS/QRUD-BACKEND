@@ -10,10 +10,12 @@ const router = Router()
 router.get('/',usuariosGetAll)
 
 router.get('/:id',usuariosGet)
-
+//TODO:RFC al ultimo 
 router.post('/',[
     check('email', 'El correo no es válido').isEmail(),
     check('email').custom( emailExistUsuario ),
+    check('telefono', 'El telefono no es valido').isMobilePhone('es-MX'),
+    check('direccion', 'la direccion es obligatoria').not().isEmpty(),
     check('nombre', 'El Nombre es obligatorio').not().isEmpty(),
     validarCampos
 ],usuariosPost)

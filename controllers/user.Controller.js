@@ -64,3 +64,9 @@ module.exports = {
   usuariosPut,
   usuariosDelete
 };
+
+
+
+//TODO: Pendiente refactor de validaciones.
+//TODO: Auth Pendiente
+//TODO: QR Pendiente

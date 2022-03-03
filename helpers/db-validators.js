@@ -1,5 +1,5 @@
 const { Usuario, Personal, Role } = require("../models/");
-
+//TODO: automatizar db-validators con modelos dinamicos
 const emailExistPersonal = async (email) => {
     // console.log(req);
     const existe = await Personal.findOne({ email });
@@ -17,13 +17,9 @@ const emailExistPersonal = async (email) => {
   };
   
 
-
-
-
-
   const personalExistID = async (id) => {
-    const existeUsuarioID = await Personal.findById(id);
-    if (!existeUsuarioID) {
+    const existePersonalID = await Personal.findById(id);
+    if (!existePersonalID) {
       throw new Error("El id no existe - personalExistID");
     }
   };
@@ -34,11 +30,19 @@ const emailExistPersonal = async (email) => {
     }
   };
 
+  const rolExistID = async (id) => {
+    const existeRolID = await Role.findById(id);
+    if (!existeRolID) {
+      throw new Error("El id no existe - ROLID");
+    }
+  };
+
 
   module.exports = {
       emailExistPersonal,
       emailExistUsuario,
       userExistID,
-      personalExistID
+      personalExistID,
+      rolExistID
   };
   
