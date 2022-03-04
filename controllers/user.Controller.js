@@ -61,7 +61,7 @@ const usuariosPut = async (req, res = response) => {
   
 
  
-  const usuario = await Usuario.findByIdAndUpdate(id, resto);
+  const usuario = await Usuario.findByIdAndUpdate(id, resto,{new:true});
 
   res.json(usuario);
 };

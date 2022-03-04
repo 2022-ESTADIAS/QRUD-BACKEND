@@ -26,6 +26,7 @@ router.post('/',[
 router.put('/:id',[
     check('id', 'No es un Id válido').isMongoId(),
     check("id").custom(userExistID),
+    // check('telefono', 'El telefono no es valido').isMobilePhone('es-MX'),
     validarCampos
 ],usuariosPut)
 

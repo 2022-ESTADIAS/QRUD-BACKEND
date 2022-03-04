@@ -70,7 +70,7 @@ const PersonalPut = async (req, res = response) => {
       resto.password = bcryptjs.hashSync(password, salt);
     }
   
-    const personal = await Personal.findByIdAndUpdate(id, resto);
+    const personal = await Personal.findByIdAndUpdate(id, resto,{new: true});
   
     res.json(personal);
 };
