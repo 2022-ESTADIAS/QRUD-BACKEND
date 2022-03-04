@@ -1,13 +1,15 @@
 const { Router } = require('express')
 const { check } = require('express-validator')
-const { PersonalGet, PersonalPost, PersonalPut, PersonalDelete, PersonalGetAll } = require('../controllers/personal.Controller')
+const { PersonalGet, PersonalPost, PersonalPut, PersonalDelete, PersonalGetAll, PersonalGetAllEliminados } = require('../controllers/personal.Controller')
 const { emailExistPersonal, personalExistID } = require('../helpers/db-validators')
 const { validarCampos } = require('../middlewares/validarCampos')
 const router = Router()
 
-router.get('/:id',PersonalGet)
 
 router.get('/',PersonalGetAll)
+router.get('/eliminados', PersonalGetAllEliminados)
+router.get('/:id',PersonalGet)
+
 
 
 

@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const { check } = require('express-validator')
-const { usuariosGet, usuariosPost, usuariosPut, usuariosDelete, usuariosGetAll } = require('../controllers/user.Controller')
+const { usuariosGet, usuariosPost, usuariosPut, usuariosDelete, usuariosGetAll, usuariosGetAllEliminados } = require('../controllers/user.Controller')
 const { emailExistUsuario, userExistID } = require('../helpers/db-validators')
 const { validarCampos } = require('../middlewares/validarCampos')
 
@@ -8,6 +8,9 @@ const router = Router()
 
 
 router.get('/',usuariosGetAll)
+
+
+router.get('/eliminados', usuariosGetAllEliminados)
 
 router.get('/:id',usuariosGet)
 //TODO:RFC al ultimo 

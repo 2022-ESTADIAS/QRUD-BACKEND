@@ -12,7 +12,23 @@ const PersonalGetAll = async (req = request, res = response) => {
   
       res.json({ total,personal });
     // }
-  };
+};
+
+
+
+  //eliminados
+const PersonalGetAllEliminados = async (req = request, res = response) => {
+
+  
+    const [total, personals] = await Promise.all([
+      Personal.countDocuments({isActivo: false}),
+      Personal.find({isActivo: false})
+    ])
+
+    res.json({ total,personals });
+};
+
+
 //un solo personal
 const PersonalGet = async (req = request, res = response) => {
   const {id} = req.params
@@ -79,5 +95,6 @@ module.exports = {
     PersonalGet,
     PersonalPost,
     PersonalPut,
-    PersonalDelete
-};
+    PersonalDelete,
+    PersonalGetAllEliminados
+  };

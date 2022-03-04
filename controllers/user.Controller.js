@@ -16,6 +16,27 @@ const usuariosGetAll = async (req = request, res = response) => {
 //   }
 };
 
+
+
+//ELIMINADOS 
+
+const usuariosGetAllEliminados = async (req = request, res = response) => {
+
+
+  const [total, usuarios] = await Promise.all([
+    Usuario.countDocuments({isActivo: false}),
+    Usuario.find({isActivo: false})
+  //   .skip(Number(desde))
+  //   .limit(Number(limite))
+  ])
+
+  res.json({ total,usuarios });
+//   }
+};
+
+
+
+
 //un solo usuario
 const usuariosGet = async (req = request, res = response) => {
     const {id} = req.params
@@ -62,7 +83,8 @@ module.exports = {
   usuariosGet,
   usuariosPost,
   usuariosPut,
-  usuariosDelete
+  usuariosDelete,
+  usuariosGetAllEliminados
 };
 
 
