@@ -1,5 +1,7 @@
 const { response, request } = require("express");
 const Usuario = require("../models/user.Model");
+
+const QRCode = require("qrcode")
 // const bcryptjs = require("bcryptjs");
 
 const usuariosGetAll = async (req = request, res = response) => {
@@ -78,13 +80,35 @@ const usuariosDelete = async(req, res = response) => {
   res.json( usuario );
 };
 
+
+
+
+const generarQRuser = async (req, res = response) => {
+  const {id} = req.params
+  const usuario = await Usuario.findById(id)
+  const qrUser = JSON.stringify({usuario})
+
+//   QRCode.toString(qrUser, function (err, string) {
+//   if (err) throw err
+//   return res.json({string})
+// })
+QRCode.toDataURL(qrUser, { errorCorrectionLevel: 'H' }, function (err, url) {
+  return res.json(url)
+})
+
+
+
+    // res.json(string);
+}
+
 module.exports = {
   usuariosGetAll,
   usuariosGet,
   usuariosPost,
   usuariosPut,
   usuariosDelete,
-  usuariosGetAllEliminados
+  usuariosGetAllEliminados,
+  generarQRuser
 };
 
 

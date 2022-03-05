@@ -8,6 +8,9 @@ const router = Router()
 
 router.get('/',PersonalGetAll)
 router.get('/eliminados', PersonalGetAllEliminados)
+
+
+
 router.get('/:id',PersonalGet)
 
 

@@ -1,13 +1,17 @@
 const {response} = require('express')
 const Personal = require('../models/personal.Model')
-const bcryptjs = require('bcryptjs')
+const bcryptjs = require('bcryptjs');
+// const { Role } = require('../models');
 
 const PersonalGetAll = async (req = request, res = response) => {
 
   
       const [total, personal] = await Promise.all([
         Personal.countDocuments({isActivo: true}),
-        Personal.find({isActivo: true})
+        Personal.find({isActivo: true}).populate({
+          path: 'rol',
+          strictPopulate:false
+        })
       ])
   
       res.json({ total,personal });

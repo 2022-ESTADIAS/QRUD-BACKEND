@@ -37,6 +37,9 @@ const UsuarioSchema = Schema({
     }
 
 })
+
+
+
 UsuarioSchema.methods.toJSON = function(){
     const {__v, _id,...usuario} = this.toObject()
     //Se cambia visualmente el uid por _id

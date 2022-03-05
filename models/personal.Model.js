@@ -1,6 +1,6 @@
 
 
-const { Schema, model } = require('mongoose')
+const { Schema, model, mongoose } = require('mongoose')
 
 
 const PersonalSchema = Schema({
@@ -23,10 +23,9 @@ const PersonalSchema = Schema({
         required: [true, ' El password es obligatorio']
     },
     rol:{
-        type: String,
-        required: true,
-        default: 'AUX_ROLE',
-        enum: ['MASTER_ROLE','ADMIN_ROLE','AUX_ROLE']
+        type: mongoose.Types.ObjectId,
+        ref:"Role",
+        required:[true,"La referencia del rol es requerida"],
     },
     isActivo: {
         type: Boolean,
@@ -39,6 +38,16 @@ const PersonalSchema = Schema({
     }
 
 })
+
+// PersonalSchema.pre(/^find/, function (next) {
+//     this.populate({
+//         path: "Role",
+//         select: "rol description",
+//      },{strictPopulate: false})
+
+//     next();
+// })
+
 
 
 module.exports = model('Personal', PersonalSchema)
