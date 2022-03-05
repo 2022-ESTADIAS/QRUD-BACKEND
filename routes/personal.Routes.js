@@ -22,6 +22,7 @@ router.post('/',[
     check('telefono', 'No es un telefono valido').isMobilePhone('es-MX'),
     check('nombre', 'El Nombre es obligatorio').not().isEmpty(),
     check('password', 'El password es obligatorio y minimo 6 caracteres').isLength({min: 6}),
+    check('rol', 'El rol es requerido').isMongoId(),
     validarCampos
 ],PersonalPost)
 

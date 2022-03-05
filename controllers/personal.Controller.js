@@ -10,9 +10,11 @@ const PersonalGetAll = async (req = request, res = response) => {
         Personal.countDocuments({isActivo: true}),
         Personal.find({isActivo: true}).populate({
           path: 'rol',
-          strictPopulate:false
+          strictPopulate:false,
+          
         })
       ])
+      // delete personal.password
   
       res.json({ total,personal });
     // }
@@ -36,6 +38,7 @@ const PersonalGetAllEliminados = async (req = request, res = response) => {
 //un solo personal
 const PersonalGet = async (req = request, res = response) => {
   const {id} = req.params
+  
   const personal = await Personal.findById(id)
 
     res.json({ personal });

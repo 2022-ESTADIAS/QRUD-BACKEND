@@ -49,6 +49,14 @@ const PersonalSchema = Schema({
 // })
 
 
+PersonalSchema.methods.toJSON = function(){
+    const {__v,password,...personal} = this.toObject()
+    //Se cambia visualmente el uid por _id
+    
+    return personal
+}
+
+
 
 module.exports = model('Personal', PersonalSchema)
 
