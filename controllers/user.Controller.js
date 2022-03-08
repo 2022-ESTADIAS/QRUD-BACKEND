@@ -1,5 +1,6 @@
 const { response, request } = require("express");
 const Usuario = require("../models/user.Model");
+const nodemailer  = require('nodemailer');
 
 const QRCode = require("qrcode")
 // const bcryptjs = require("bcryptjs");
@@ -88,14 +89,39 @@ const generarQRuser = async (req, res = response) => {
   const usuario = await Usuario.findById(id)
   const qrUser = JSON.stringify({usuario})
 
-//   QRCode.toString(qrUser, function (err, string) {
-//   if (err) throw err
-//   return res.json({string})
-// })
-QRCode.toDataURL(qrUser, { errorCorrectionLevel: 'H' }, function (err, url) {
-  return res.json(url)
+
+
+  QRCode.toDataURL(qrUser, { errorCorrectionLevel: 'H' }, function (err, url) {
+  // return res.json(url)
+  const transport = nodemailer.createTransport({
+    host: "smtp.mailtrap.io",
+    port: 2525,
+    auth: {
+      user: "8a8d712feaee30",
+      pass: "6af41bf9e742f9"
+    }
+  })
+
+  const opciones = {
+    from: '"QRUD 👻" <no-reply@QRUD.com>', // sender address
+    to: "bar@example.com, baz@example.com", // list of receivers
+    subject: "Generando QR", // Subject line
+    text: "Bienvenido usuario al sistema QR le entregamos su codigo QR que nos ha solicitado", // plain text body
+    html: `<img src="${url}"></img>`, // html body
+  }
+
+ transport.sendMail(opciones).then(info =>{
+   console.log(info)
+ })
+
+
+return res.status(200).send({
+  status: "success",
+  msg:"Codigo QR enviado al correo correctamente"
 })
 
+
+})
 
 
     // res.json(string);
