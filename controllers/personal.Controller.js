@@ -39,9 +39,16 @@ const PersonalGetAllEliminados = async (req = request, res = response) => {
 const PersonalGet = async (req = request, res = response) => {
   const {id} = req.params
   
-  const personal = await Personal.findById(id)
+  
+   const personal = await Personal.findById(id).populate({
+      path: 'rol',
+      strictPopulate:false,
+      
+    })
+  
+  // delete personal.password
 
-    res.json({ personal });
+  res.json({ personal });
 };
 
 
