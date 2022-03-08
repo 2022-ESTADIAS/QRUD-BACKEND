@@ -50,9 +50,9 @@ const PersonalSchema = Schema({
 
 
 PersonalSchema.methods.toJSON = function(){
-    const {__v,password,...personal} = this.toObject()
+    const {__v,password,_id, ...personal} = this.toObject()
     //Se cambia visualmente el uid por _id
-    
+    personal.uid = _id
     return personal
 }
 
