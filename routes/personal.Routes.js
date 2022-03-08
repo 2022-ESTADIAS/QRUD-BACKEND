@@ -1,6 +1,9 @@
 const { Router } = require('express')
 const { check } = require('express-validator')
+
+const { login } = require('../controllers/auth.Controller')
 const { PersonalGet, PersonalPost, PersonalPut, PersonalDelete, PersonalGetAll, PersonalGetAllEliminados } = require('../controllers/personal.Controller')
+
 const { emailExistPersonal, personalExistID } = require('../helpers/db-validators')
 const { validarCampos } = require('../middlewares/validarCampos')
 const router = Router()
@@ -30,7 +33,7 @@ router.put('/:id',[
     check('id', 'No es un Id válido').isMongoId(),
     check("id").custom(personalExistID),
     // check('telefono', 'No es un telefono valido').isMobilePhone('es-MX'),
-
+    
     validarCampos
 ],PersonalPut)
 
@@ -40,6 +43,7 @@ router.delete('/:id',[
     validarCampos
 ],PersonalDelete)
 
+router.post("/login",login);
 
 
 module.exports = router

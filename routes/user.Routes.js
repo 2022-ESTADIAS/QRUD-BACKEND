@@ -3,6 +3,7 @@ const { check } = require('express-validator')
 const { usuariosGet, usuariosPost, usuariosPut, usuariosDelete, usuariosGetAll, usuariosGetAllEliminados, generarQRuser } = require('../controllers/user.Controller')
 const { emailExistUsuario, userExistID } = require('../helpers/db-validators')
 const { validarCampos } = require('../middlewares/validarCampos')
+const { default: validarTokens } = require('../middlewares/validarTokens')
 
 const router = Router()
 
@@ -20,7 +21,7 @@ router.get('/qr/:id',generarQRuser)
 
 router.get('/:id',usuariosGet)
 //TODO:RFC al ultimo 
-router.post('/',[
+router.post('/',validarTokens,[
     check('email', 'El correo no es válido').isEmail(),
     check('email').custom( emailExistUsuario ),
     check('telefono', 'El telefono no es valido').isMobilePhone('es-MX'),
