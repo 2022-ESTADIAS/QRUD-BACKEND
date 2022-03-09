@@ -3,7 +3,7 @@ const { check } = require('express-validator')
 const { usuariosGet, usuariosPost, usuariosPut, usuariosDelete, usuariosGetAll, usuariosGetAllEliminados, generarQRuser } = require('../controllers/user.Controller')
 const { emailExistUsuario, userExistID } = require('../helpers/db-validators')
 const { validarCampos } = require('../middlewares/validarCampos')
-const { default: validarTokens } = require('../middlewares/validarTokens')
+const {  validarTokens } = require('../middlewares/validarTokens')
 
 const router = Router()
 

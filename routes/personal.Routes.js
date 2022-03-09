@@ -6,10 +6,11 @@ const { PersonalGet, PersonalPost, PersonalPut, PersonalDelete, PersonalGetAll, 
 
 const { emailExistPersonal, personalExistID } = require('../helpers/db-validators')
 const { validarCampos } = require('../middlewares/validarCampos')
+const { validarTokens } = require('../middlewares/validarTokens')
 const router = Router()
 
 
-router.get('/',PersonalGetAll)
+router.get('/', validarTokens,PersonalGetAll) 
 router.get('/eliminados', PersonalGetAllEliminados)
 
 

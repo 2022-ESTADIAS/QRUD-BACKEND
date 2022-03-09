@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const Personal = require("../models/personal.Model")
 
 const validarTokens = async(req, res, next) => {
     const token = req.headers.authorization?.split(" ")[1];
@@ -11,9 +12,10 @@ const validarTokens = async(req, res, next) => {
     }
 
     try {
-        const tokenVerificado = jwt.verify(token, process.env.JSON_KEY);
-        req.token = tokenVerificado;
-        console.log(req.token)
+        const {uid} = jwt.verify(token, process.env.JSON_KEY);
+        const usuario = await Personal.findById(uid);
+        req.usuario = usuario;
+
         next();
     } catch (error) {
         console.log(error);
@@ -24,4 +26,4 @@ const validarTokens = async(req, res, next) => {
    }
 }
 
-exports.default = validarTokens;
+module.exports = {validarTokens};
