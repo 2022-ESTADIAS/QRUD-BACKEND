@@ -4,6 +4,7 @@ const Personal = require("../models/personal.Model")
 const validarTokens = async(req, res, next) => {
     const token = req.headers.authorization?.split(" ")[1];
 
+    // console.log(token)
     if (!token) {
         return res.status(403).send({
             status: "Error",
@@ -12,9 +13,15 @@ const validarTokens = async(req, res, next) => {
     }
 
     try {
-        const {uid} = jwt.verify(token, process.env.JSON_KEY);
-        const usuario = await Personal.findById(uid);
-        req.usuario = usuario;
+        const {id} =  jwt.verify(token, process.env.JSON_KEY);
+        const usuario = await Personal.findById(id).populate({
+            path: 'rol',
+            strictPopulate:false,
+            
+          })
+
+        console.log(usuario)
+        req.usuario = usuario
 
         next();
     } catch (error) {

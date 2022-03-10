@@ -2,6 +2,7 @@ const  {generarJWT} = require('../helpers/generarJWT');
 const Personal = require('../models/personal.Model');
 const bcryptjs = require('bcryptjs');
 const { request } = require('express');
+
 const login  = async(req = request,res) =>{
 
     const {email,password} = req.body;
@@ -10,8 +11,9 @@ const login  = async(req = request,res) =>{
         let token;
        
          
+        // const [personal] = await Personal.find({email}).select('+password');
         const personal = await Personal.findOne({email}).select('+password');
-
+        // console.log(personal[0])
 
         if(!personal){
             return res.status(404).send({
@@ -28,8 +30,11 @@ const login  = async(req = request,res) =>{
       }
 
        const compararPassword = await bcryptjs.compare(password,personal.password);
-
-        token = await generarJWT(personal.uid);
+    //    const id =personal._id.toString().split("(")[0];
+    //    console.log(id)
+      console.log(personal.id)
+      console.log(personal)
+        token = await generarJWT(personal._id);
 
         return res.status(200).send({
             status: "success",

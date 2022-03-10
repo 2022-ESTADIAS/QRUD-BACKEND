@@ -4,14 +4,21 @@ const { usuariosGet, usuariosPost, usuariosPut, usuariosDelete, usuariosGetAll, 
 const { emailExistUsuario, userExistID } = require('../helpers/db-validators')
 const { validarCampos } = require('../middlewares/validarCampos')
 const {  validarTokens } = require('../middlewares/validarTokens')
+const {  esAdminRole,hasRole } = require('../middlewares/validarRoles');
 
 const router = Router()
 
+const {admin,master,aux} = {
+    admin:"ADMIN_ROLE",
+    master:"MASTER_ROLE",
+    aux:"AUX_ROLE",
+}
 
-router.get('/',usuariosGetAll)
+
+router.get('/', validarTokens,hasRole(admin,aux,master) ,usuariosGetAll)
 
 
-router.get('/eliminados', usuariosGetAllEliminados)
+router.get('/eliminados',validarTokens,hasRole(admin,master), usuariosGetAllEliminados)
 
 
 
