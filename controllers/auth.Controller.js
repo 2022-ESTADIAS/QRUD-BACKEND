@@ -12,7 +12,11 @@ const login  = async(req = request,res) =>{
        
          
         // const [personal] = await Personal.find({email}).select('+password');
-        const personal = await Personal.findOne({email}).select('+password');
+        const personal = await Personal.findOne({email}).select('+password').populate({
+            path: 'rol',
+            strictPopulate:false,
+            
+          });
         // console.log(personal[0])
 
         if(!personal){

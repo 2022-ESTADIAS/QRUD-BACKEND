@@ -130,7 +130,8 @@ const generarQRuser = async (req, res = response) => {
 
 return res.status(200).send({
   status: "success",
-  msg:"Codigo QR enviado al correo correctamente"
+  msg:"Codigo QR enviado al correo correctamente",
+  newUser
 })
 
 
