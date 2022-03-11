@@ -7,7 +7,7 @@ const validarTokens = async(req, res, next) => {
     if (!token) {
         return res.status(403).send({
             status: "Error",
-            message:"No tienes permiso para navegar en esta pagina por favor logueate"
+            msgtk:"No tienes permiso para navegar en esta pagina por favor logueate"
        }) 
     }
 
@@ -27,7 +27,7 @@ const validarTokens = async(req, res, next) => {
         console.log(error);
         return res.status(403).send({
             status: "Error",
-            message:"Este token no coincide con la firma, ha expirado o  no coincide con ningun usuario"
+            msgtk:"Este token no coincide con la firma, ha expirado o  no coincide con ningun usuario"
        })
    }
 }

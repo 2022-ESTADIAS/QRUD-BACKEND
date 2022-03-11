@@ -88,9 +88,25 @@ const generarQRuser = async (req, res = response) => {
   const {id} = req.params
   const usuario = await Usuario.findById(id)
   const destino = usuario.email
+
+//verificar usuario activo
   if (usuario.isActivo == false){
-    res.json({message: "usuario no esta activo"})
+    res.json({msg: "usuario no esta activo"})
   }
+
+
+//verificar qr
+  if(!usuario.qr){
+    usuario.qr = true
+    await usuario.save()
+
+
+  }else if(usuario.qr){
+    res.json({msg: "Ya se ha generado el QR para este usuario, por favor revisar su correo."})
+  }
+
+
+
   const qrUser = JSON.stringify({usuario})
 
 
@@ -131,7 +147,7 @@ const generarQRuser = async (req, res = response) => {
 return res.status(200).send({
   status: "success",
   msg:"Codigo QR enviado al correo correctamente",
-  newUser
+
 })
 
 

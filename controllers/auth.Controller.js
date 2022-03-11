@@ -22,7 +22,7 @@ const login  = async(req = request,res) =>{
         if(!personal){
             return res.status(404).send({
                 status: "Error",
-                message: "El usuario no fue encontrado favor de registrarse en la aplicacion"
+                msg: "El usuario no fue encontrado favor de registrarse en la aplicacion"
             })
         }
 
@@ -30,7 +30,7 @@ const login  = async(req = request,res) =>{
     if (!personal.isActivo) {
         return res
           .status(400)
-          .json({ message: "Personal no Encontrado - estado: False " });
+          .json({ msg: "Personal no Encontrado - estado: False " });
       }
 
        const compararPassword = await bcryptjs.compare(password,personal.password);
@@ -42,7 +42,7 @@ const login  = async(req = request,res) =>{
 
         return res.status(200).send({
             status: "success",
-            message: "Usuario encontrado",
+            msg: "Usuario encontrado",
             token,
             personal
         });
@@ -53,7 +53,7 @@ const login  = async(req = request,res) =>{
         console.log(error);
         return res.status(500).send({
             status: 'error',
-            message: "error en el servidor"
+            msg: "error en el servidor"
         })
     }
 
