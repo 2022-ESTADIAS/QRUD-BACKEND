@@ -23,12 +23,12 @@ router.get('/eliminados',validarTokens,hasRole(admin,master), usuariosGetAllElim
 
 
 //TEST QR
-router.get('/qr/:id',generarQRuser)
+router.get('/qr/:id',validarTokens,hasRole(admin,master),generarQRuser)
 //==================================
 
-router.get('/:id',usuariosGet)
+router.get('/:id', validarTokens,hasRole(admin,aux,master) ,usuariosGet)
 //TODO:RFC al ultimo 
-router.post('/',validarTokens,[
+router.post('/',validarTokens,hasRole(admin,master),[
     check('email', 'El correo no es válido').isEmail(),
     check('email').custom( emailExistUsuario ),
     check('telefono', 'El telefono no es valido').isMobilePhone('es-MX'),
@@ -37,14 +37,14 @@ router.post('/',validarTokens,[
     validarCampos
 ],usuariosPost)
 
-router.put('/:id',[
+router.put('/:id',validarTokens,hasRole(admin,master),[
     check('id', 'No es un Id válido').isMongoId(),
     check("id").custom(userExistID),
     // check('telefono', 'El telefono no es valido').isMobilePhone('es-MX'),
     validarCampos
 ],usuariosPut)
 
-router.delete('/:id',[
+router.delete('/:id',validarTokens,hasRole(admin,master),[
     check('id', 'No es un Id válido').isMongoId(),
     check("id").custom(userExistID),
     validarCampos

@@ -6,21 +6,28 @@ const { PersonalGet, PersonalPost, PersonalPut, PersonalDelete, PersonalGetAll, 
 
 const { emailExistPersonal, personalExistID } = require('../helpers/db-validators')
 const { validarCampos } = require('../middlewares/validarCampos')
+const { hasRole } = require('../middlewares/validarRoles')
 const { validarTokens } = require('../middlewares/validarTokens')
 const router = Router()
 
-
-router.get('/', validarTokens,PersonalGetAll) 
-router.get('/eliminados', PersonalGetAllEliminados)
-
-
-
-router.get('/:id',PersonalGet)
+const {admin,master,aux} = {
+    admin:"ADMIN_ROLE",
+    master:"MASTER_ROLE",
+    aux:"AUX_ROLE",
+}
 
 
+router.get('/',validarTokens,hasRole(admin,master),PersonalGetAll) 
+router.get('/eliminados',validarTokens,hasRole(admin,master), PersonalGetAllEliminados)
 
 
-router.post('/',[
+
+router.get('/:id',validarTokens,hasRole(admin,master),PersonalGet)
+
+
+
+
+router.post('/',validarTokens,hasRole(admin,master),[
     check('email', 'El correo no es válido').isEmail(),
     check('email').custom( emailExistPersonal ),
     check('telefono', 'No es un telefono valido').isMobilePhone('es-MX'),
@@ -30,7 +37,7 @@ router.post('/',[
     validarCampos
 ],PersonalPost)
 
-router.put('/:id',[
+router.put('/:id',validarTokens,hasRole(admin,master),[
     check('id', 'No es un Id válido').isMongoId(),
     check("id").custom(personalExistID),
     // check('telefono', 'No es un telefono valido').isMobilePhone('es-MX'),
@@ -38,7 +45,7 @@ router.put('/:id',[
     validarCampos
 ],PersonalPut)
 
-router.delete('/:id',[
+router.delete('/:id',validarTokens,hasRole(admin,master),[
     check('id', 'No es un Id válido').isMongoId(),
     check("id").custom(personalExistID),
     validarCampos
