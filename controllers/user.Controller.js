@@ -88,6 +88,7 @@ const generarQRuser = async (req, res = response) => {
   const {id} = req.params
   const usuario = await Usuario.findById(id)
   const destino = usuario.email
+  const nombre = usuario.nombre
 
 //verificar usuario activo
   if (usuario.isActivo == false){
@@ -127,7 +128,7 @@ const generarQRuser = async (req, res = response) => {
     from: '"QRUD 👻" <qrud.app@gmail.com>', // sender address
     to: destino, // list of receivers
     subject: "Generando QR", // Subject line
-    html: `<h1>bienvenido koso</h1><br><img src=cid:koso@koso.com></img>`, // html body
+    html: `<h1>bienvenido ${nombre}</h1><br><img src=cid:koso@koso.com></img>`, // html body
     text: "Bienvenido usuario al sistema QR le entregamos su codigo QR que nos ha solicitado", // plain text body
 
 

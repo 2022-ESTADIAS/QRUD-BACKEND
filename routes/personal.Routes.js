@@ -10,6 +10,7 @@ const {
   PersonalGetAll,
   PersonalGetAllEliminados,
 } = require("../controllers/personal.Controller");
+const { changePwd } = require("../controllers/pwd.Controller");
 
 const {
   emailExistPersonal,
@@ -25,6 +26,17 @@ const { admin, master, aux } = {
   master: "MASTER_ROLE",
   aux: "AUX_ROLE",
 };
+
+
+//CHANGE PWD
+router.put(
+  "/changepwd",
+  validarTokens,
+  hasRole(admin,master,aux),
+  changePwd
+)
+
+
 
 router.get("/", 
 validarTokens, 
@@ -85,6 +97,9 @@ router.delete(
   ],
   PersonalDelete
 );
+
+
+
 
 router.post("/login", login);
 

@@ -34,10 +34,13 @@ const login  = async(req = request,res) =>{
       }
 
        const compararPassword = await bcryptjs.compare(password,personal.password);
-    //    const id =personal._id.toString().split("(")[0];
-    //    console.log(id)
-      console.log(personal.id)
-      console.log(personal)
+       if(!compararPassword){
+           return res.status(400).json({msg: "pwd incorrecta"})
+       }
+        // //    const id =personal._id.toString().split("(")[0];
+        // //    console.log(id)
+        //   console.log(personal.id)
+        //   console.log(personal)
         token = await generarJWT(personal._id);
 
         return res.status(200).send({
