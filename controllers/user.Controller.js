@@ -44,7 +44,7 @@ const usuariosGetAllEliminados = async (req = request, res = response) => {
 const usuariosGet = async (req = request, res = response) => {
     const {id} = req.params
     const usuario = await Usuario.findById(id)
-
+    
       res.json({ usuario });
   };
 
@@ -87,27 +87,40 @@ const usuariosDelete = async(req, res = response) => {
 const generarQRuser = async (req, res = response) => {
   const {id} = req.params
   const usuario = await Usuario.findById(id)
+  const destino = usuario.email
+  if (usuario.isActivo == false){
+    res.json({message: "usuario no esta activo"})
+  }
   const qrUser = JSON.stringify({usuario})
 
 
 
   QRCode.toDataURL(qrUser, { errorCorrectionLevel: 'H' }, function (err, url) {
-  // return res.json(url)
+  
   const transport = nodemailer.createTransport({
-    host: "smtp.mailtrap.io",
-    port: 2525,
+    host: 'smtp.gmail.com',
+    port: 587,
     auth: {
-      user: "8a8d712feaee30",
-      pass: "6af41bf9e742f9"
+        user: 'qrud.app@gmail.com',
+        pass: 'qrudapp999'
     }
-  })
+});
+
 
   const opciones = {
-    from: '"QRUD 👻" <no-reply@QRUD.com>', // sender address
-    to: "bar@example.com, baz@example.com", // list of receivers
+    from: '"QRUD 👻" <qrud.app@gmail.com>', // sender address
+    to: destino, // list of receivers
     subject: "Generando QR", // Subject line
+    html: `<h1>bienvenido koso</h1><br><img src=cid:koso@koso.com></img>`, // html body
     text: "Bienvenido usuario al sistema QR le entregamos su codigo QR que nos ha solicitado", // plain text body
-    html: `<img src="${url}"></img>`, // html body
+
+
+    attachments: [
+    {
+      filename: 'qr.png',
+      path: `${url}`,
+      cid: "koso@koso.com"
+    }],
   }
 
  transport.sendMail(opciones).then(info =>{
