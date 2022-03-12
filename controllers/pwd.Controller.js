@@ -53,7 +53,7 @@ const forgotPwd = async(req,res,)=>{
     createdAt: Date.now(),
   }).save();
 
-  const link = `http://localhost:3000/personal/email-pwd?token=${resetToken}&id=${user.id}`;
+  const link = `https://qrudapp.herokuapp.com/personal/email-pwd?token=${resetToken}&id=${user.id}`;
 console.log(user.email)
   //ENviar correo
   const transport = nodemailer.createTransport({
