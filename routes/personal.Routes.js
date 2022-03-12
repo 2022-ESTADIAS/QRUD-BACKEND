@@ -1,7 +1,6 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
 
-const { login } = require("../controllers/auth.Controller");
 const {
   PersonalGet,
   PersonalPost,
@@ -10,7 +9,7 @@ const {
   PersonalGetAll,
   PersonalGetAllEliminados,
 } = require("../controllers/personal.Controller");
-const { changePwd } = require("../controllers/pwd.Controller");
+const { changePwd, forgotPwd, forgotPwd2 } = require("../controllers/pwd.Controller");
 
 const {
   emailExistPersonal,
@@ -26,6 +25,26 @@ const { admin, master, aux } = {
   master: "MASTER_ROLE",
   aux: "AUX_ROLE",
 };
+
+router.put(
+  "/email-pwd",
+  forgotPwd2
+)
+
+
+
+//FORGOT PWD VIA EMAIL
+//http://localhost:3000/forgot-pwd?token=${resetToken}&id=${user.id}
+router.put(
+  "/forgot-pwd",
+  [
+    check("email", "El correo no es valido").isEmail(),
+    validarCampos,
+
+  ],forgotPwd
+)
+
+
 
 
 //CHANGE PWD
@@ -101,6 +120,9 @@ router.delete(
 
 
 
-router.post("/login", login);
+
+
+
+
 
 module.exports = router;
