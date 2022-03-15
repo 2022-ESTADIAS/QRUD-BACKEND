@@ -99,7 +99,7 @@ const forgotPwd2 = async(req,res = response) =>{
   if (!isValid) {
    return res.json({msg: "token no coincide"})
   }else{
-    // res.json({msg:"koso"}) //Si coincide
+    // return res.json({msg:"koso"}) //Si coincide
 
     if(newpwd == again){
 

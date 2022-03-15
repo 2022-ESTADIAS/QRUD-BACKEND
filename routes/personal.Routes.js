@@ -96,7 +96,7 @@ router.post(
 router.put(
   "/:id",
   validarTokens,
-  hasRole(admin),
+  hasRole(master),
   [
     check("id", "No es un Id válido").isMongoId(),
     check("id").custom(personalExistID),
@@ -108,7 +108,7 @@ router.put(
 router.delete(
   "/:id",
   validarTokens,
-  hasRole(admin),
+  hasRole(master),
   [
     check("id", "No es un Id válido").isMongoId(),
     check("id").custom(personalExistID),
