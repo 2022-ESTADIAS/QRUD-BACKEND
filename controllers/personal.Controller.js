@@ -74,16 +74,10 @@ const PersonalPost = async(req,res = response)=>{
 
 
 const PersonalPut = async (req, res = response) => {
-    //Params es lo que trae la request
     const { id } = req.params;
     const { _id, password, qr,email, ...resto } = req.body;
   
-    //Validar contra body
-    if (password) {
-      const salt = bcryptjs.genSaltSync();
-      resto.password = bcryptjs.hashSync(password, salt);
-    }
-  
+    
     const personal = await Personal.findByIdAndUpdate(id, resto,{new: true});
   
     res.json(personal);
@@ -92,15 +86,31 @@ const PersonalPut = async (req, res = response) => {
 const PersonalDelete = async(req, res = response) => {
     const { id } = req.params
   
-    //BORRADO FISICAMENTE
-    // const usuario = await Usuario.findByIdAndDelete( id )
-  
     //borrado por estado, se pasa valor a false, queda deshabilitado
     const personal = await Personal.findByIdAndUpdate(id, { isActivo: false})
   
     res.json( personal );
   };
 
+
+  const PersonalDeletePermanente = async(req,res = response)=>{
+    const { id } = req.params
+  
+    //BORRADO FISICAMENTE
+
+    const rol = await Personal.findById(id).populate({path: "rol"})
+    // console.log(rol.rol.rol);
+    const isMaster = rol.rol.rol
+
+    isMaster == "MASTER_ROLE"  
+    ? res.json({msg: "No se puede eliminar MASTER_ROLE"}) 
+    : (await Personal.findByIdAndDelete(id),
+      res.json({msg: "Personal Eliminado Definitivamente"}))
+    
+  }
+  
+  
+  
 
 
 
@@ -110,5 +120,6 @@ module.exports = {
     PersonalPost,
     PersonalPut,
     PersonalDelete,
+    PersonalDeletePermanente,
     PersonalGetAllEliminados
   };

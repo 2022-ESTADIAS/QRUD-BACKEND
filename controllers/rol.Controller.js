@@ -3,14 +3,8 @@ const Rol = require('../models/role.Model')
 
 const RolGetAll = async (req = request, res = response) => {
 
-  
-    const [total, personal] = await Promise.all([
-      Rol.countDocuments(),
-      Rol.find()
-    ])
-
-    res.json({ total,personal });
-  // }
+  const roles = await Rol.find({rol: ["AUX_ROLE", "ADMIN_ROLE"]})
+    res.json({ roles });
 };
 
 const RolGet = async(req, res = response) => {

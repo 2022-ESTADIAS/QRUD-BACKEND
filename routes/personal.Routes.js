@@ -8,6 +8,7 @@ const {
   PersonalDelete,
   PersonalGetAll,
   PersonalGetAllEliminados,
+  PersonalDeletePermanente,
 } = require("../controllers/personal.Controller");
 const { changePwd, forgotPwd, forgotPwd2 } = require("../controllers/pwd.Controller");
 
@@ -35,7 +36,7 @@ router.put(
 
 //FORGOT PWD VIA EMAIL
 //http://localhost:3000/forgot-pwd?token=${resetToken}&id=${user.id}
-router.put(
+router.post(
   "/forgot-pwd",
   [
     check("email", "El correo no es valido").isEmail(),
@@ -116,6 +117,19 @@ router.delete(
   ],
   PersonalDelete
 );
+
+//eliminación definitiva
+router.delete(
+  "/def/:id",
+  validarTokens,
+  hasRole(admin,master),
+  [
+    check("id", "No es un Id válido").isMongoId(),
+    check("id").custom(personalExistID),
+    validarCampos,
+  ],
+  PersonalDeletePermanente
+)
 
 
 

@@ -8,6 +8,7 @@ const {
   usuariosGetAll,
   usuariosGetAllEliminados,
   generarQRuser,
+  usuariosDeletePermanente,
 } = require("../controllers/user.Controller");
 const { emailExistUsuario, userExistID } = require("../helpers/db-validators");
 const { validarCampos } = require("../middlewares/validarCampos");
@@ -95,5 +96,18 @@ router.delete(
   ],
   usuariosDelete
 );
+
+//eliminación definitiva
+router.delete(
+  "/def/:id",
+  validarTokens,
+  hasRole(admin,master),
+  [
+    check("id", "No es un Id válido").isMongoId(),
+    check("id").custom(userExistID),
+    validarCampos,
+  ],
+  usuariosDeletePermanente
+)
 
 module.exports = router;

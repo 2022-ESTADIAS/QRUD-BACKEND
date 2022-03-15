@@ -3,7 +3,6 @@ const Usuario = require("../models/user.Model");
 const nodemailer  = require('nodemailer');
 
 const QRCode = require("qrcode");
-// const bcryptjs = require("bcryptjs");
 
 const usuariosGetAll = async (req = request, res = response) => {
 
@@ -11,8 +10,6 @@ const usuariosGetAll = async (req = request, res = response) => {
     const [total, usuarios] = await Promise.all([
       Usuario.countDocuments({isActivo: true}),
       Usuario.find({isActivo: true})
-    //   .skip(Number(desde))
-    //   .limit(Number(limite))
     ])
 
     res.json({ total,usuarios });
@@ -29,8 +26,6 @@ const usuariosGetAllEliminados = async (req = request, res = response) => {
   const [total, usuarios] = await Promise.all([
     Usuario.countDocuments({isActivo: false}),
     Usuario.find({isActivo: false})
-  //   .skip(Number(desde))
-  //   .limit(Number(limite))
   ])
 
   res.json({ total,usuarios });
@@ -69,17 +64,7 @@ const usuariosPut = async (req, res = response) => {
   res.json(usuario);
 };
 
-const usuariosDelete = async(req, res = response) => {
-  const { id } = req.params
 
-  //BORRADO FISICAMENTE
-  // const usuario = await Usuario.findByIdAndDelete( id )
-
-  //borrado por estado, se pasa valor a false, queda deshabilitado
-  const usuario = await Usuario.findByIdAndUpdate(id, { isActivo: false})
-
-  res.json( usuario );
-};
 
 
 
@@ -180,8 +165,31 @@ return res.status(200).send({
 })
 
 
-    // res.json(string);
 }
+
+
+const usuariosDelete = async(req, res = response) => {
+  const { id } = req.params
+
+  //borrado por estado, se pasa valor a false, queda deshabilitado
+  const usuario = await Usuario.findByIdAndUpdate(id, { isActivo: false})
+
+  res.json( usuario );
+};
+
+
+//Delete permanente
+const usuariosDeletePermanente = async(req,res = response)=>{
+  const { id } = req.params
+
+  //BORRADO FISICAMENTE
+  const usuario = await Usuario.findByIdAndDelete( id )
+
+
+  res.json( {msg: "Usuario eliminado definitivamente"} );
+}
+
+
 
 module.exports = {
   usuariosGetAll,
@@ -190,11 +198,9 @@ module.exports = {
   usuariosPut,
   usuariosDelete,
   usuariosGetAllEliminados,
-  generarQRuser
+  generarQRuser,
+  usuariosDeletePermanente
 };
 
 
 
-//TODO: Pendiente refactor de validaciones.
-//TODO: Auth Pendiente
-//TODO: QR Pendiente
