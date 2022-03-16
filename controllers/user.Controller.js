@@ -174,7 +174,9 @@ const usuariosDelete = async(req, res = response) => {
   //borrado por estado, se pasa valor a false, queda deshabilitado
   const usuario = await Usuario.findByIdAndUpdate(id, { isActivo: false})
 
-  res.json( usuario );
+  usuario.isActivo == false ? res.json({msg: "usuario no encontrado"}) : res.json({msg: "usuario eliminado correctamente"})
+
+  // res.json( usuario );
 };
 
 

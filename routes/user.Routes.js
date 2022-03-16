@@ -84,7 +84,7 @@ router.put(
   usuariosPut
 );
 
-router.put(
+router.delete(
   "/dlt/:id",
   validarTokens,
   hasRole(admin, master),
