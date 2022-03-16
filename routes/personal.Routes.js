@@ -107,7 +107,7 @@ router.put(
 );
 
 router.put(
-  "/:id",
+  "/dlt/:id",
   validarTokens,
   hasRole(master),
   [

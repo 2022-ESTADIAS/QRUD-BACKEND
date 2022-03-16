@@ -85,11 +85,12 @@ const PersonalPut = async (req, res = response) => {
 
 const PersonalDelete = async(req, res = response) => {
     const { id } = req.params
-  
-    //borrado por estado, se pasa valor a false, queda deshabilitado
-    const personal = await Personal.findByIdAndUpdate(id, { isActivo: false})
-  
-    res.json( personal );
+    const rol = await Personal.findById(id).populate({path:"rol"})
+    const isMaster = rol.rol.rol
+    isMaster == "MASTER_ROLE"
+    ? res.json({msg: "No se puede eliminar MASTER_ROLE"})
+    : (await Personal.findByIdAndUpdate(id, { isActivo: false}),
+      res.json( {msg: "Personal eliminado correctamente"}))
   };
 
 
