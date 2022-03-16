@@ -41,7 +41,7 @@ const RolPut = async (req, res = response) => {
     const { id } = req.params;
     const {rol , description} = req.body;
   
-    const role = await Rol.findByIdAndUpdate(id,{rol,description});
+    const role = await Rol.findByIdAndUpdate(id,{rol,description},{new: true});
   
     res.json(role);
 };
