@@ -106,7 +106,7 @@ router.put(
   PersonalPut
 );
 
-router.put(
+router.delete(
   "/dlt/:id",
   validarTokens,
   hasRole(master),
