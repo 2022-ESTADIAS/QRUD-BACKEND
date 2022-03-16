@@ -85,7 +85,7 @@ router.put(
   usuariosPut
 );
 
-router.delete(
+router.put(
   "/:id",
   validarTokens,
   hasRole(admin, master),

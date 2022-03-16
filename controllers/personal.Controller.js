@@ -78,7 +78,7 @@ const PersonalPut = async (req, res = response) => {
     const { _id, password, qr,email, ...resto } = req.body;
   
     
-    const personal = await Personal.findByIdAndUpdate(id, resto,{new: true});
+    const personal = await Personal.findByIdAndUpdate(id, resto,{new: true}).populate({path: "rol"});
   
     res.json(personal);
 };

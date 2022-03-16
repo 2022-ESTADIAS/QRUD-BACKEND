@@ -27,6 +27,7 @@ const { admin, master, aux } = {
   aux: "AUX_ROLE",
 };
 
+//con esta base se genera el URL del correo. PRIVATE
 router.put(
   "/email-pwd",
   forgotPwd2
@@ -34,8 +35,7 @@ router.put(
 
 
 
-//FORGOT PWD VIA EMAIL
-//http://localhost:3000/forgot-pwd?token=${resetToken}&id=${user.id}
+//FORGOT PWD VIA EMAIL PUBLIC
 router.post(
   "/forgot-pwd",
   [
@@ -48,7 +48,7 @@ router.post(
 
 
 
-//CHANGE PWD
+//CHANGE PWD PROTECTED
 router.put(
   "/changepwd",
   validarTokens,
@@ -106,7 +106,7 @@ router.put(
   PersonalPut
 );
 
-router.delete(
+router.put(
   "/:id",
   validarTokens,
   hasRole(master),
@@ -122,7 +122,7 @@ router.delete(
 router.delete(
   "/def/:id",
   validarTokens,
-  hasRole(admin,master),
+  hasRole(admin),
   [
     check("id", "No es un Id válido").isMongoId(),
     check("id").custom(personalExistID),

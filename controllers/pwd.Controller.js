@@ -3,7 +3,7 @@ const crypto = require("crypto-js");
 const { Personal,Token } = require("../models/index");
 const nodemailer  = require('nodemailer');
 
-
+//PROTECTED
 const changePwd = async(req, res = response) => {
   const id = req.usuario.id;
   const { lastpwd, newpwd, newpwd2 } = req.body;
@@ -29,6 +29,8 @@ const changePwd = async(req, res = response) => {
 
 
 //====================================================================================
+
+//PUBLIC
 const forgotPwd = async(req,res,)=>{
   const {email} = req.body
   const user = await Personal.findOne({email})
@@ -105,11 +107,13 @@ transport.sendMail(opciones).then(info =>{
   console.log(info)
 })
 //=======================
-res.json({newToken,link})
+// res.json({newToken,link})
+res.json({msg: " Correo de restablecimiento enviado "})
 }
 
 
 //paso2 despues de clikear el enlace del correo
+//PRIVATE
 const forgotPwd2 = async(req,res = response) =>{
   const salt = bcryptjs.genSaltSync()
 
