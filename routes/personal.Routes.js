@@ -28,6 +28,9 @@ const { admin, master, aux } = {
   aux: "AUX_ROLE",
 };
 
+//=================================INICIOPWD
+
+
 //con esta base se genera el URL del correo. PRIVATE
 router.put(
   "/email-pwd",
@@ -49,14 +52,14 @@ router.post(
 
 
 
-//CHANGE PWD PROTECTED
+//CHANGE PWD PROTECTED CAMBIO DE CONTRASEÑA INTERNO
 router.put(
   "/changepwd",
   validarTokens,
   hasRole(admin,master,aux),
   changePwd
 )
-
+//=================================FINPWD
 
 
 router.get("/", 
@@ -133,7 +136,7 @@ router.delete(
 )
 
 //Reactivar Personal
-router.post(
+router.get(
   "/active/:id",
   validarTokens,
   hasRole(master),

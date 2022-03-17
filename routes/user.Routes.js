@@ -111,7 +111,7 @@ router.delete(
 )
 
 //Reactivación de usuario
-router.post(
+router.get(
   "/active/:id",
   validarTokens,
   hasRole(admin, master),
