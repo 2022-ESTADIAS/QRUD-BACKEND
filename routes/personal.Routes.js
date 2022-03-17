@@ -133,7 +133,7 @@ router.delete(
 )
 
 //Reactivar Personal
-router.put(
+router.post(
   "/active/:id",
   validarTokens,
   hasRole(master),
