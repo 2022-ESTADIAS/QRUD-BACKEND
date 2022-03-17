@@ -9,6 +9,7 @@ const {
   usuariosGetAllEliminados,
   generarQRuser,
   usuariosDeletePermanente,
+  usuarioActive,
 } = require("../controllers/user.Controller");
 const { emailExistUsuario, userExistID } = require("../helpers/db-validators");
 const { validarCampos } = require("../middlewares/validarCampos");
@@ -107,6 +108,19 @@ router.delete(
     validarCampos,
   ],
   usuariosDeletePermanente
+)
+
+//Reactivación de usuario
+router.put(
+  "/active/:id",
+  validarTokens,
+  hasRole(admin, master),
+  [
+    check("id", "No es un Id válido").isMongoId(),
+    check("id").custom(userExistID),
+    validarCampos,
+  ],
+  usuarioActive
 )
 
 module.exports = router;

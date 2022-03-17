@@ -106,10 +106,21 @@ const PersonalDelete = async(req, res = response) => {
     isMaster == "MASTER_ROLE"  
     ? res.json({msg: "No se puede eliminar MASTER_ROLE"}) 
     : (await Personal.findByIdAndDelete(id),
+    
       res.json({msg: "Personal Eliminado Definitivamente"}))
     
   }
   
+
+  const PersonalActive = async(req, res = response) =>{
+
+    const { id } = req.params
+    const personal = await Personal.findByIdAndUpdate(id, { isActivo: true})
+    personal.isActivo == true
+    ? res.json({msg:"EL personal ya se encuentra activo"})
+    : res.json({msg: "Personal reactivado correctamente"})
+    
+  }
   
   
 
@@ -122,5 +133,6 @@ module.exports = {
     PersonalPut,
     PersonalDelete,
     PersonalDeletePermanente,
-    PersonalGetAllEliminados
+    PersonalGetAllEliminados,
+    PersonalActive
   };

@@ -9,6 +9,7 @@ const {
   PersonalGetAll,
   PersonalGetAllEliminados,
   PersonalDeletePermanente,
+  PersonalActive,
 } = require("../controllers/personal.Controller");
 const { changePwd, forgotPwd, forgotPwd2 } = require("../controllers/pwd.Controller");
 
@@ -122,13 +123,26 @@ router.delete(
 router.delete(
   "/def/:id",
   validarTokens,
-  hasRole(admin),
+  hasRole(master),
   [
     check("id", "No es un Id válido").isMongoId(),
     check("id").custom(personalExistID),
     validarCampos,
   ],
   PersonalDeletePermanente
+)
+
+//Reactivar Personal
+router.put(
+  "/active/:id",
+  validarTokens,
+  hasRole(master),
+  [
+    check("id", "No es un Id válido").isMongoId(),
+    check("id").custom(personalExistID),
+    validarCampos,
+  ],
+  PersonalActive
 )
 
 

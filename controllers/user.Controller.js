@@ -191,6 +191,14 @@ const usuariosDeletePermanente = async(req,res = response)=>{
   res.json( {msg: "Usuario eliminado definitivamente"} );
 }
 
+const usuarioActive = async (req, res = response)=> {
+  const { id } = req.params
+
+  const usuario = await Usuario.findByIdAndUpdate(id, { isActivo: true})
+
+  usuario.isActivo == true ? res.json({msg: "El usuario ya se encuentra activo"}) : res.json({msg: "usuario reactivado correctamente"})
+}
+
 
 
 module.exports = {
@@ -201,7 +209,8 @@ module.exports = {
   usuariosDelete,
   usuariosGetAllEliminados,
   generarQRuser,
-  usuariosDeletePermanente
+  usuariosDeletePermanente,
+  usuarioActive
 };
 
 
