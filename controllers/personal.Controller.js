@@ -6,17 +6,12 @@ const bcryptjs = require('bcryptjs');
 const PersonalGetAll = async (req = request, res = response) => {
 
   
-      const [total, personal] = await Promise.all([
-        Personal.countDocuments({isActivo: true}),
-        Personal.find({isActivo: true}).populate({
-          path: 'rol',
-          strictPopulate:false,
-          
-        })
-      ])
-      // delete personal.password
+      let personal = await Personal.find({isActivo: true}).populate({path: "rol"})
+
+      personal = personal.filter((persona)=> persona.rol.rol != "MASTER_ROLE")
+
   
-      res.json({ total,personal });
+      res.json({ personal });
     // }
 };
 
