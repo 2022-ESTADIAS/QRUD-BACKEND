@@ -3,12 +3,8 @@ const Rol = require('../models/role.Model')
 
 const RolGetAll = async (req = request, res = response) => {
 
-//   const roles = await Rol.find({rol: ["AUX_ROLE", "ADMIN_ROLE"]})
-//     res.json({ roles });
-
 const roles = await Rol.find()
 roles.shift()
-// console.log(roles)
 
 res.json({roles})
 };
@@ -30,7 +26,7 @@ const RolPost = async(req,res = response)=>{
     await role.save()
     
     res.json({
-        msg: 'QRUD API Rol POST controller',
+        msg: 'Rol Creado exitosamente!',
         role
     })
 }
