@@ -46,8 +46,12 @@ const forgotPwd = async(req,res)=>{
    await Token.deleteOne();
   }
   const salt = bcryptjs.genSaltSync()
-  let resetToken = crypto.AES.encrypt('my message', 'secret key 123').toString();
+  //TODO REFACTOR RESET TOKEN
+  let resetToken = await bcryptjs.hash("koso",salt)
+  // console.log(resetToken);
+
   const hash = await bcryptjs.hash(resetToken,salt);
+  //====================================
   // console.log(hash)
 
   await new Token({
@@ -55,9 +59,10 @@ const forgotPwd = async(req,res)=>{
     token: hash,
     createdAt: Date.now(),
   }).save();
-
+  //LINK PROD
   // const link = `https://qrudapp.herokuapp.com/personal/email-pwd?token=${resetToken}&id=${user.id}`;
-  const link = `http://localhost:4200/personal/email-pwd?token=${resetToken}&id=${user.id}`
+  //LINK LOCAL
+  const link = `http://localhost:3000/personal/email-pwd?token=${resetToken}&id=${user.id}`
 
 //ENVIO DE CORREO PARA PWD
   transport.sendMail(passwordEmail(email,link)).then(_info =>{
@@ -76,25 +81,32 @@ const forgotPwd2 = async(req,res = response) =>{
 
   const {token,id} = req.query
   const {newpwd,again} = req.body
+
   let passwordResetToken = await Token.findOne({ userId:id });
+
+  
+  const tokenID = passwordResetToken.id
+  
+  
+  
   if (!passwordResetToken) {
-   return res.json({msg: "token invalido o expirado"})
+    return res.json({msg: "token invalido o expirado"})
   }
   const isValid = await bcryptjs.compare(token, passwordResetToken.token);
-
+  
   if (!isValid) {
-   return res.json({msg: "token no coincide"})
+    return res.json({msg: "token no coincide"})
   }else{
-    // return res.json({msg:"koso"}) //Si coincide
-
+    
     if(newpwd == again){
-
+      
       const hash = await bcryptjs.hash(newpwd,salt);
       await Personal.updateOne(
         { _id: id },
         { $set: { password: hash } },
         { new: true }
         );
+        await Token.findByIdAndDelete(tokenID)
 
       return res.json({msg:"contraseña cambiada exitosamente mediante el correo"})
       }else{
@@ -102,7 +114,6 @@ const forgotPwd2 = async(req,res = response) =>{
       }
   }
   
-  // const hash = await bcryptjs.hash(password, Number(bcryptSalt));
 
 } 
 
