@@ -62,7 +62,8 @@ const forgotPwd = async(req,res)=>{
   //LINK PROD
   // const link = `https://qrudapp.herokuapp.com/personal/email-pwd?token=${resetToken}&id=${user.id}`;
   //LINK LOCAL
-  const link = `http://localhost:3000/personal/email-pwd?token=${resetToken}&id=${user.id}`
+  // const link = `http://localhost:4200/personal/email-pwd?token=${resetToken}&id=${user.id}`
+  const link = `http://localhost:4200/#/personal/email-pwd?token=${resetToken}&id=${user.id}`
 
 //ENVIO DE CORREO PARA PWD
   transport.sendMail(passwordEmail(email,link)).then(_info =>{
