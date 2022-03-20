@@ -1,5 +1,8 @@
-const { Usuario, Personal, Role } = require("../models/");
-//TODO: automatizar db-validators con modelos dinamicos
+const Usuario = require("../models/user.Model")
+const Personal = require("../models/personal.Model")
+const Role = require("../models/role.Model")
+
+
 const emailExistPersonal = async (email) => {
     // console.log(req);
     const existe = await Personal.findOne({ email });

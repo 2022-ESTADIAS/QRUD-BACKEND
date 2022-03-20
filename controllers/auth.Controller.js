@@ -1,50 +1,31 @@
 const  {generarJWT} = require('../helpers/generarJWT');
-const Personal = require('../models/personal.Model');
+const Personal = require("../models/personal.Model")
 const bcryptjs = require('bcryptjs');
-const { request } = require('express');
 
-const login  = async(req = request,res) =>{
+const login  = async(req ,res) =>{
 
     const {email,password} = req.body;
 
     try {
         let token;
-       
-         
-        // const [personal] = await Personal.find({email}).select('+password');
-        const personal = await Personal.findOne({email}).select('+password').populate({
-            path: 'rol',
-            strictPopulate:false,
-            
-          });
-        // console.log(personal[0])
+                
+        const personal = await Personal.findOne({email}).select('+password').populate({path: 'rol'});
 
         if(!personal){
-            return res.status(404).send({
-                status: "Error",
-                msg: "El usuario no fue encontrado favor de registrarse en la aplicacion"
-            })
+            return res.status(404).json({msg: "Personal no encontrado."})
         }
 
-         //SI EL USUARIO ESTA ACTIVO
-    if (!personal.isActivo) {
-        return res
-          .status(400)
-          .json({ msg: "Personal no Encontrado - estado: False " });
-      }
+        if (!personal.isActivo) {
+            return res.status(404).json({ msg: "Personal no encontrado." });
+        }
 
-       const compararPassword = await bcryptjs.compare(password,personal.password);
+       const compararPassword = await bcryptjs.compare( password, personal.password );
        if(!compararPassword){
-           return res.status(400).json({msg: "pwd incorrecta"})
+           return res.status(400).json({msg: "contraseña incorrecta."})
        }
-        // //    const id =personal._id.toString().split("(")[0];
-        // //    console.log(id)
-        //   console.log(personal.id)
-        //   console.log(personal)
         token = await generarJWT(personal._id);
 
-        return res.status(200).send({
-            status: "success",
+        return res.status(200).json({
             msg: "Usuario encontrado",
             token,
             personal
@@ -54,8 +35,7 @@ const login  = async(req = request,res) =>{
 
     } catch (error) {
         console.log(error);
-        return res.status(500).send({
-            status: 'error',
+        return res.status(500).json({
             msg: "error en el servidor"
         })
     }

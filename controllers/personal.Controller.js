@@ -1,133 +1,167 @@
-const {response} = require('express')
-const Personal = require('../models/personal.Model')
-const bcryptjs = require('bcryptjs');
-// const { Role } = require('../models');
+const bcryptjs = require("bcryptjs");
 
-const PersonalGetAll = async (req = request, res = response) => {
+const Personal = require("../models/personal.Model");
 
-  
-      let personal = await Personal.find({isActivo: true}).populate({path: "rol"})
+//Todo el personal
+const PersonalGetAll = async (req, res) => {
+  try {
+    let personal = await Personal.find({ isActivo: true }).populate({path: "rol"});
 
-      personal = personal.filter((persona)=> persona.rol.rol != "MASTER_ROLE")
+    personal = personal.filter((persona) => persona.rol.rol != "MASTER_ROLE");
 
-  
-      res.json({ personal });
-    // }
+    return res.status(200).json({ personal });
+
+  } catch (error) {
+    return res.status(500).json({ err: "Error de servidor.", error });
+  }
 };
 
+//Todo el personal eliminado
+const PersonalGetAllEliminados = async (req, res) => {
+  try {
+    const eliminados = await Personal.find({ isActivo: false });
 
+    return res.status(200).json({ eliminados });
 
-  //eliminados
-const PersonalGetAllEliminados = async (req = request, res = response) => {
-
-  
-    const [total, personals] = await Promise.all([
-      Personal.countDocuments({isActivo: false}),
-      Personal.find({isActivo: false})
-    ])
-
-    res.json({ total,personals });
+  } catch (error) {
+    return res.status(500).json({ err: "Error de servidor.", error });
+  }
 };
-
 
 //un solo personal
 const PersonalGet = async (req = request, res = response) => {
-  const {id} = req.params
-  
-  
-   const personal = await Personal.findById(id).populate({
-      path: 'rol',
-      strictPopulate:false,
-      
-    })
-  
-  // delete personal.password
-
-  res.json({ personal });
-};
-
-
-
-
-const PersonalPost = async(req,res = response)=>{ 
-    const {nombre,telefono,email,password,rol} = req.body
-    const personal = new Personal({nombre,telefono,email,password,rol})
-
-    //encriptar contraseña hash
-    const salt = bcryptjs.genSaltSync()
-    personal.password = bcryptjs.hashSync(password,salt)
-    //guardar en bd
-
-
-    await personal.save()
-
-    //TODO: isActive = False para el Personal unicamente. Validación por correo isActive =true
-    res.json({
-        msg: 'Personal creado exitosamente',
-    })
-}
-
-
-const PersonalPut = async (req, res = response) => {
+  try {
     const { id } = req.params;
-    const { _id, password, qr,email, ...resto } = req.body;
-  
+    const activo = await Personal.find({id})
+
+    if (!activo.isActivo){
+      return res.status(404).json({msg: "Personal no existe"})
+    }
     
-    const personal = await Personal.findByIdAndUpdate(id, resto,{new: true}).populate({path: "rol"});
-  
-    res.json(personal);
+    const personal = await Personal.findById(id).populate({ path: "rol" });
+
+    return res.status(200).json({ personal });
+    
+  } catch (error) {
+
+    return res.status(500).json({ err: "Error de servidor.", error });
+  }
 };
 
-const PersonalDelete = async(req, res = response) => {
-    const { id } = req.params
-    const rol = await Personal.findById(id).populate({path:"rol"})
-    const isMaster = rol.rol.rol
-    isMaster == "MASTER_ROLE"
-    ? res.json({msg: "No se puede eliminar MASTER_ROLE"})
-    : (await Personal.findByIdAndUpdate(id, { isActivo: false}),
-      res.json( {msg: "Personal eliminado correctamente"}))
+//Crear Personal
+const PersonalPost = async (req, res = response) => {
+  try {
+    const { nombre, telefono, email, password, rol } = req.body;
+    const personal = new Personal({ nombre, telefono, email, password, rol });
+
+    const salt = bcryptjs.genSaltSync();
+
+    personal.password = bcryptjs.hashSync(password, salt);
+
+    await personal.save();
+
+    return res.status(201).json({ msg: "Personal creado exitosamente" });
+
+  } catch (error) {
+
+    return res.status(500).json({ err: "Error de servidor.", error });
+  }
+};
+
+//Actualizar Personal
+const PersonalPut = async (req, res = response) => {
+  try {
+  
+  const { id } = req.params;
+  const { _id, password, qr, email, ...resto } = req.body;
+  const activo = await Personal.findById(id)
+
+  if(!activo.isActivo){
+    return res.status(404).json({msg: "El personal no existe"})
+  }
+
+  const personal = await Personal.findByIdAndUpdate(id, resto, {new: true}).populate({ path: "rol" });
+
+  return res.json(personal);
+
+} catch (error) {
+
+  return res.status(500).json({ err: "Error de servidor.", error });
+}
+};
+
+//Delete Usuario (Por Estado)
+const PersonalDelete = async (req, res = response) => {
+  try {
+    
+  const { id } = req.params;
+  const rol = await Personal.findById(id).populate({ path: "rol" });
+  const isMaster = rol.rol.rol;
+  
+  if(isMaster == "MASTER_ROLE"){
+    return res.status(401).json({ msg: "No se puede eliminar MASTER_ROLE" })
+  }
+    
+  await Personal.findByIdAndUpdate(id, { isActivo: false })
+  return res.status(200).json({ msg: "Personal eliminado correctamente" });
+  
+} catch (error) {
+
+  return res.status(500).json({ err: "Error de servidor.", error });
+    
+}
+};
+
+
+
+//Delete Usuario Permanente
+const PersonalDeletePermanente = async (req, res = response) => {
+  try {
+    
+    const { id } = req.params;
+    
+    
+    const rol = await Personal.findById(id).populate({ path: "rol" });
+    const isMaster = rol.rol.rol;
+    
+    if(isMaster == "MASTER_ROLE"){
+      return res.status(401).json({ msg: "No se puede eliminar MASTER_ROLE" })
+    }
+  
+    await Personal.findByIdAndDelete(id)
+    return res.status(200).json({ msg: "Personal Eliminado Definitivamente" });
+
+  } catch (error) {
+    return res.status(500).json({ err: "Error de servidor.", error });
+    
+  }
   };
 
-
-  const PersonalDeletePermanente = async(req,res = response)=>{
-    const { id } = req.params
-  
-    //BORRADO FISICAMENTE
-
-    const rol = await Personal.findById(id).populate({path: "rol"})
-    // console.log(rol.rol.rol);
-    const isMaster = rol.rol.rol
-
-    isMaster == "MASTER_ROLE"  
-    ? res.json({msg: "No se puede eliminar MASTER_ROLE"}) 
-    : (await Personal.findByIdAndDelete(id),
-    
-      res.json({msg: "Personal Eliminado Definitivamente"}))
-    
-  }
-  
-
-  const PersonalActive = async(req, res = response) =>{
-
-    const { id } = req.params
-    const personal = await Personal.findByIdAndUpdate(id, { isActivo: true})
-    personal.isActivo == true
-    ? res.json({msg:"EL personal ya se encuentra activo"})
-    : res.json({msg: "Personal reactivado correctamente"})
-    
-  }
   
   
+  const PersonalActive = async (req, res = response) => {
+    try {
+      
+      const { id } = req.params;
+      const personal = await Personal.findByIdAndUpdate(id, { isActivo: true });
+      
+      return personal.isActivo == true
+      ? res.status(400).json({ msg: "EL personal ya se encuentra activo" }) //Error
+      : res.status(200).json({ msg: "Personal reactivado correctamente" }); //Success
 
+    } catch (error) {
 
+      return res.status(500).json({ err: "Error de servidor.", error });
+    }
+};
 
 module.exports = {
-    PersonalGetAll,
-    PersonalGet,
-    PersonalPost,
-    PersonalPut,
-    PersonalDelete,
-    PersonalDeletePermanente,
-    PersonalGetAllEliminados,
-    PersonalActive
-  };
+  PersonalGetAll,
+  PersonalGet,
+  PersonalPost,
+  PersonalPut,
+  PersonalDelete,
+  PersonalDeletePermanente,
+  PersonalGetAllEliminados,
+  PersonalActive,
+};

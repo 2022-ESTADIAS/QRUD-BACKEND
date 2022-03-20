@@ -31,23 +31,9 @@ const PersonalSchema = Schema({
         type: Boolean,
         default: true
 
-    },
-    qr: {
-        type: Boolean,
-        default: false
     }
 
 })
-
-// PersonalSchema.pre(/^find/, function (next) {
-//     this.populate({
-//         path: "Role",
-//         select: "rol description",
-//      },{strictPopulate: false})
-
-//     next();
-// })
-
 
 PersonalSchema.methods.toJSON = function(){
     const {__v,password,_id, ...personal} = this.toObject()
@@ -60,9 +46,3 @@ PersonalSchema.methods.toJSON = function(){
 
 module.exports = model('Personal', PersonalSchema)
 
-
-
-
-// master_role = admin admin
-// admin_role = admin
-// aux_role = Personal X
