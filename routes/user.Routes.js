@@ -11,7 +11,7 @@ const {
   usuariosDeletePermanente,
   usuarioActive,
 } = require("../controllers/user.Controller");
-const { emailExistUsuario, userExistID } = require("../helpers/db-validators");
+const { emailExistUsuario, userExistID, rfcUsuario } = require("../helpers/db-validators");
 const { validarCampos } = require("../middlewares/validarCampos");
 const { validarTokens } = require("../middlewares/validarTokens");
 const { esAdminRole, hasRole } = require("../middlewares/validarRoles");
@@ -63,6 +63,7 @@ router.post(
   validarTokens,
   hasRole(aux,admin, master),
   [
+    check("rfc", "El RFC es obligatorio").custom(rfcUsuario),
     check("email", "El correo no es válido").isEmail(),
     check("email").custom(emailExistUsuario),
     check("telefono", "El telefono no es valido").isMobilePhone("es-MX"),

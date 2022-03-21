@@ -2,6 +2,7 @@ const Usuario = require("../models/user.Model");
 const QRCode = require("qrcode");
 
 const { qrEmail, transport } = require("../helpers/qrEmail");
+const { rfcRgx } = require("../helpers/regex");
 
 //test QR
 const opt = {
@@ -66,11 +67,15 @@ const usuariosPost = async (req, res) => {
 
   try {
     const { nombre,rfc,direccion,telefono,email } = req.body;
-    const usuario = new Usuario({ nombre,rfc,direccion,telefono,email });
-    
-    await usuario.save();
-    return res.status(201).json({ msg : "Usuario Creado Exitosamente" });
-    
+    if(rfcRgx(rfc)){
+      const usuario = new Usuario({ nombre,rfc,direccion,telefono,email });
+      await usuario.save();
+      return res.status(201).json({ msg : "Usuario Creado Exitosamente" });
+
+    }else{
+      res.status(400).json({msg: "formato incorrecto"})
+    }
+        
   } catch (error) {
     
     return res.status(500).json({ err: "Error de servidor.", error });   
@@ -88,6 +93,7 @@ try {
   if(!activo.isActivo){
     return res.status(404).json({msg: "El usuario no existe"})
   }
+  
   const usuario = await Usuario.findByIdAndUpdate(id, resto,{new:true});
   
   return res.status(200).json(usuario);
@@ -213,5 +219,10 @@ module.exports = {
   usuarioActive
 };
 
+
+
+//REGEX RFC
+
+// /^[ña-z]{3,4}[0-9]{6}[0-9a-z]{3}$/i
 
 

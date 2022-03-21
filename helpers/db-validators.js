@@ -18,6 +18,14 @@ const emailExistPersonal = async (email) => {
       throw new Error("El email ya ha sido registrado, desea iniciar sesion?");
     }
   };
+
+  const rfcUsuario = async(rfc)=>{
+
+    const existe = await Usuario.findOne({rfc})
+    if(existe){
+      throw new Error("El RFC ya ha sido registrado")
+    }
+  }
   
 
   const personalExistID = async (id) => {
@@ -46,6 +54,7 @@ const emailExistPersonal = async (email) => {
       emailExistUsuario,
       userExistID,
       personalExistID,
-      rolExistID
+      rolExistID,
+      rfcUsuario
   };
   

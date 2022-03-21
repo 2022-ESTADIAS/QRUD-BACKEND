@@ -11,7 +11,8 @@ const UsuarioSchema = Schema({
     },
     rfc: {
         type: String,
-        required: [true, 'El RFC es obligatorio']
+        required: [true, 'El RFC es obligatorio'],
+        unique: true
     },
     direccion: {
         type: String,

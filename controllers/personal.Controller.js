@@ -1,4 +1,5 @@
 const bcryptjs = require("bcryptjs");
+const { PwdRgx } = require("../helpers/regex");
 
 const Personal = require("../models/personal.Model");
 
@@ -51,16 +52,19 @@ const PersonalGet = async (req = request, res = response) => {
 //Crear Personal
 const PersonalPost = async (req, res = response) => {
   try {
-    const { nombre, telefono, email, password, rol } = req.body;
-    const personal = new Personal({ nombre, telefono, email, password, rol });
-
     const salt = bcryptjs.genSaltSync();
+    const { nombre, telefono, email, password, rol } = req.body;
 
-    personal.password = bcryptjs.hashSync(password, salt);
+    if(PwdRgx(password)){
 
-    await personal.save();
+      const personal = new Personal({ nombre, telefono, email, password, rol });
+      personal.password = bcryptjs.hashSync(password, salt);
+      await personal.save();
+      return res.status(201).json({ msg: "Personal creado exitosamente" });
 
-    return res.status(201).json({ msg: "Personal creado exitosamente" });
+    }else{
+      return res.status(400).json({msg: "formato incorrecto"})
+    }
 
   } catch (error) {
 
@@ -165,3 +169,12 @@ module.exports = {
   PersonalGetAllEliminados,
   PersonalActive,
 };
+
+
+
+//REGEX CONTRASEÑA 
+//La contraseña debe tener al entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula, al menos una mayúscula y al menos un caracter no alfanumérico.
+//  Ejemplo:
+//w3Unpo<code>t0d0
+
+// ^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$
