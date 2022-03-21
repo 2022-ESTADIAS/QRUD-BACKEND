@@ -19,7 +19,7 @@ const PersonalGetAll = async (req, res) => {
 //Todo el personal eliminado
 const PersonalGetAllEliminados = async (req, res) => {
   try {
-    const eliminados = await Personal.find({ isActivo: false });
+    const eliminados = await Personal.find({ isActivo: false }).populate({path: "rol"});
 
     return res.status(200).json({ eliminados });
 
