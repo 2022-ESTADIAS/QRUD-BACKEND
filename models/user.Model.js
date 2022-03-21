@@ -12,7 +12,8 @@ const UsuarioSchema = Schema({
     rfc: {
         type: String,
         required: [true, 'El RFC es obligatorio'],
-        unique: true
+        unique: true,
+        match: [/^[ña-z]{3,4}[0-9]{6}[0-9a-z]{3}$/i]
     },
     direccion: {
         type: String,
