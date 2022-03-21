@@ -68,7 +68,7 @@ const qrEmail = (destino,nombre,url) =>{
 
 const passwordEmail = (destino,link) =>{
   const opciones = {
-    from: '"QRUD 👻 :emo" <qrud.app@gmail.com>', // sender address
+    from: '"QRUD 👻" <qrud.app@gmail.com>', // sender address
     to: destino, // list of receivers
     subject: "Cambiando contraseña",
     html: `<html lang="en">
