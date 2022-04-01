@@ -35,8 +35,8 @@ const { admin, master, aux } = {
 router.put(
   "/email-pwd",
   forgotPwd2
-)
-
+  )
+  
 
 
 //FORGOT PWD VIA EMAIL PUBLIC
@@ -58,12 +58,12 @@ router.put(
   validarTokens,
   hasRole(admin,master,aux),
   changePwd
-)
-//=================================FINPWD
-
-
-router.get("/", 
-validarTokens, 
+  )
+  //=================================FINPWD
+  
+  
+  router.get("/", 
+  validarTokens, 
 hasRole(admin, master), 
 PersonalGetAll);
 
@@ -72,31 +72,16 @@ router.get(
   validarTokens,
   hasRole(admin, master),
   PersonalGetAllEliminados
-);
-
-router.get(
-  "/:id",
-  validarTokens,
+  );
+  
+  router.get(
+    "/:id",
+    validarTokens,
   hasRole(admin, master),
   [check("id").custom(personalExistID)],
   PersonalGet
 );
 
-router.post(
-  "/",
-  validarTokens,
-  hasRole(master),
-  [
-    check("email", "El correo no es válido").isEmail(),
-    check("email").custom(emailExistPersonal),
-    check("telefono", "No es un telefono valido").isMobilePhone("es-MX"),
-    check("nombre", "El Nombre es obligatorio").not().isEmpty(),
-    check("password","El password es obligatorio y minimo 8 caracteres").isLength({ min: 8 }),
-    check("rol", "El rol es requerido").isMongoId(),
-    validarCampos,
-  ],
-  PersonalPost
-);
 
 router.put(
   "/:id",
@@ -108,9 +93,25 @@ router.put(
     validarCampos,
   ],
   PersonalPut
-);
-
-router.delete(
+  );
+  
+  router.post(
+    "/",
+    validarTokens,
+    hasRole(master),
+    [
+      check("email", "El correo no es válido").isEmail(),
+      check("email").custom(emailExistPersonal),
+      check("telefono", "No es un telefono valido").isMobilePhone("es-MX"),
+      check("nombre", "El Nombre es obligatorio").not().isEmpty(),
+      check("password","El password es obligatorio y minimo 8 caracteres").isLength({ min: 8 }),
+      check("rol", "El rol es requerido").isMongoId(),
+      validarCampos,
+    ],
+    PersonalPost
+  );
+  
+  router.delete(
   "/dlt/:id",
   validarTokens,
   hasRole(master),
