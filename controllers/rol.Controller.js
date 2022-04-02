@@ -65,6 +65,9 @@ const RolPut = async (req, res = response) => {
     }
 };
 
+//TODO: ROL DELETE 
+
+
 
 
 module.exports = {
