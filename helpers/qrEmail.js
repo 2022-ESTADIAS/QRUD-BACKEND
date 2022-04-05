@@ -112,6 +112,44 @@ const passwordEmail = (destino,link) =>{
 }
 
 
+const activateEmail = (destino,link) =>{
+  const opciones = {
+    from: '"QRUD 👻" <qrud.app@gmail.com>', // sender address
+    to: destino, // list of receivers
+    subject: "Activar Usuario",
+    html: `<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Rosario:wght@300&display=swap');
+            </style>
+        <section style="font-family: 'Rosario', sans-serif; text-align: center; border-radius: 20px; margin-top: 30px; display: block; margin-left: auto; margin-right: auto; background: #fff; box-shadow: 0 2px 15px rgba(64,64,64,.7); width: 500px; height: 600px;">
+            <img src="cid:logo" alt="Logo" style=" padding-top: 30px; width: 100px; height: 100px; display: block; margin-left: auto; margin-right: auto;">
+            <h1 style="text-align: center; margin-top: 30px;">Notificación de Activación de Usuario</h1>
+            <p style="font-size: 20px; margin-top: 50px; padding-left: 30px; padding-right: 30px;"> Para activar tu cuenta de QRUD, da clic en el siguiente enlace:</p>
+            <a href="${link}">Enlace.</a>
+            <p style="font-size: 20px; padding-left: 30px; padding-right: 30px;"> Si no quieres activar tu cuenta, puedes ignorar este mensaje; El usuario se elimina automáticamente en 3 horas.</p> 
+            <span>¡Gracias!</span>  
+        </section>
+    </body>
+    </html>`,
+    text: "Solicitud de Activación de Cuenta", // plain text body
+    attachments : [
+      {
+        path: 'https://i.postimg.cc/DwkPJ400/QRUD.png',
+        cid: 'logo'
+      }
+    ]
+    }
+    return opciones
+}
+
+
 
 
 
@@ -122,5 +160,6 @@ const passwordEmail = (destino,link) =>{
 module.exports = {
     qrEmail,
     passwordEmail,
+    activateEmail,
     transport
 };

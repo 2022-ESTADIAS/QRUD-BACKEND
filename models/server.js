@@ -11,6 +11,7 @@ class Server{
         this.PersonalRoutes = '/personal'
         this.RoleRoutes = '/rol'
         this.AuthRoutes = '/auth'
+        this.PublicRoutes = '/public'
         //DB
         this.conectarDB()
         //Middlewares
@@ -38,6 +39,7 @@ class Server{
        this.app.use(this.PersonalRoutes, require("../routes/personal.Routes"))
        this.app.use(this.RoleRoutes, require("../routes/rol.Routes"))
        this.app.use(this.AuthRoutes,require("../routes/auth.Routes"))
+       this.app.use(this.PublicRoutes,require("../routes/public.Routes"))
     }
     
 

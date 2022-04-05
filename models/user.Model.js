@@ -36,7 +36,11 @@ const UsuarioSchema = Schema({
     qr: {
         type: Boolean,
         default: false
+    },
+    linkqr: {
+        type: String,
     }
+
 
 })
 

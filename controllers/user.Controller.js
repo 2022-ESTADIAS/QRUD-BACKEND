@@ -130,6 +130,7 @@ try {
   QRCode.toDataURL(qrUser, opt, function (err, url) {
     
     transport.sendMail(qrEmail(email,nombre,url)).then(async(_info)=>{
+      usuario.linkqr = url
       usuario.qr = true
       await usuario.save()
       //Ocupar para debug
