@@ -53,6 +53,10 @@ const usuariosGet = async (req, res) => {
     try {
       const {id} = req.params
       const usuario = await Usuario.findById(id)
+
+      if (usuario.isActivo == false){
+        return res.status(400).json({msg: "El usuario no existe"})
+      }
       
       return res.status(200).json({ usuario });
       
