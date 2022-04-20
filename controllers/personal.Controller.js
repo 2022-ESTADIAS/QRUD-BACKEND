@@ -35,7 +35,7 @@ const PersonalGet = async (req = request, res = response) => {
     const { id } = req.params;
     const activo = await Personal.find({id})
 
-    if (!activo.isActivo){
+    if (activo.isActivo == false){
       return res.status(404).json({msg: "Personal no existe"})
     }
     

@@ -73,7 +73,7 @@ const forgotPwd = async(req,res)=>{
   const hash = await bcryptjs.hash(resetToken,salt);
   
   await new Token({userId: user.id,token: hash,createdAt: Date.now()}).save();
-  
+  //TODO: RENOVAR ENLACE
   const link = `https://frosty-visvesvaraya-177bf5.netlify.app/#/personal/email-pwd?token=${resetToken}&id=${user.id}`;
 
   
