@@ -56,6 +56,9 @@ const RolPut = async (req, res = response) => {
         const {rol , description} = req.body;
         
         const role = await Rol.findByIdAndUpdate(id,{rol,description},{new: true});
+        if(!role){
+            return res.status(404).json({msg:"EL ROL NO EXISTE"})
+        }
         
         return res.json(role);
         
