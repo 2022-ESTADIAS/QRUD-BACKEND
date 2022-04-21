@@ -4,7 +4,7 @@ const QRCode = require("qrcode");
 const { qrEmail, transport } = require("../helpers/qrEmail");
 const { rfcRgx } = require("../helpers/regex");
 
-//test QR
+
 const opt = {
   errorCorrectionLevel: 'H',
   
@@ -14,6 +14,13 @@ const opt = {
   // }
 }
 
+/**
+ * 
+ * @param {request} req 
+ * @param {response} res 
+ * @returns Retorna la lista de todos los usuarios activos del sistema.
+ * @description Busca todos los usuarios con la propiedad isActivo = true.
+ */
 const usuariosGetAll = async (req, res) => {
 try {
   
@@ -30,6 +37,13 @@ try {
 
 
 //ELIMINADOS 
+/**
+ * 
+ * @param {request} req 
+ * @param {response} res 
+ * @returns Retorna la lista de todos los usuarios inactivos del sistema.
+ * @description Busca todos los usuarios con la propiedad isActivo = false.
+ */
 
 const usuariosGetAllEliminados = async (req, res) => {
 try {
@@ -47,8 +61,14 @@ try {
 
 
 
-
-//un solo usuario
+/**
+ * 
+ * @param {request} req 
+ * @param {response} res 
+ * @returns Un unico usuario ACTIVO mediante el ID.
+ * @description Busca un usuario mediante el ID proporcionado. Si este no esta activo, manda error "El usuario no existe".
+ * Si esta activo, retorna el usuario.
+ */
 const usuariosGet = async (req, res) => {
     try {
       const {id} = req.params
@@ -66,7 +86,14 @@ const usuariosGet = async (req, res) => {
     }
   };
 
-
+/**
+ * 
+ * @param {request} req 
+ * @param {response} res 
+ * @returns "Usuario Creado Exitosamente", si falla, retorna "formato incorrecto".
+ * @description Realiza la creación de usuario, cuenta con multiples regex para asegurar datos correctos.
+ * Se utiliza regex para RFC.
+ */
 const usuariosPost = async (req, res) => {
 
   try {
@@ -88,6 +115,14 @@ const usuariosPost = async (req, res) => {
     
 };
 
+/**
+ * 
+ * @param {request} req 
+ * @param {response} res 
+ * @returns El usuario actualizado.
+ * @description Se permite actualizar al usuario, si este se proporciona con un Id invalido o inactivo, mostrará errores.
+ * "El usuario no existe".
+ */
 const usuariosPut = async (req, res) => {
 try {
   const { id } = req.params;
@@ -109,7 +144,14 @@ try {
 };
 
 
-
+/**
+ * 
+ * @param {request} req 
+ * @param {response} res 
+ * @returns Correo electronico con QR del usuario en caso de ser exitoso. En caso de error "El QR se ha generado para este usuario." o "usuario no está activo".
+ * @description Se genera un QR para el usuario con el id proporcionado. El QR contiene información como nombre, rfc, direccion, telefono y correo.
+ * Este QR se envia al correo del usuario.
+ */
 const generarQRuser = async (req, res = response) => {
 try {
   const {id} = req.params
@@ -159,7 +201,14 @@ try {
 }
 }
 
-//Borrado por Estado
+
+/**
+ * 
+ * @param {request} req 
+ * @param {response} res 
+ * @returns Exito: "usuario eliminado correctamente", Error: "usuario no encontrado"
+ * @description Se recibe un id por parametro y se elimina este usuario por estado. Cambia su propiedad isActivo = false.
+ */
 const usuariosDelete = async(req, res = response) => {
 try{
 
@@ -179,6 +228,13 @@ try{
 
 
 //Delete permanente
+/**
+ * 
+ * @param {request} req 
+ * @param {response} res 
+ * @returns Exito: "usuario eliminado definitivamente", Error: "El id no existe - userExistID"
+ * @description Se recibe un id por parametro y se elimina este usuario definitivamente.
+ */
 const usuariosDeletePermanente = async(req,res = response)=>{
   try {
     const { id } = req.params
@@ -193,7 +249,13 @@ const usuariosDeletePermanente = async(req,res = response)=>{
     return res.status(500).json({ err: "Error de servidor.", error });     
   }
 }
-
+/**
+ * 
+ * @param {request} req 
+ * @param {response} res 
+ * @returns Exito: "usuario reactivado correctamente". Error: "El usuario ya se encuentra activo"
+ * @description Permite la reactivación del usuario mediante el ID proporcionado.
+ */
 const usuarioActive = async (req, res = response)=> {
   try {
   
@@ -225,8 +287,6 @@ module.exports = {
 
 
 
-//REGEX RFC
 
-// /^[ña-z]{3,4}[0-9]{6}[0-9a-z]{3}$/i
 
 

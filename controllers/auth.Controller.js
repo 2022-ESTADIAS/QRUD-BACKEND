@@ -1,7 +1,12 @@
 const  {generarJWT} = require('../helpers/generarJWT');
 const Personal = require("../models/personal.Model")
 const bcryptjs = require('bcryptjs');
-
+/**
+ * @param {request} req 
+ * @param {response} res 
+ * @returns Si este es correcto, retorna el usuario en sesión y un token.
+ * @description Funcionalidad que permite el login al sistema.
+ */
 const login  = async(req ,res) =>{
 
     const {email,password} = req.body;

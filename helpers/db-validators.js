@@ -3,6 +3,11 @@ const Personal = require("../models/personal.Model")
 const Role = require("../models/role.Model")
 
 
+/**
+ * 
+ * @param {string} email
+ * @description Verifica la existencia de un correo en base de datos (colección de Personal). 
+ */
 const emailExistPersonal = async (email) => {
     // console.log(req);
     const existe = await Personal.findOne({ email });
@@ -11,6 +16,12 @@ const emailExistPersonal = async (email) => {
     }
   };
 
+
+  /**
+ * 
+ * @param {string} email
+ * @description Verifica la existencia de un correo en base de datos (colección de Usuarios). 
+ */
   const emailExistUsuario = async (email) => {
     // console.log(req);
     const existe = await Usuario.findOne({ email });
@@ -19,6 +30,11 @@ const emailExistPersonal = async (email) => {
     }
   };
 
+  /**
+ * 
+ * @param {string} rfc
+ * @description Verifica la existencia de un rfc en base de datos (colección de Usuario). 
+ */
   const rfcUsuario = async(rfc)=>{
 
     const existe = await Usuario.findOne({rfc})
@@ -27,13 +43,24 @@ const emailExistPersonal = async (email) => {
     }
   }
   
-
+/**
+ * 
+ * @param {*} id
+ * @description Verifica la existencia de un id en base de datos (colección Personal) 
+ */
   const personalExistID = async (id) => {
     const existePersonalID = await Personal.findById(id);
     if (!existePersonalID) {
       throw new Error("El id no existe - personalExistID");
     }
   };
+
+
+  /**
+   * 
+   * @param {*} id
+   * @description Verifica la existencia de un id en base de datos (colección Usuarios) 
+   */
   const userExistID = async (id) => {
     const existeUsuarioID = await Usuario.findById(id);
     if (!existeUsuarioID) {
@@ -41,6 +68,12 @@ const emailExistPersonal = async (email) => {
     }
   };
 
+
+  /**
+   * 
+   * @param {*} id 
+   * @description Verifica la existencia de un rol en base de datos (colección Role)
+   */
   const rolExistID = async (id) => {
     const existeRolID = await Role.findById(id);
     if (!existeRolID) {

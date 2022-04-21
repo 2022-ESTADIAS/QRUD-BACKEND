@@ -17,7 +17,13 @@ const transport = nodemailer.createTransport({
 });
 
 
-
+/**
+ * 
+ * @param {*} destino 
+ * @param {*} nombre 
+ * @param {*} url 
+ * @returns formato de correo para generación de QR.
+ */
 const qrEmail = (destino,nombre,url) =>{
    
     const opt = {
@@ -65,7 +71,12 @@ const qrEmail = (destino,nombre,url) =>{
       
 }
 
-
+/**
+ * 
+ * @param {*} destino 
+ * @param {*} link 
+ * @returns formato de correo para cambio de contraseña QRUD.
+ */
 const passwordEmail = (destino,link) =>{
   const opciones = {
     from: '"QRUD 👻" <qrud.app@gmail.com>', // sender address

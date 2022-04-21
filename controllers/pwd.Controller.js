@@ -6,7 +6,14 @@ const { PwdRgx } = require("../helpers/regex");
 
 
 
-//Cambio de Contraseña Interno
+
+/**
+ * @param {request} req
+ * @param {response} res
+ * @returns Si es correcto, retorna "Contraseña actualizada correctamente", si no, "Las contraseñas no coinciden" o "Formato Incorrecto"
+ * @description Es el cambio de contraseña interno del sistema. En este caso, el Personal en sesión se sabe
+ * su contraseña antigua pero aun así desea cambiarla. Este se protege mediante una regex para hacer contraseñas seguras.
+ */
 const changePwd = async(req, res) => {
 
   try {
@@ -48,7 +55,15 @@ const changePwd = async(req, res) => {
 
 
 
-//¿Olvidaste tu contraseña?
+
+/**
+ * 
+ * @param {request} req 
+ * @param {response} res 
+ * @returns Retorna un correo de cambio de contraseña. El cual esta formado por una URL base, token y un id de usuario.
+ * @description Se recibe un correo por el body de la petición. El cual si existe, procede a generar un URL para el correo.
+ * Si este no existe, manda error "Usuario no encontrado".
+ */
 const forgotPwd = async(req,res)=>{
   try {
     
@@ -88,7 +103,15 @@ const forgotPwd = async(req,res)=>{
 
 
 
-//El chistoso
+
+/**
+ * 
+ * @param {request} req 
+ * @param {response} res 
+ * @returns Si es correcto, retorna "Se ha cambiado la contraseña correctamente.", si no "las contraseñas no coinciden" o "formato incorrecto".
+ * @description Aqui se accede despues de dar click al enlace del correo. Pide 2 campos de contraseña. Estas deben cumplir las condiciones del regex.
+ * Minimo 8 caracteres, 1 mayuscula, 1 minuscula, 1 simbolo y un numero.
+ */
 const forgotPwd2 = async(req,res = response) =>{
   try {
     const salt = bcryptjs.genSaltSync()

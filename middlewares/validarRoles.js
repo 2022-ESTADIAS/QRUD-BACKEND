@@ -1,5 +1,13 @@
 const { response } = require("express");
 
+
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns DEPRECATED.
+ */
 const esAdminRole = (req,res = response,next) =>{
 
     if(!req.usuario){
@@ -14,6 +22,12 @@ const esAdminRole = (req,res = response,next) =>{
     next()
 
 }
+/**
+ * 
+ * @param  {...any} roles 
+ * @returns Lista de roles permitidos.
+ * @description Al pasar la lista de roles, estas son las que tendrán acceso a las rutas.
+ */
 const hasRole = (  ...roles  ) =>{
     return (req, res = response, next)=>{
         if(!req.usuario){

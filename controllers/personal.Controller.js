@@ -3,7 +3,14 @@ const { PwdRgx } = require("../helpers/regex");
 
 const Personal = require("../models/personal.Model");
 
-//Todo el personal
+
+/**
+ * @param {request} req 
+ * @param {response} res 
+ * @returns Todo el personal ACTIVO del sistema.
+ * @description Busca en BD el personal con el filtro de que estos mismo tengan la propiedad isActivo en true. y popula el rol por cada personal.
+ * Se omite el personal que tenga el rol de MASTER_ROLE
+ */
 const PersonalGetAll = async (req, res) => {
   try {
     let personal = await Personal.find({ isActivo: true }).populate({path: "rol"});
@@ -18,6 +25,12 @@ const PersonalGetAll = async (req, res) => {
 };
 
 //Todo el personal eliminado
+/**
+ * @param {request} req 
+ * @param {response} res 
+ * @returns Todo el personal INACTIVO del sistema.
+ * @description Busca en BD el personal con el filtro de que estos mismo tengan la propiedad isActivo en false. y popula el rol por cada personal.
+ */
 const PersonalGetAllEliminados = async (req, res) => {
   try {
     const eliminados = await Personal.find({ isActivo: false }).populate({path: "rol"});
@@ -30,6 +43,13 @@ const PersonalGetAllEliminados = async (req, res) => {
 };
 
 //un solo personal
+/**
+ * 
+ * @param {request} req 
+ * @param {response} res 
+ * @returns Un solo personal ACTIVO del sistema.
+ * @description Recibe un ID como parametro. Este se busca en BD y se comprueba que este activo, de otra manera, este falla.
+ */
 const PersonalGet = async (req = request, res = response) => {
   try {
     const { id } = req.params;
@@ -49,7 +69,13 @@ const PersonalGet = async (req = request, res = response) => {
   }
 };
 
-//Crear Personal
+
+/**
+ * @param {request} req 
+ * @param {response} res 
+ * @returns Si este es correcto, "Personal Creado Exitosamente", si falla, "Formato Incorrecto".
+ * @description Se realiza la creación de Personal con ciertas validaciones tanto de correo y contraseña.
+ */
 const PersonalPost = async (req, res = response) => {
   try {
     const salt = bcryptjs.genSaltSync();
@@ -73,11 +99,19 @@ const PersonalPost = async (req, res = response) => {
 };
 
 //Actualizar Personal
+/**
+ * 
+ * @param {request} req 
+ * @param {response} res 
+ * @returns El objeto actualizado del personal. 
+ * @description Recibe un ID como parametro y permite la actualización del usuario.
+ * Mediante esta funcion no se puede editar NI CONTRASEÑA, NI EMAIL.
+ */
 const PersonalPut = async (req, res = response) => {
   try {
   
   const { id } = req.params;
-  const { _id, password, qr, email, ...resto } = req.body;
+  const { _id, password, email, ...resto } = req.body;
   const activo = await Personal.findById(id)
 
   if(!activo.isActivo){
@@ -94,7 +128,15 @@ const PersonalPut = async (req, res = response) => {
 }
 };
 
-//Delete Usuario (Por Estado)
+
+/**
+ * 
+ * @param {request} req 
+ * @param {response} res 
+ * @returns Si es correcto, retorna "Personal eliminado Correctamente". Si no, "El id no existe - personalExistID"
+ * @description Se recibe un id como parametro y se verifica que este no sea MASTER_ROLE.
+ * Si NO es MASTER_ROLE, procede a eliminar el usuario por estado. Se pasa isActivo = false.
+ */
 const PersonalDelete = async (req, res = response) => {
   try {
     
@@ -102,6 +144,7 @@ const PersonalDelete = async (req, res = response) => {
   const rol = await Personal.findById(id).populate({ path: "rol" });
   const isMaster = rol.rol.rol;
   
+
   if(isMaster == "MASTER_ROLE"){
     return res.status(401).json({ msg: "No se puede eliminar MASTER_ROLE" })
   }
@@ -119,6 +162,14 @@ const PersonalDelete = async (req, res = response) => {
 
 
 //Delete Usuario Permanente
+/**
+ * 
+ * @param {request} req 
+ * @param {response} res 
+ * @returns Si es correcto, retorna "Personal eliminado Definitivamente". Si no, "El id no existe - personalExistID"
+ * @description Se recibe un id como parametro y se verifica que este no sea MASTER_ROLE.
+ * Si NO es MASTER_ROLE, procede a eliminar el usuario de la base de datos. Este ya no existe dentro del sistema.
+ */
 const PersonalDeletePermanente = async (req, res = response) => {
   try {
     
@@ -142,7 +193,13 @@ const PersonalDeletePermanente = async (req, res = response) => {
   };
 
   
-  
+  /**
+ * 
+ * @param {request} req 
+ * @param {response} res 
+ * @returns Si es correcto, retorna "Personal reactivado correctamente". Si no, "EL personal ya se encuentra activo"
+ * @description Se recibe un id como parametro y actualiza el campo isActivo = true.
+ */
   const PersonalActive = async (req, res = response) => {
     try {
       
@@ -172,9 +229,3 @@ module.exports = {
 
 
 
-//REGEX CONTRASEÑA 
-//La contraseña debe tener al entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula, al menos una mayúscula y al menos un caracter no alfanumérico.
-//  Ejemplo:
-//w3Unpo<code>t0d0
-
-// ^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$
