@@ -122,7 +122,13 @@ const passwordEmail = (destino,link) =>{
   
 }
 
-
+/**
+ * 
+ * @param {*} destino 
+ * @param {*} link 
+ * @returns Formato de correo para activación de cuenta de usuarios.
+ * @description FUNCIONALIDAD PWA.  
+ */
 const activateEmail = (destino,link) =>{
   const opciones = {
     from: '"QRUD 👻" <qrud.app@gmail.com>', // sender address

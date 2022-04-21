@@ -5,7 +5,7 @@ const { emailExistUsuario, rfcUsuario } = require("../helpers/db-validators");
 const { validarCampos } = require("../middlewares/validarCampos");
 
 const router = Router();
-//FALTAN VALIDACIONES
+
 router.post("/registro",
 [
     check("rfc", "El RFC es obligatorio").custom(rfcUsuario),

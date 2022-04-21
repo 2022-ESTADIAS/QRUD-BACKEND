@@ -3,6 +3,15 @@ const { rfcRgx } = require("../helpers/regex");
 const Usuario = require("../models/user.Model");
 const { generarQRuser } = require("./user.Controller");
 
+
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns Un correo para activación de cuentas de usuarios.
+ * @description FUNCIONALIDAD PWA. Se realiza el registro de usuarios de manera publica.
+ * @Todo Actualizar url de correo. 
+ */
 const registroPublico = async(req,res) =>{
     try {
         const { nombre,rfc,direccion,telefono,email } = req.body;
@@ -30,7 +39,13 @@ const registroPublico = async(req,res) =>{
 
 
 }
-
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns EXITO:  "Usuario activado exitosamente". Error:"No se puede activar al usuario"
+ * @description FUNCIONALIDAD PWA. Este es el paso despues de realizar el registro y hacer click al enlace del correo.
+ */
 const activarUsuarioEmail = async(req,res)=>{
     try {
         const {id} = req.params
