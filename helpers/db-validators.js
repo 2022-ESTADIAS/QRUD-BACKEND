@@ -26,7 +26,7 @@ const emailExistPersonal = async (email) => {
     // console.log(req);
     const existe = await Usuario.findOne({ email });
     if (existe) {
-      throw new Error("El email ya ha sido registrado, desea iniciar sesion?");
+      throw new Error("El email ya ha sido registrado, desea generar su QR?");
     }
   };
 
