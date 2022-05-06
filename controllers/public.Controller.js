@@ -20,7 +20,7 @@ const registroPublico = async(req,res) =>{
           usuario.isActivo = false
           await usuario.save();
         
-          const link = `http://localhost:3000/public/email-active/${usuario.id}`          
+          const link = `https://qrud.proyectosalm.com/#/usuario/activo/${usuario.id}`
           //CORREO
           transport.sendMail(activateEmail(usuario.email,link)).then(_info =>{
             res.status(200).json({msg: "Correo de activación enviado exitosamente"})
