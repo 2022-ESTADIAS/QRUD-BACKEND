@@ -1,36 +1,31 @@
-const nodemailer  = require('nodemailer');
-
-
-
+const nodemailer = require("nodemailer");
 
 const transport = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure:false,
-    auth: {
-      user: 'qrud.app@gmail.com',
-      pass: 'qrudapp999'
-    },
-    tls: {
-      rejectUnauthorized: false
-  }
+  host: "smtp.ethereal.email",
+  port: 587,
+  auth: {
+    user: "leopold.ritchie90@ethereal.email",
+    pass: "yjBbRxd3MqzJNgJGB2",
+  },
+  secure: false,
+  tls: {
+    rejectUnauthorized: false,
+  },
 });
 
-
 /**
- * 
- * @param {*} destino 
- * @param {*} nombre 
- * @param {*} url 
+ *
+ * @param {*} destino
+ * @param {*} nombre
+ * @param {*} url
  * @returns formato de correo para generación de QR.
  */
-const qrEmail = (destino,nombre,url) =>{
-   
-    const opt = {
-        from: '"QRUD 👻" <qrud.app@gmail.com>', // sender address
-        to: destino, // list of receivers
-        subject: "Generando QR", // Subject line
-        html:  `<!DOCTYPE html>
+const qrEmail = (destino, nombre, url) => {
+  const opt = {
+    from: '"QRUD 👻" <qrud.app@gmail.com>', // sender address
+    to: destino, // list of receivers
+    subject: "Generando QR", // Subject line
+    html: `<!DOCTYPE html>
         <html lang="en">
         <head>
             <meta charset="UTF-8">
@@ -51,33 +46,30 @@ const qrEmail = (destino,nombre,url) =>{
             </section>
         </body>
         </html>`, // html body
-        text: "Bienvenido usuario al sistema QR le entregamos su codigo QR que nos ha solicitado", // plain text body
-    
-    
-        attachments: [
-        {
-          filename: 'qr.png',
-          path: `${url}`,
-          cid: "koso@koso.com"
-        },
-        {
-          path: 'https://i.postimg.cc/DwkPJ400/QRUD.png',
-          cid: 'logo'
-        }
-      ]
-      }
-      return opt
-    
-      
-}
+    text: "Bienvenido usuario al sistema QR le entregamos su codigo QR que nos ha solicitado", // plain text body
+
+    attachments: [
+      {
+        filename: "qr.png",
+        path: `${url}`,
+        cid: "koso@koso.com",
+      },
+      {
+        path: "https://i.postimg.cc/DwkPJ400/QRUD.png",
+        cid: "logo",
+      },
+    ],
+  };
+  return opt;
+};
 
 /**
- * 
- * @param {*} destino 
- * @param {*} link 
+ *
+ * @param {*} destino
+ * @param {*} link
  * @returns formato de correo para cambio de contraseña QRUD.
  */
-const passwordEmail = (destino,link) =>{
+const passwordEmail = (destino, link) => {
   const opciones = {
     from: '"QRUD 👻" <qrud.app@gmail.com>', // sender address
     to: destino, // list of receivers
@@ -104,32 +96,28 @@ const passwordEmail = (destino,link) =>{
     </body>
     </html>`,
     text: "Solicitud de cambio de contraseña", // plain text body
-    attachments : [
+    attachments: [
       {
-        path: 'https://i.postimg.cc/DwkPJ400/QRUD.png',
-        cid: 'logo'
-      }
-    ]
-  
-  
-  
-  }
-  return opciones
-  
+        path: "https://i.postimg.cc/DwkPJ400/QRUD.png",
+        cid: "logo",
+      },
+    ],
+  };
+  return opciones;
+
   // transport.sendMail(opciones).then(info =>{
   //   console.log(info)
   // })
-  
-}
+};
 
 /**
- * 
- * @param {*} destino 
- * @param {*} link 
+ *
+ * @param {*} destino
+ * @param {*} link
  * @returns Formato de correo para activación de cuenta de usuarios.
- * @description FUNCIONALIDAD PWA.  
+ * @description FUNCIONALIDAD PWA.
  */
-const activateEmail = (destino,link) =>{
+const activateEmail = (destino, link) => {
   const opciones = {
     from: '"QRUD 👻" <qrud.app@gmail.com>', // sender address
     to: destino, // list of receivers
@@ -156,27 +144,19 @@ const activateEmail = (destino,link) =>{
     </body>
     </html>`,
     text: "Solicitud de Activación de Cuenta", // plain text body
-    attachments : [
+    attachments: [
       {
-        path: 'https://i.postimg.cc/DwkPJ400/QRUD.png',
-        cid: 'logo'
-      }
-    ]
-    }
-    return opciones
-}
-
-
-
-
-
-
-
-
+        path: "https://i.postimg.cc/DwkPJ400/QRUD.png",
+        cid: "logo",
+      },
+    ],
+  };
+  return opciones;
+};
 
 module.exports = {
-    qrEmail,
-    passwordEmail,
-    activateEmail,
-    transport
+  qrEmail,
+  passwordEmail,
+  activateEmail,
+  transport,
 };
