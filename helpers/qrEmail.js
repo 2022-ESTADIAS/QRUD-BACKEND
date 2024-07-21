@@ -7,6 +7,10 @@ const transport = nodemailer.createTransport({
     user: "projectos631@gmail.com",
     pass: "awtmcbvffxlyocxw",
   },
+  secure: false,
+  tls: {
+    rejectUnauthorized: false,
+  },
 });
 
 /**
