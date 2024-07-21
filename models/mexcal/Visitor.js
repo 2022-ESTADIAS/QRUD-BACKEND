@@ -18,6 +18,9 @@ const VisitorSchema = Schema({
     type: String,
     required: [true, "La fecha de visita es requerida"],
   },
+  visit_company: {
+    type: String,
+  },
   contact_name: {
     type: String,
     required: [true, "El contacto es obligatorio"],

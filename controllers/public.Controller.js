@@ -1,5 +1,6 @@
 const { qrEmail, activateEmail, transport } = require("../helpers/qrEmail");
 const Department = require("../models/mexcal/Department");
+const Visit = require("../models/mexcal/Visit");
 const Visitor = require("../models/mexcal/Visitor");
 const VisitorsTypes = require("../models/mexcal/VisitorTypes");
 const Usuario = require("../models/user.Model");
@@ -7,11 +8,7 @@ const QRCode = require("qrcode");
 
 const opt = {
   errorCorrectionLevel: "H",
-
-  // color: {
-  //   // dark: '#593e73 ',  // Blue dots
-  // //   light: '#ffffff' // Transparent background
-  // }
+  width: "250px",
 };
 
 /**
@@ -116,10 +113,76 @@ const getAllVisitorsTypes = async (req, res) => {
     return res.status(500).json({ err: "Error de servidor.", error });
   }
 };
+const visitorsEntries = async (req, res) => {
+  try {
+    let message = "hora de entrada actualizada con exito!";
+
+    const { visitorQr, scanDate } = req.body;
+
+    const visit = await Visit.findOne({
+      visitor_id: visitorQr._id,
+    });
+    const visitType = await VisitorsTypes.findOne({
+      name: "Visitantes",
+    });
+    const visitor = await Visitor.findById(visitorQr._id);
+
+    if (!visit) {
+      await Visit.create({
+        visit_init_time: scanDate,
+        visitor_id: visitorQr._id,
+      });
+    } else {
+      visit.visit_end_time = scanDate;
+      await visit.save();
+
+      if (visitType.uid.toString() == visitorQr.visitor_type_id.toString()) {
+        visitor.isActive = false;
+        await visitor.save();
+      }
+
+      message = "hora de salida actualizada con exito!";
+    }
+
+    return res.status(200).send({
+      status: "success",
+      message,
+    });
+  } catch (error) {
+    return res.status(500).json({ err: "Error de servidor.", error });
+  }
+};
+
+const verifyActiveVisitor = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const visitor = await Visitor.findOne({
+      _id: id,
+      isActive: true,
+    });
+    if (!visitor) {
+      throw new Error(
+        "El acceso del visitante ha caducado, debe realizar otro registro"
+      );
+    }
+
+    return res.status(200).send({
+      status: "success",
+      message: "visitante valido",
+      access: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ err: "Error de servidor.", error });
+  }
+};
 
 module.exports = {
   registroPublico,
   activarUsuarioEmail,
   getAllDepartments,
   getAllVisitorsTypes,
+  visitorsEntries,
+  verifyActiveVisitor,
 };
