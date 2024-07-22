@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
+
 const {
   registroPublico,
   activarUsuarioEmail,
@@ -14,6 +15,7 @@ const {
   emailExistVisitor,
 } = require("../helpers/db-validators");
 const { validarCampos } = require("../middlewares/validarCampos");
+const upload = require("../helpers/uploadFiles");
 
 const router = Router();
 
@@ -30,6 +32,16 @@ router.post(
     check("contact_name", "El contacto es obligatorio").not().isEmpty(),
     validarCampos,
   ],
+  upload.fields([
+    {
+      name: "ine_file",
+      maxCount: 1,
+    },
+    {
+      name: "image_licence_file",
+      maxCount: 1,
+    },
+  ]),
   registroPublico
 );
 

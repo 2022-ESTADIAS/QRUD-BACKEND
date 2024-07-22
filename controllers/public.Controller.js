@@ -7,8 +7,9 @@ const Usuario = require("../models/user.Model");
 const QRCode = require("qrcode");
 
 const opt = {
-  errorCorrectionLevel: "H",
-  width: "250px",
+  errorCorrectionLevel: "L",
+  width: 250,
+  scale: 1,
 };
 
 /**
@@ -53,11 +54,13 @@ const registroPublico = async (req, res) => {
     //   visitor_type_id,
     // } = req.body;
     const visitor = await Visitor.create(req.body);
+    console.log(req.files, "ARCHIVOS SUBIDOS");
+    console.log(req.file, "ARCHIVO SUBIDO");
 
     const departament = await Department.findById(visitor.department_id);
     const visitorType = await VisitorsTypes.findById(visitor.visitor_type_id);
     const data = {
-      ...visitor,
+      ...visitor._doc,
       department: departament.name,
       visitor_type: visitorType.name,
     };
@@ -119,6 +122,8 @@ const visitorsEntries = async (req, res) => {
 
     const { visitorQr, scanDate } = req.body;
 
+    console.log(visitorQr, " QUE CHINGADERA SE ESTA ENVIANDO AL BACK ");
+
     const visit = await Visit.findOne({
       visitor_id: visitorQr._id,
     });
@@ -136,7 +141,7 @@ const visitorsEntries = async (req, res) => {
       visit.visit_end_time = scanDate;
       await visit.save();
 
-      if (visitType.uid.toString() == visitorQr.visitor_type_id.toString()) {
+      if (visitType._id.toString() == visitorQr.visitor_type_id.toString()) {
         visitor.isActive = false;
         await visitor.save();
       }
@@ -149,6 +154,7 @@ const visitorsEntries = async (req, res) => {
       message,
     });
   } catch (error) {
+    console.log(error, "VISITOR ERROR");
     return res.status(500).json({ err: "Error de servidor.", error });
   }
 };
@@ -174,7 +180,12 @@ const verifyActiveVisitor = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ err: "Error de servidor.", error });
+    return res
+      .status(500)
+      .json({
+        err: "El acceso del visitante ha caducado, debe realizar otro registro",
+        error,
+      });
   }
 };
 

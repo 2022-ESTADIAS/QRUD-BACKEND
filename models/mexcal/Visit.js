@@ -2,10 +2,10 @@ const { Schema, model, Types } = require("mongoose");
 
 const VisitSchema = Schema({
   visit_init_time: {
-    type: Date,
+    type: String,
   },
   visit_end_time: {
-    type: Date,
+    type: String,
   },
   isActive: {
     type: Boolean,
