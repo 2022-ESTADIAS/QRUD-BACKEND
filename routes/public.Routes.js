@@ -8,6 +8,8 @@ const {
   getAllVisitorsTypes,
   visitorsEntries,
   verifyActiveVisitor,
+  getAllDevices,
+  getAllReasons,
 } = require("../controllers/public.Controller");
 const {
   emailExistUsuario,
@@ -47,6 +49,8 @@ router.post(
 
 router.post("/visitors-entries", visitorsEntries);
 router.get("/departments", getAllDepartments);
+router.get("/devices", getAllDevices);
+router.get("/reasons", getAllReasons);
 router.get("/visitors-types", getAllVisitorsTypes);
 router.get("/visitors-active-verification/:id", verifyActiveVisitor);
 router.get("/email-active/:id", activarUsuarioEmail);

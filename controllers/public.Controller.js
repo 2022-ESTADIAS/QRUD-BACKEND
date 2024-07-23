@@ -1,5 +1,7 @@
 const { qrEmail, activateEmail, transport } = require("../helpers/qrEmail");
 const Department = require("../models/mexcal/Department");
+const Device = require("../models/mexcal/Devices");
+const ReasonForAdmission = require("../models/mexcal/ReasonForAdmission");
 const Visit = require("../models/mexcal/Visit");
 const Visitor = require("../models/mexcal/Visitor");
 const VisitorsTypes = require("../models/mexcal/VisitorTypes");
@@ -116,6 +118,34 @@ const getAllVisitorsTypes = async (req, res) => {
     return res.status(500).json({ err: "Error de servidor.", error });
   }
 };
+const getAllDevices = async (req, res) => {
+  try {
+    const devices = await Device.find({
+      isActive: true,
+    });
+
+    return res.status(200).send({
+      message: "Dispositivos",
+      devices,
+    });
+  } catch (error) {
+    return res.status(500).json({ err: "Error de servidor.", error });
+  }
+};
+const getAllReasons = async (req, res) => {
+  try {
+    const reasons = await ReasonForAdmission.find({
+      isActive: true,
+    });
+
+    return res.status(200).send({
+      message: "Dispositivos",
+      reasons,
+    });
+  } catch (error) {
+    return res.status(500).json({ err: "Error de servidor.", error });
+  }
+};
 const visitorsEntries = async (req, res) => {
   try {
     let message = "hora de entrada actualizada con exito!";
@@ -180,12 +210,10 @@ const verifyActiveVisitor = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res
-      .status(500)
-      .json({
-        err: "El acceso del visitante ha caducado, debe realizar otro registro",
-        error,
-      });
+    return res.status(500).json({
+      err: "El acceso del visitante ha caducado, debe realizar otro registro",
+      error,
+    });
   }
 };
 
@@ -196,4 +224,6 @@ module.exports = {
   getAllVisitorsTypes,
   visitorsEntries,
   verifyActiveVisitor,
+  getAllDevices,
+  getAllReasons,
 };
