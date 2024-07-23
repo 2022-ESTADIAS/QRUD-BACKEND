@@ -39,6 +39,14 @@ const VisitorSchema = Schema({
     ref: "Visitors_type",
     required: [true, "La referencia del visitante es requerida"],
   },
+  reason_id: {
+    type: SchemaTypes.ObjectId,
+    ref: "Reason_for_admission",
+  },
+  hasVehicle: {
+    type: Boolean,
+    default: true,
+  },
   isActive: {
     type: Boolean,
     default: true,
