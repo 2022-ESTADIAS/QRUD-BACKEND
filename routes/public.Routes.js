@@ -26,12 +26,12 @@ router.post(
   [
     check("email", "El correo no es válido").isEmail(),
     check("email").custom(emailExistVisitor),
-    check("name", "El Nombre es obligatorio").not().isEmpty(),
-    check("visit_date", "la fecha de visita es obligatoria").not().isEmpty(),
-    check("department_id", "El departamento es obligatorio").not().isEmpty(),
-    check("enter_device", "El dispositivo es obligatorio").not().isEmpty(),
+    // check("name", "El Nombre es obligatorio").not().isEmpty(),
+    // check("visit_date", "la fecha de visita es obligatoria").not().isEmpty(),
+    // check("department_id", "El departamento es obligatorio").not().isEmpty(),
+    // check("enter_device", "El dispositivo es obligatorio").not().isEmpty(),
     check("visitor_type_id", "El visitante es obligatorio").not().isEmpty(),
-    check("contact_name", "El contacto es obligatorio").not().isEmpty(),
+    // check("contact_name", "El contacto es obligatorio").not().isEmpty(),
     validarCampos,
   ],
   upload.fields([

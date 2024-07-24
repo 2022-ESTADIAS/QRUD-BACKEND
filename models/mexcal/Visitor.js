@@ -45,7 +45,6 @@ const VisitorSchema = Schema({
   },
   hasVehicle: {
     type: Boolean,
-    default: true,
   },
   isActive: {
     type: Boolean,

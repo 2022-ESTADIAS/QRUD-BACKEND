@@ -1,6 +1,7 @@
 const { qrEmail, activateEmail, transport } = require("../helpers/qrEmail");
 const Department = require("../models/mexcal/Department");
 const Device = require("../models/mexcal/Devices");
+const Driver = require("../models/mexcal/Driver");
 const ReasonForAdmission = require("../models/mexcal/ReasonForAdmission");
 const Visit = require("../models/mexcal/Visit");
 const Visitor = require("../models/mexcal/Visitor");
@@ -55,17 +56,27 @@ const registroPublico = async (req, res) => {
     //   department_id,
     //   visitor_type_id,
     // } = req.body;
-    const visitor = await Visitor.create(req.body);
-    console.log(req.files, "ARCHIVOS SUBIDOS");
-    console.log(req.file, "ARCHIVO SUBIDO");
+    const visitorType = await VisitorsTypes.findById(req.body.visitor_type_id);
+    let visitor = {};
 
-    const departament = await Department.findById(visitor.department_id);
-    const visitorType = await VisitorsTypes.findById(visitor.visitor_type_id);
-    const data = {
-      ...visitor._doc,
-      department: departament.name,
-      visitor_type: visitorType.name,
-    };
+    if (visitorType.name == "Transportistas") {
+      const driverFrom = await Driver.create(req.body);
+
+      visitor = {
+        ...driverFrom._doc,
+        name: driverFrom._doc.operator_name,
+      };
+    } else {
+      const visitorForm = await Visitor.create(req.body);
+      const departament = await Department.findById(visitor.department_id);
+      visitor = {
+        ...visitorForm._doc,
+        department: departament.name,
+        visitor_type: visitorType.name,
+      };
+    }
+
+    const data = visitor;
     console.log(data, "VISITANTE");
 
     const qrData = JSON.stringify(data);
@@ -86,6 +97,7 @@ const registroPublico = async (req, res) => {
         });
     });
   } catch (error) {
+    console.log(error, "PUBLIC REGISTER");
     return res.status(500).json({ err: "Error de servidor.", error });
   }
 };
@@ -197,17 +209,21 @@ const verifyActiveVisitor = async (req, res) => {
       _id: id,
       isActive: true,
     });
-    if (!visitor) {
+    const driver = await Driver.findOne({
+      _id: id,
+      isActive: true,
+    });
+    if (driver || visitor) {
+      return res.status(200).send({
+        status: "success",
+        message: "visitante valido",
+        access: true,
+      });
+    } else {
       throw new Error(
         "El acceso del visitante ha caducado, debe realizar otro registro"
       );
     }
-
-    return res.status(200).send({
-      status: "success",
-      message: "visitante valido",
-      access: true,
-    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
