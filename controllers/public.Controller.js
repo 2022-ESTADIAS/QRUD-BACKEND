@@ -68,7 +68,7 @@ const registroPublico = async (req, res) => {
       };
     } else {
       const visitorForm = await Visitor.create(req.body);
-      const departament = await Department.findById(visitor.department_id);
+      const departament = await Department.findById(req.body.department_id);
       visitor = {
         ...visitorForm._doc,
         department: departament.name,
