@@ -48,29 +48,24 @@ const activarUsuarioEmail = async (req, res) => {
  */
 const registroPublico = async (req, res) => {
   try {
-    // const {
-    //   name,
-    //   email,
-    //   visit_date,
-    //   enter_device,
-    //   department_id,
-    //   visitor_type_id,
-    // } = req.body;
     const visitorType = await VisitorsTypes.findById(req.body.visitor_type_id);
     let visitor = {};
+    console.log(req.body, "BODY DE LA PETICION");
+    console.log(req.files, "ARCHIVOS SUBIDOS FILES");
+    console.log(req.file, "ARCHIVOS SUBIDOS FILE");
 
     if (visitorType.name == "Transportistas") {
-      const driverFrom = await Driver.create(req.body);
+      // const driverFrom = await Driver.create(req.body);
 
       visitor = {
-        ...driverFrom._doc,
-        name: driverFrom._doc.operator_name,
+        // ...driverFrom._doc,
+        // name: driverFrom._doc.operator_name,
       };
     } else {
-      const visitorForm = await Visitor.create(req.body);
+      // const visitorForm = await Visitor.create(req.body);
       const departament = await Department.findById(req.body.department_id);
       visitor = {
-        ...visitorForm._doc,
+        // ...visitorForm._doc,
         department: departament.name,
         visitor_type: visitorType.name,
       };
@@ -79,25 +74,29 @@ const registroPublico = async (req, res) => {
     const data = visitor;
     console.log(data, "VISITANTE");
 
-    const qrData = JSON.stringify(data);
+    // const qrData = JSON.stringify(data);
 
-    QRCode.toDataURL(qrData, opt, function (err, url) {
-      transport
-        .sendMail(qrEmail(visitor.email, visitor.name, url))
-        .then(async (_info) => {
-          //Ocupar para debug
-          // console.log(info.response)
-          return res.status(200).send({
-            status: "success",
-            msg: "Codigo QR enviado al correo correctamente",
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          return res
-            .status(500)
-            .json({ err: "Credenciales de servidor invalidas", error: err });
-        });
+    // QRCode.toDataURL(qrData, opt, function (err, url) {
+    //   transport
+    //     .sendMail(qrEmail(visitor.email, visitor.name, url))
+    //     .then(async (_info) => {
+    //       //Ocupar para debug
+    //       // console.log(info.response)
+    //       return res.status(200).send({
+    //         status: "success",
+    //         msg: "Codigo QR enviado al correo correctamente",
+    //       });
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //       return res
+    //         .status(500)
+    //         .json({ err: "Credenciales de servidor invalidas", error: err });
+    //     });
+    // });
+    return res.status(201).send({
+      status: "success",
+      message: "subida de archivos exitosa",
     });
   } catch (error) {
     console.log(error, "PUBLIC REGISTER");

@@ -24,26 +24,18 @@ const router = Router();
 router.post(
   "/registro",
   [
-    check("email", "El correo no es válido").isEmail(),
-    check("email").custom(emailExistVisitor),
+    // check("email", "El correo no es válido").isEmail(),
+    // check("email").custom(emailExistVisitor),
     // check("name", "El Nombre es obligatorio").not().isEmpty(),
     // check("visit_date", "la fecha de visita es obligatoria").not().isEmpty(),
     // check("department_id", "El departamento es obligatorio").not().isEmpty(),
     // check("enter_device", "El dispositivo es obligatorio").not().isEmpty(),
-    check("visitor_type_id", "El visitante es obligatorio").not().isEmpty(),
+    // check("visitor_type_id", "El visitante es obligatorio").not().isEmpty(),
     // check("contact_name", "El contacto es obligatorio").not().isEmpty(),
     validarCampos,
   ],
-  upload.fields([
-    {
-      name: "ine_file",
-      maxCount: 1,
-    },
-    {
-      name: "image_licence_file",
-      maxCount: 1,
-    },
-  ]),
+
+  upload.single("ine_field"),
   registroPublico
 );
 

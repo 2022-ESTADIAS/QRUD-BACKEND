@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { dbConnection } = require("../database/config");
+const path = require("path");
 
 class Server {
   constructor() {
@@ -29,7 +30,7 @@ class Server {
     //JSON
     this.app.use(express.json());
     //Public
-    this.app.use(express.static("public"));
+    this.app.use(express.static(path.join(__dirname, "../public")));
   }
 
   routes() {
