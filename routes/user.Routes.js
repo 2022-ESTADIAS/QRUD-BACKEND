@@ -11,7 +11,11 @@ const {
   usuariosDeletePermanente,
   usuarioActive,
 } = require("../controllers/user.Controller");
-const { emailExistUsuario, userExistID, rfcUsuario } = require("../helpers/db-validators");
+const {
+  emailExistUsuario,
+  userExistID,
+  rfcUsuario,
+} = require("../helpers/db-validators");
 const { validarCampos } = require("../middlewares/validarCampos");
 const { validarTokens } = require("../middlewares/validarTokens");
 const { esAdminRole, hasRole } = require("../middlewares/validarRoles");
@@ -24,11 +28,7 @@ const { admin, master, aux } = {
   aux: "AUX_ROLE",
 };
 
-router.get(
-    "/", 
-    validarTokens, 
-    hasRole(admin, aux, master), 
-    usuariosGetAll);
+router.get("/", validarTokens, hasRole(admin, aux, master), usuariosGetAll);
 
 router.get(
   "/eliminados",
@@ -38,12 +38,14 @@ router.get(
 );
 
 //TEST QR
-router.get("/qr/:id",
- validarTokens, 
- hasRole(aux,admin, master), 
- check("id").custom(userExistID),
- validarCampos,
- generarQRuser);
+router.get(
+  "/qr/:id",
+  validarTokens,
+  //  hasRole(aux,admin, master),
+  // check("id").custom(userExistID),
+  // validarCampos,
+  generarQRuser
+);
 //==================================
 
 //id fallaba
@@ -61,7 +63,7 @@ router.get(
 router.post(
   "/",
   validarTokens,
-  hasRole(aux,admin, master),
+  hasRole(aux, admin, master),
   [
     check("rfc", "El RFC es obligatorio").custom(rfcUsuario),
     check("email", "El correo no es válido").isEmail(),
@@ -102,14 +104,14 @@ router.delete(
 router.delete(
   "/def/:id",
   validarTokens,
-  hasRole(admin,master),
+  hasRole(admin, master),
   [
     check("id", "No es un Id válido").isMongoId(),
     check("id").custom(userExistID),
     validarCampos,
   ],
   usuariosDeletePermanente
-)
+);
 
 //Reactivación de usuario
 router.get(
@@ -122,6 +124,6 @@ router.get(
     validarCampos,
   ],
   usuarioActive
-)
+);
 
 module.exports = router;

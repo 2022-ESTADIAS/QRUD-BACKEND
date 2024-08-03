@@ -79,25 +79,30 @@ const registroPublico = async (req, res) => {
     const data = visitor;
     console.log(data, "VISITANTE");
 
-    const qrData = JSON.stringify(data);
+    // const qrData = JSON.stringify(data);
 
-    QRCode.toDataURL(qrData, opt, function (err, url) {
-      transport
-        .sendMail(qrEmail(visitor.email, visitor.name, url))
-        .then(async (_info) => {
-          //Ocupar para debug
-          // console.log(info.response)
-          return res.status(200).send({
-            status: "success",
-            msg: "Codigo QR enviado al correo correctamente",
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          return res
-            .status(500)
-            .json({ err: "Credenciales de servidor invalidas", error: err });
-        });
+    // QRCode.toDataURL(qrData, opt, function (err, url) {
+    //   transport
+    //     .sendMail(qrEmail(visitor.email, visitor.name, url))
+    //     .then(async (_info) => {
+    //       //Ocupar para debug
+    //       // console.log(info.response)
+    //       return res.status(200).send({
+    //         status: "success",
+    //         msg: "Codigo QR enviado al correo correctamente",
+    //       });
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //       return res
+    //         .status(500)
+    //         .json({ err: "Credenciales de servidor invalidas", error: err });
+    //     });
+    // });
+
+    return res.status(201).send({
+      status: "success",
+      msg: "El usuario fue creado correctamente",
     });
   } catch (error) {
     console.log(error, "PUBLIC REGISTER");
@@ -166,8 +171,6 @@ const visitorsEntries = async (req, res) => {
     let message = "hora de entrada actualizada con exito!";
 
     const { visitorQr, scanDate } = req.body;
-
-    console.log(visitorQr, " QUE CHINGADERA SE ESTA ENVIANDO AL BACK ");
 
     const visit = await Visit.findOne({
       visitor_id: visitorQr._id,
