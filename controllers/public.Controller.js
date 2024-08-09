@@ -57,7 +57,7 @@ const registroPublico = async (req, res) => {
     console.log(req.files, "ARCHIVOS SUBIDOS FILES");
     console.log(req.file, "ARCHIVOS SUBIDOS FILE");
 
-    if (visitorType.name == "Transportistas") {
+    if (visitorType?.name == "Transportistas") {
       // const driverFrom = await Driver.create(req.body);
       const fileName = await uploadFileToAWS(
         "mexcal-storage",
@@ -74,7 +74,10 @@ const registroPublico = async (req, res) => {
         // name: driverFrom._doc.operator_name,
       };
     } else {
-      const visitorForm = await Visitor.create(req.body);
+      const visitorForm = await Visitor.create({
+        ...req.body,
+        hasVehicle: req.body.hasVehicle == "true" ? true : false,
+      });
       const departament = await Department.findById(req.body.department_id);
 
       if (visitorType.name == "Proveedores") {
