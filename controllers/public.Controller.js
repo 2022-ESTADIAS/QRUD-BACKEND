@@ -56,22 +56,42 @@ const registroPublico = async (req, res) => {
     console.log(req.body, "BODY DE LA PETICION");
     console.log(req.files, "ARCHIVOS SUBIDOS FILES");
     console.log(req.file, "ARCHIVOS SUBIDOS FILE");
-
+    console.log(req.files.ine_field, "ARCHIVOS SUBIDOS INE FILE");
+    console.log(
+      req.files.driver_licence_field,
+      "ARCHIVOS SUBIDOS DRIVER LICENCE FILE"
+    );
     if (visitorType?.name == "Transportistas") {
-      // const driverFrom = await Driver.create(req.body);
-      const fileName = await uploadFileToAWS(
+      const driverFrom = await Driver.create(req.body);
+      const fileNameINE = await uploadFileToAWS(
         "mexcal-storage",
         "transportistas",
-        req.file
+        req.files.ine_field[0]
       );
-      // const fileReference = await File.create({
-      //   filename: req.file.filename,
-      //   user_id: driverFrom._doc._id,
-      // });
+      const fileNameLicense = await uploadFileToAWS(
+        "mexcal-storage",
+        "transportistas",
+        req.files.driver_licence_field[0]
+      );
+      const fileReferenceINE = await File.create({
+        filename: fileNameINE,
+        visitor_id: driverFrom._id,
+      });
+      const fileReferenceLicense = await File.create({
+        filename: fileNameLicense,
+        visitor_id: driverFrom._id,
+      });
+      await Driver.findOneAndUpdate(
+        { _id: driverFrom._id },
+        {
+          ine_file_id: fileReferenceINE._id,
+          image_licence_file_id: fileReferenceLicense._id,
+        }
+      );
 
       visitor = {
-        // ...driverFrom._doc,
-        // name: driverFrom._doc.operator_name,
+        ...driverFrom._doc,
+        name: driverFrom._doc.operator_name,
       };
     } else {
       const visitorForm = await Visitor.create({
@@ -84,7 +104,7 @@ const registroPublico = async (req, res) => {
         const fileName = await uploadFileToAWS(
           "mexcal-storage",
           "proveedores",
-          req.file
+          req.files.ine_field[0]
         );
 
         const fileReference = await File.create({
@@ -101,7 +121,7 @@ const registroPublico = async (req, res) => {
         const fileName = await uploadFileToAWS(
           "mexcal-storage",
           "visitantes",
-          req.file
+          req.files.ine_field[0]
         );
         // await getFileFromAWS("mexcal-storage", fileName);
 

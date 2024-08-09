@@ -50,9 +50,6 @@ const VisitorSchema = Schema({
     type: Boolean,
     default: true,
   },
-  image_licence_file_id: {
-    type: String,
-  },
   ine_file_id: {
     type: String,
   },

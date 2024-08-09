@@ -26,6 +26,12 @@ const DriverSchema = Schema({
     type: Boolean,
     default: true,
   },
+  image_licence_file_id: {
+    type: String,
+  },
+  ine_file_id: {
+    type: String,
+  },
 });
 
 DriverSchema.methods.toJSON = function () {

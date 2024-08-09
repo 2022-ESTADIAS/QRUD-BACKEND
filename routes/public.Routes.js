@@ -34,8 +34,10 @@ router.post(
     // check("contact_name", "El contacto es obligatorio").not().isEmpty(),
     validarCampos,
   ],
-
-  upload.single("ine_field"),
+  upload.fields([
+    { name: "ine_field", maxCount: 1 },
+    { name: "driver_licence_field", maxCount: 1 },
+  ]),
   registroPublico
 );
 
