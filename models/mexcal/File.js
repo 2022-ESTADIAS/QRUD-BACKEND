@@ -23,4 +23,4 @@ FileSchema.methods.toJSON = function () {
   return file;
 };
 
-module.exports = model("Visit", FileSchema);
+module.exports = model("File", FileSchema);

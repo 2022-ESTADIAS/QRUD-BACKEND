@@ -1,3 +1,4 @@
+const { uploadFileToAWS, getFileFromAWS } = require("../helpers/awsClient");
 const { qrEmail, activateEmail, transport } = require("../helpers/qrEmail");
 const Department = require("../models/mexcal/Department");
 const Device = require("../models/mexcal/Devices");
@@ -7,6 +8,7 @@ const Visit = require("../models/mexcal/Visit");
 const Visitor = require("../models/mexcal/Visitor");
 const VisitorsTypes = require("../models/mexcal/VisitorTypes");
 const Usuario = require("../models/user.Model");
+const File = require("../models/mexcal/File");
 const QRCode = require("qrcode");
 
 const opt = {
@@ -48,29 +50,72 @@ const activarUsuarioEmail = async (req, res) => {
  */
 const registroPublico = async (req, res) => {
   try {
-    // const {
-    //   name,
-    //   email,
-    //   visit_date,
-    //   enter_device,
-    //   department_id,
-    //   visitor_type_id,
-    // } = req.body;
     const visitorType = await VisitorsTypes.findById(req.body.visitor_type_id);
     let visitor = {};
+    let ineFieldId = "";
+    console.log(req.body, "BODY DE LA PETICION");
+    console.log(req.files, "ARCHIVOS SUBIDOS FILES");
+    console.log(req.file, "ARCHIVOS SUBIDOS FILE");
 
     if (visitorType.name == "Transportistas") {
-      const driverFrom = await Driver.create(req.body);
+      // const driverFrom = await Driver.create(req.body);
+      const fileName = await uploadFileToAWS(
+        "mexcal-storage",
+        "transportistas",
+        req.file
+      );
+      // const fileReference = await File.create({
+      //   filename: req.file.filename,
+      //   user_id: driverFrom._doc._id,
+      // });
 
       visitor = {
-        ...driverFrom._doc,
-        name: driverFrom._doc.operator_name,
+        // ...driverFrom._doc,
+        // name: driverFrom._doc.operator_name,
       };
     } else {
       const visitorForm = await Visitor.create(req.body);
       const departament = await Department.findById(req.body.department_id);
+
+      if (visitorType.name == "Proveedores") {
+        const fileName = await uploadFileToAWS(
+          "mexcal-storage",
+          "proveedores",
+          req.file
+        );
+
+        const fileReference = await File.create({
+          filename: fileName,
+          visitor_id: visitorForm._id,
+        });
+        await Visitor.findOneAndUpdate(
+          { _id: visitorForm._id },
+          {
+            ine_file_id: fileReference._id,
+          }
+        );
+      } else {
+        const fileName = await uploadFileToAWS(
+          "mexcal-storage",
+          "visitantes",
+          req.file
+        );
+        // await getFileFromAWS("mexcal-storage", fileName);
+
+        const fileReference = await File.create({
+          filename: fileName,
+          visitor_id: visitorForm._id,
+        });
+        await Visitor.findOneAndUpdate(
+          { _id: visitorForm._id },
+          {
+            ine_file_id: fileReference._id,
+          }
+        );
+      }
+
       visitor = {
-        ...visitorForm._doc,
+        // ...visitorForm._doc,
         department: departament.name,
         visitor_type: visitorType.name,
       };
