@@ -8,7 +8,7 @@ const Driver = require("../models/mexcal/Driver");
 
 const opt = {
   errorCorrectionLevel: "L",
-  width: 250,
+  width: 300,
   scale: 1,
 
   // color: {

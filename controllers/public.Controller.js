@@ -52,15 +52,7 @@ const registroPublico = async (req, res) => {
   try {
     const visitorType = await VisitorsTypes.findById(req.body.visitor_type_id);
     let visitor = {};
-    let ineFieldId = "";
-    console.log(req.body, "BODY DE LA PETICION");
-    console.log(req.files, "ARCHIVOS SUBIDOS FILES");
-    console.log(req.file, "ARCHIVOS SUBIDOS FILE");
-    console.log(req.files.ine_field, "ARCHIVOS SUBIDOS INE FILE");
-    console.log(
-      req.files.driver_licence_field,
-      "ARCHIVOS SUBIDOS DRIVER LICENCE FILE"
-    );
+
     if (visitorType?.name == "Transportistas") {
       const driverFrom = await Driver.create(req.body);
       const fileNameINE = await uploadFileToAWS(
@@ -307,6 +299,53 @@ const verifyActiveVisitor = async (req, res) => {
   }
 };
 
+const getImageFromAWS = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let images = {};
+    const driver = await Driver.findById(id)
+      .populate("ine_file_id", "filename")
+      .populate("image_licence_file_id", "filename");
+
+    if (driver) {
+      const ine = await getFileFromAWS(
+        "mexcal-storage",
+        driver.ine_file_id.filename
+      );
+      const license = await getFileFromAWS(
+        "mexcal-storage",
+        driver.image_licence_file_id.filename
+      );
+
+      images = {
+        ine,
+        license,
+      };
+    } else {
+      const usuario = await Visitor.findById(id).populate(
+        "ine_file_id",
+        "filename"
+      );
+      const ine = await getFileFromAWS(
+        "mexcal-storage",
+        usuario.ine_file_id.filename
+      );
+      images = {
+        ine,
+      };
+    }
+
+    return res.status(200).send({
+      status: "success",
+      message: "imagen recuperada con exito!",
+      images,
+    });
+  } catch (error) {
+    console.log(error, "IMAGE ERROR");
+    return res.status(500).json({ err: "Error de servidor.", error });
+  }
+};
+
 module.exports = {
   registroPublico,
   activarUsuarioEmail,
@@ -316,4 +355,5 @@ module.exports = {
   verifyActiveVisitor,
   getAllDevices,
   getAllReasons,
+  getImageFromAWS,
 };

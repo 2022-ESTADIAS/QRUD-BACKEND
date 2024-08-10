@@ -1,4 +1,4 @@
-const { Schema, model, Types } = require("mongoose");
+const { Schema, model, Types, SchemaTypes } = require("mongoose");
 
 const DriverSchema = Schema({
   company_name: {
@@ -27,10 +27,14 @@ const DriverSchema = Schema({
     default: true,
   },
   image_licence_file_id: {
-    type: String,
+    type: SchemaTypes.ObjectId,
+    ref: "File",
+    // required: [true, "La referencia de la imagen es requerida"],
   },
   ine_file_id: {
-    type: String,
+    type: SchemaTypes.ObjectId,
+    ref: "File",
+    // required: [true, "La referencia de la imagen es requerida"],
   },
 });
 

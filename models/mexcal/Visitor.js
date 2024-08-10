@@ -51,7 +51,9 @@ const VisitorSchema = Schema({
     default: true,
   },
   ine_file_id: {
-    type: String,
+    type: SchemaTypes.ObjectId,
+    ref: "File",
+    // required: [true, "La referencia de la imagen es requerida"],
   },
 });
 
