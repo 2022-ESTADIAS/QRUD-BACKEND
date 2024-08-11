@@ -5,6 +5,8 @@ const { qrEmail, transport } = require("../helpers/qrEmail");
 const { rfcRgx } = require("../helpers/regex");
 const Visitor = require("../models/mexcal/Visitor");
 const Driver = require("../models/mexcal/Driver");
+const es = require("../lang/es.json");
+const en = require("../lang/en.json");
 
 const opt = {
   errorCorrectionLevel: "L",
@@ -134,6 +136,14 @@ const usuariosPut = async (req, res) => {
  * Este QR se envia al correo del usuario.
  */
 const generarQRuser = async (req, res = response) => {
+  const sendingEmail =
+    req.headers.lang == "es" ? es.qrCodeSentToEmail : en.qrCodeSentToEmail;
+  const sendingEmailError =
+    req.headers.lang == "es"
+      ? es.unableToGenerateQRCode
+      : en.unableToGenerateQRCode;
+  const serverError =
+    req.headers.lang == "es" ? es.serverError : en.serverError;
   try {
     const { id } = req.params;
     let user = {};
@@ -173,14 +183,12 @@ const generarQRuser = async (req, res = response) => {
           // console.log(info.response)
           return res.status(200).send({
             status: "success",
-            msg: "Codigo QR enviado al correo correctamente",
+            msg: sendingEmail,
           });
         })
         .catch((err) => {
           console.log(err);
-          return res
-            .status(500)
-            .json({ err: "No fue posible generar el QR", error: err });
+          return res.status(500).json({ err: sendingEmailError, error: err });
         });
     });
 
@@ -189,7 +197,7 @@ const generarQRuser = async (req, res = response) => {
     //   msg: "Codigo QR enviado al correo correctamente",
     // });
   } catch (error) {
-    return res.status(500).json({ err: "Error de servidor.", error });
+    return res.status(500).json({ err: serverError, error });
   }
 };
 

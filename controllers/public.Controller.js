@@ -10,6 +10,8 @@ const VisitorsTypes = require("../models/mexcal/VisitorTypes");
 const Usuario = require("../models/user.Model");
 const File = require("../models/mexcal/File");
 const QRCode = require("qrcode");
+const es = require("../lang/es.json");
+const en = require("../lang/en.json");
 
 const opt = {
   errorCorrectionLevel: "L",
@@ -49,6 +51,11 @@ const activarUsuarioEmail = async (req, res) => {
  * @Todo Actualizar url de correo.
  */
 const registroPublico = async (req, res) => {
+  const userCreated =
+    req.headers.lang == "es" ? es.userHasBeenCreated : en.userHasBeenCreated;
+  const serverError =
+    req.headers.lang == "es" ? es.serverError : en.serverError;
+
   try {
     const visitorType = await VisitorsTypes.findById(req.body.visitor_type_id);
     let visitor = {};
@@ -162,15 +169,17 @@ const registroPublico = async (req, res) => {
 
     return res.status(201).send({
       status: "success",
-      msg: "El usuario fue creado correctamente",
+      msg: userCreated,
     });
   } catch (error) {
     console.log(error, "PUBLIC REGISTER");
-    return res.status(500).json({ err: "Error de servidor.", error });
+    return res.status(500).json({ err: serverError, error });
   }
 };
 
 const getAllDepartments = async (req, res) => {
+  const serverError =
+    req.headers.lang == "es" ? es.serverError : en.serverError;
   try {
     const departments = await Department.find({
       isActive: true,
@@ -181,10 +190,12 @@ const getAllDepartments = async (req, res) => {
       departments,
     });
   } catch (error) {
-    return res.status(500).json({ err: "Error de servidor.", error });
+    return res.status(500).json({ err: serverError, error });
   }
 };
 const getAllVisitorsTypes = async (req, res) => {
+  const serverError =
+    req.headers.lang == "es" ? es.serverError : en.serverError;
   try {
     const visitorTypes = await VisitorsTypes.find({
       isActive: true,
@@ -195,10 +206,12 @@ const getAllVisitorsTypes = async (req, res) => {
       visitorTypes,
     });
   } catch (error) {
-    return res.status(500).json({ err: "Error de servidor.", error });
+    return res.status(500).json({ err: serverError, error });
   }
 };
 const getAllDevices = async (req, res) => {
+  const serverError =
+    req.headers.lang == "es" ? es.serverError : en.serverError;
   try {
     const devices = await Device.find({
       isActive: true,
@@ -209,10 +222,12 @@ const getAllDevices = async (req, res) => {
       devices,
     });
   } catch (error) {
-    return res.status(500).json({ err: "Error de servidor.", error });
+    return res.status(500).json({ err: serverError, error });
   }
 };
 const getAllReasons = async (req, res) => {
+  const serverError =
+    req.headers.lang == "es" ? es.serverError : en.serverError;
   try {
     const reasons = await ReasonForAdmission.find({
       isActive: true,
@@ -223,12 +238,22 @@ const getAllReasons = async (req, res) => {
       reasons,
     });
   } catch (error) {
-    return res.status(500).json({ err: "Error de servidor.", error });
+    return res.status(500).json({ err: serverError, error });
   }
 };
 const visitorsEntries = async (req, res) => {
+  const serverError =
+    req.headers.lang == "es" ? es.serverError : en.serverError;
+  const entryTime =
+    req.headers.lang == "es"
+      ? es.entryTimeSuccessfullyUpdate
+      : en.entryTimeSuccessfullyUpdate;
+  const departureTime =
+    req.headers.lang == "es"
+      ? es.departureTimeSuccessfullyUpdate
+      : en.departureTimeSuccessfullyUpdate;
   try {
-    let message = "hora de entrada actualizada con exito!";
+    let message = entryTime;
 
     const { visitorQr, scanDate } = req.body;
 
@@ -254,7 +279,7 @@ const visitorsEntries = async (req, res) => {
         await visitor.save();
       }
 
-      message = "hora de salida actualizada con exito!";
+      message = departureTime;
     }
 
     return res.status(200).send({
@@ -263,11 +288,13 @@ const visitorsEntries = async (req, res) => {
     });
   } catch (error) {
     console.log(error, "VISITOR ERROR");
-    return res.status(500).json({ err: "Error de servidor.", error });
+    return res.status(500).json({ err: serverError, error });
   }
 };
 
 const verifyActiveVisitor = async (req, res) => {
+  const accessExpired =
+    req.headers.lang == "es" ? es.errorAccess : en.errorAccess;
   try {
     const { id } = req.params;
 
@@ -286,20 +313,20 @@ const verifyActiveVisitor = async (req, res) => {
         access: true,
       });
     } else {
-      throw new Error(
-        "El acceso del visitante ha caducado, debe realizar otro registro"
-      );
+      throw new Error(accessExpired);
     }
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      err: "El acceso del visitante ha caducado, debe realizar otro registro",
+      err: accessExpired,
       error,
     });
   }
 };
 
 const getImageFromAWS = async (req, res) => {
+  const serverError =
+    req.headers.lang == "es" ? es.serverError : en.serverError;
   try {
     const { id } = req.params;
     let images = {};
@@ -342,7 +369,7 @@ const getImageFromAWS = async (req, res) => {
     });
   } catch (error) {
     console.log(error, "IMAGE ERROR");
-    return res.status(500).json({ err: "Error de servidor.", error });
+    return res.status(500).json({ err: serverError, error });
   }
 };
 

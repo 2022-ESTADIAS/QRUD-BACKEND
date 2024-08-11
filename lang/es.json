@@ -1,0 +1,14 @@
+{
+  "personalNotFound": "Personal no encontrado.",
+  "wrongPassword": "contraseña incorrecta.",
+  "personalFound": "Usuario encontrado",
+  "serverError": "error en el servidor",
+  "userHasBeenCreated": "El usuario fue creado correctamente",
+  "entryTimeSuccessfullyUpdate": "hora de entrada actualizada con exito!",
+  "departureTimeSuccessfullyUpdate": "hora de salida actualizada con exito!",
+  "errorAccess": "El acceso del visitante ha caducado, debe realizar otro registro",
+  "qrCodeSentToEmail": "Codigo QR enviado al correo correctamente",
+  "unableToGenerateQRCode": "No fue posible generar el QR",
+  "updatePassword": "Contraseña actualizada correctamente",
+  "passwordDoesntMatch": "Las contraseñas no coinciden"
+}

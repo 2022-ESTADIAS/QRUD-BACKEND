@@ -1,0 +1,10 @@
+{
+  "personalNotFound": "Personal Not Found",
+  "wrongPassword": "Wrong Password",
+  "personalFound": "User Found",
+  "serverError": "Server Error",
+  "userHasBeenCreated": "The user was successfully created",
+  "entryTimeSuccessfullyUpdate": "entry time successfully updated!",
+  "departureTimeSuccessfullyUpdate": "departure time successfully updated!",
+  "errorAccess": "The visitor's access has expired, you must register again."
+}

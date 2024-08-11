@@ -3,6 +3,8 @@ const Personal = require("../models/personal.Model");
 const Token = require("../models/token.Model");
 const { passwordEmail, transport } = require("../helpers/qrEmail");
 const { PwdRgx } = require("../helpers/regex");
+const es = require("../lang/es.json");
+const en = require("../lang/en.json");
 
 /**
  * @param {request} req
@@ -12,6 +14,12 @@ const { PwdRgx } = require("../helpers/regex");
  * su contraseña antigua pero aun así desea cambiarla. Este se protege mediante una regex para hacer contraseñas seguras.
  */
 const changePwd = async (req, res) => {
+  const serverError =
+    req.headers.lang == "es" ? es.serverError : en.serverError;
+  const updatePassword =
+    req.headers.lang == "es" ? es.updatePassword : en.updatePassword;
+  const passwordDoesntMatch =
+    req.headers.lang == "es" ? es.passwordDoesntMatch : en.passwordDoesntMatch;
   try {
     const id = req.usuario.id;
     const { lastpwd, newpwd, newpwd2 } = req.body;
@@ -28,20 +36,18 @@ const changePwd = async (req, res) => {
         const password = bcryptjs.hashSync(newpwd, salt);
         await Personal.findByIdAndUpdate(id, { password });
 
-        return res
-          .status(200)
-          .json({ msg: "Contraseña actualizada correctamente" });
+        return res.status(200).json({ msg: updatePassword });
       } else {
-        return res.status(400).json({ msg: "Las contraseñas no coinciden" });
+        return res.status(400).json({ msg: passwordDoesntMatch });
       }
       // }else{
       //   return res.status(400).json({msg: "formato incorrecto"})
       // }
     } else {
-      return res.status(400).json({ msg: "Las contraseñas no coinciden" });
+      return res.status(400).json({ msg: passwordDoesntMatch });
     }
   } catch (error) {
-    return res.status(500).json({ err: "Error de servidor.", error });
+    return res.status(500).json({ err: serverError, error });
   }
 };
 

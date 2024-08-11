@@ -1,7 +1,11 @@
 const Driver = require("../models/mexcal/Driver");
 const Visitor = require("../models/mexcal/Visitor");
+const es = require("../lang/es.json");
+const en = require("../lang/en.json");
 
 const getAllVisitors = async (req, res) => {
+  const serverError =
+    req.headers.lang == "es" ? es.serverError : en.serverError;
   const page = +req.query.pageNumber || 1;
   const pageSize = 10;
   const keyword = req.query.keyword
@@ -33,12 +37,14 @@ const getAllVisitors = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      err: "Error en el servidor",
+      err: serverError,
       error,
     });
   }
 };
 const getAllDrivers = async (req, res) => {
+  const serverError =
+    req.headers.lang == "es" ? es.serverError : en.serverError;
   const page = +req.query.pageNumber || 1;
   const pageSize = 10;
   const keyword = req.query.keyword
@@ -70,7 +76,7 @@ const getAllDrivers = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      err: "Error en el servidor",
+      err: serverError,
       error,
     });
   }
