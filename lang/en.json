@@ -6,5 +6,10 @@
   "userHasBeenCreated": "The user was successfully created",
   "entryTimeSuccessfullyUpdate": "entry time successfully updated!",
   "departureTimeSuccessfullyUpdate": "departure time successfully updated!",
-  "errorAccess": "The visitor's access has expired, you must register again."
+  "errorAccess": "The visitor's access has expired, you must register again.",
+  "qrCodeSentToEmail": "QR code sent to email correctly",
+  "unableToGenerateQRCode": "It was not possible to generate the QR",
+  "updatePassword": "Password updated correctly",
+  "passwordDoesntMatch": "Passwords do not match",
+  "invalidQRCode": "Invalid QR Code"
 }

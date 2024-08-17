@@ -10,7 +10,7 @@ const {
   verifyActiveVisitor,
   getAllDevices,
   getAllReasons,
-  getImageFromAWS,
+  getUserFromQRCode,
 } = require("../controllers/public.Controller");
 const {
   emailExistUsuario,
@@ -49,6 +49,6 @@ router.get("/reasons", getAllReasons);
 router.get("/visitors-types", getAllVisitorsTypes);
 router.get("/visitors-active-verification/:id", verifyActiveVisitor);
 router.get("/email-active/:id", activarUsuarioEmail);
-router.get("/image/:id", getImageFromAWS);
+router.get("/qrcode/user/:id", getUserFromQRCode);
 
 module.exports = router;

@@ -24,6 +24,7 @@ const getAllVisitors = async (req, res) => {
     const visitors = await Visitor.find({
       ...keyword,
     })
+      .sort([["_id", "desc"]])
       .populate("visitor_type_id", "name")
       .limit(pageSize)
       .skip(pageSize * (page - 1));
@@ -64,6 +65,7 @@ const getAllDrivers = async (req, res) => {
     const drivers = await Driver.find({
       ...keyword,
     })
+      .sort([["_id", "desc"]])
       .limit(pageSize)
       .skip(pageSize * (page - 1));
 

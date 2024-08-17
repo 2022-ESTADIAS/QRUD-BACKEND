@@ -147,22 +147,26 @@ const generarQRuser = async (req, res = response) => {
   try {
     const { id } = req.params;
     let user = {};
+    let userEmailSent = {};
     const driver = await Driver.findById(id);
 
     if (driver) {
       user = {
-        ...driver._doc,
+        _id: driver._doc._id,
+      };
+      userEmailSent = {
         name: driver?.operator_name,
+        email: driver.email,
       };
     } else {
-      const usuario = await Visitor.findById(id)
-        .populate("department_id", "name")
-        .populate("visitor_type_id", "name");
+      const usuario = await Visitor.findById(id);
 
       user = {
-        ...usuario._doc,
-        department: usuario?.department_id?.name,
-        visitor_type: usuario?.visitor_type_id?.name,
+        _id: usuario._doc._id,
+      };
+      userEmailSent = {
+        name: usuario.name,
+        email: usuario.email,
       };
     }
 
@@ -174,7 +178,7 @@ const generarQRuser = async (req, res = response) => {
 
     QRCode.toDataURL(qrUser, opt, function (err, url) {
       transport
-        .sendMail(qrEmail(user?.email, user?.name, url))
+        .sendMail(qrEmail(userEmailSent?.email, userEmailSent?.name, url))
         .then(async (_info) => {
           // usuario.linkqr = url;
           // usuario.qr = true;

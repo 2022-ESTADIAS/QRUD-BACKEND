@@ -10,5 +10,6 @@
   "qrCodeSentToEmail": "Codigo QR enviado al correo correctamente",
   "unableToGenerateQRCode": "No fue posible generar el QR",
   "updatePassword": "Contraseña actualizada correctamente",
-  "passwordDoesntMatch": "Las contraseñas no coinciden"
+  "passwordDoesntMatch": "Las contraseñas no coinciden",
+  "invalidQRCode": "Codigo QR invalido"
 }

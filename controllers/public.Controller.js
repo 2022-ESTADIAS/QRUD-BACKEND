@@ -260,9 +260,7 @@ const visitorsEntries = async (req, res) => {
     const visit = await Visit.findOne({
       visitor_id: visitorQr._id,
     });
-    const visitType = await VisitorsTypes.findOne({
-      name: "Visitantes",
-    });
+
     const visitor = await Visitor.findById(visitorQr._id);
 
     if (!visit) {
@@ -274,11 +272,10 @@ const visitorsEntries = async (req, res) => {
       visit.visit_end_time = scanDate;
       await visit.save();
 
-      if (visitType._id.toString() == visitorQr.visitor_type_id.toString()) {
+      if (visitorQr.visitor_type == "Visitantes") {
         visitor.isActive = false;
         await visitor.save();
       }
-
       message = departureTime;
     }
 
@@ -324,13 +321,19 @@ const verifyActiveVisitor = async (req, res) => {
   }
 };
 
-const getImageFromAWS = async (req, res) => {
+const getUserFromQRCode = async (req, res) => {
   const serverError =
     req.headers.lang == "es" ? es.serverError : en.serverError;
+  const qrCodeError =
+    req.headers.lang == "es" ? es.invalidQRCode : en.invalidQRCode;
   try {
     const { id } = req.params;
-    let images = {};
-    const driver = await Driver.findById(id)
+    let user = {};
+    // const driver = await Driver.findById(id)
+    const driver = await Driver.findOne({
+      _id: id,
+      isActive: true,
+    })
       .populate("ine_file_id", "filename")
       .populate("image_licence_file_id", "filename");
 
@@ -344,32 +347,45 @@ const getImageFromAWS = async (req, res) => {
         driver.image_licence_file_id.filename
       );
 
-      images = {
-        ine,
-        license,
+      user = {
+        ...driver._doc,
+        name: driver.operator_name,
+        ine_field: ine,
+        driver_licence_field: license,
       };
     } else {
-      const usuario = await Visitor.findById(id).populate(
-        "ine_file_id",
-        "filename"
-      );
+      // const usuario = await Visitor.findById(id)
+      const usuario = await Visitor.findOne({
+        _id: id,
+        isActive: true,
+      })
+        .populate("ine_file_id", "filename")
+        .populate("department_id", "name")
+        .populate("visitor_type_id", "name");
+
+      if (!usuario) {
+        throw new Error(qrCodeError);
+      }
       const ine = await getFileFromAWS(
         "mexcal-storage",
         usuario.ine_file_id.filename
       );
-      images = {
-        ine,
+      user = {
+        ...usuario._doc,
+        visitor_type: usuario.visitor_type_id.name,
+        department: usuario.department_id.name,
+        ine_field: ine,
       };
     }
 
     return res.status(200).send({
       status: "success",
-      message: "imagen recuperada con exito!",
-      images,
+      message: "usuario recuperado con exito!",
+      user,
     });
   } catch (error) {
     console.log(error, "IMAGE ERROR");
-    return res.status(500).json({ err: serverError, error });
+    return res.status(500).json({ err: error.message, error });
   }
 };
 
@@ -382,5 +398,5 @@ module.exports = {
   verifyActiveVisitor,
   getAllDevices,
   getAllReasons,
-  getImageFromAWS,
+  getUserFromQRCode,
 };
