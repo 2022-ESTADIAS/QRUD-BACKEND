@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const { dbConnection } = require("../database/config");
 const path = require("path");
+const cron = require("node-cron");
+const { visitorsCron } = require("../helpers/disbledVisitorsCron");
 
 class Server {
   constructor() {
@@ -19,6 +21,8 @@ class Server {
     this.middlewares();
     //Rutas
     this.routes();
+
+    this.cronJob();
   }
   async conectarDB() {
     await dbConnection();
@@ -45,6 +49,12 @@ class Server {
   listen() {
     this.app.listen(this.port, () => {
       console.log("Servidor corriendo en el puerto", this.port);
+    });
+  }
+  cronJob() {
+    cron.schedule("0 20 * * *", async () => {
+      console.log("EJECUTANDO CRON ");
+      visitorsCron();
     });
   }
 }
