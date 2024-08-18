@@ -257,20 +257,28 @@ const visitorsEntries = async (req, res) => {
 
     const { visitorQr, scanDate } = req.body;
 
-    const visit = await Visit.findOne({
+    const visit = await Visit.find({
       visitor_id: visitorQr._id,
-    });
+    })
+      .sort({
+        _id: -1,
+      })
+      .limit(1);
 
     const visitor = await Visitor.findById(visitorQr._id);
 
-    if (!visit) {
+    if (
+      !visit ||
+      visit.length == 0 ||
+      (visit[0].visit_init_time && visit[0].visit_end_time)
+    ) {
       await Visit.create({
         visit_init_time: scanDate,
         visitor_id: visitorQr._id,
       });
     } else {
-      visit.visit_end_time = scanDate;
-      await visit.save();
+      visit[0].visit_end_time = scanDate;
+      await visit[0].save();
 
       if (visitorQr.visitor_type == "Visitantes") {
         visitor.isActive = false;
