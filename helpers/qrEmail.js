@@ -38,15 +38,15 @@ const qrEmail = (destino, nombre, url) => {
                 @import url('https://fonts.googleapis.com/css2?family=Rosario:wght@300&display=swap');
                 </style>
             <section style="font-family: 'Rosario', sans-serif; text-align: center; border-radius: 20px; margin-top: 30px; display: block; margin-left: auto; margin-right: auto; background: #fff; box-shadow: 0 2px 15px rgba(64,64,64,.7); width: 500px; height: 800px;">
-                <img src="cid:logo" alt="Logo" style=" padding-top: 30px; width: 100px; height: 100px; display: block; margin-left: auto; margin-right: auto;">
+                <img src="cid:logo" alt="Logo" style=" padding-top: 30px;  display: block; margin-left: auto; margin-right: auto;">
                 <h1 style="text-align: center;">Bienvenido ${nombre}</h1>
                 <img src="cid:koso@koso.com" alt="QR" style="display: block; margin-left: auto; margin-right: auto; width: 250px; height: 250px;">
-                <p style="font-size: 20px; padding-left: 30px; padding-right: 30px;"> Bienvenido a nuestro sistema de datos QRUD, escanea el codigo QR para verificar tus datos.</p>
-                <a href="#">Si hay algun error en tus datos presione Aqui.</a>
+                <p style="font-size: 20px; padding-left: 30px; padding-right: 30px;"> Bienvenido a nuestro sistema de datos MexCal Truckline, escanea el codigo QR para verificar tus datos.</p>
+               
             </section>
         </body>
         </html>`, // html body
-    text: "Bienvenido usuario al sistema QR le entregamos su codigo QR que nos ha solicitado", // plain text body
+    text: "Bienvenido usuario al sistema MexCal Truckline le entregamos su codigo QR que nos ha solicitado", // plain text body
 
     attachments: [
       {
@@ -55,7 +55,8 @@ const qrEmail = (destino, nombre, url) => {
         cid: "koso@koso.com",
       },
       {
-        path: "https://i.postimg.cc/DwkPJ400/QRUD.png",
+        // path: "https://i.post img.cc/DwkPJ400/QRUD.png",
+        path: "https://qrud-backend-6ra0.onrender.com/logo.png",
         cid: "logo",
       },
     ],
@@ -86,7 +87,7 @@ const passwordEmail = (destino, link) => {
             @import url('https://fonts.googleapis.com/css2?family=Rosario:wght@300&display=swap');
             </style>
         <section style="font-family: 'Rosario', sans-serif; text-align: center; border-radius: 20px; margin-top: 30px; display: block; margin-left: auto; margin-right: auto; background: #fff; box-shadow: 0 2px 15px rgba(64,64,64,.7); width: 500px; height: 600px;">
-            <img src="cid:logo" alt="Logo" style=" padding-top: 30px; width: 100px; height: 100px; display: block; margin-left: auto; margin-right: auto;">
+            <img src="cid:logo" alt="Logo" style=" padding-top: 30px;  display: block; margin-left: auto; margin-right: auto;">
             <h1 style="text-align: center; margin-top: 30px;">Notificación de cambio de contraseña</h1>
             <p style="font-size: 20px; margin-top: 50px; padding-left: 30px; padding-right: 30px;"> Para restablecer tu contraseña de QRUD, da clic en el siguiente enlace:</p>
             <a href="${link}">Enlace.</a>
@@ -98,7 +99,8 @@ const passwordEmail = (destino, link) => {
     text: "Solicitud de cambio de contraseña", // plain text body
     attachments: [
       {
-        path: "https://i.postimg.cc/DwkPJ400/QRUD.png",
+        // path: "https://i.postimg.cc/DwkPJ400/QRUD.png",
+        path: "https://qrud-backend-6ra0.onrender.com/logo.png",
         cid: "logo",
       },
     ],
@@ -134,7 +136,7 @@ const activateEmail = (destino, link) => {
             @import url('https://fonts.googleapis.com/css2?family=Rosario:wght@300&display=swap');
             </style>
         <section style="font-family: 'Rosario', sans-serif; text-align: center; border-radius: 20px; margin-top: 30px; display: block; margin-left: auto; margin-right: auto; background: #fff; box-shadow: 0 2px 15px rgba(64,64,64,.7); width: 500px; height: 600px;">
-            <img src="cid:logo" alt="Logo" style=" padding-top: 30px; width: 100px; height: 100px; display: block; margin-left: auto; margin-right: auto;">
+            <img src="cid:logo" alt="Logo" style=" padding-top: 30px;  display: block; margin-left: auto; margin-right: auto;">
             <h1 style="text-align: center; margin-top: 30px;">Notificación de Activación de Usuario</h1>
             <p style="font-size: 20px; margin-top: 50px; padding-left: 30px; padding-right: 30px;"> Para activar tu cuenta de QRUD, da clic en el siguiente enlace:</p>
             <a href="${link}">Enlace.</a>
@@ -146,7 +148,8 @@ const activateEmail = (destino, link) => {
     text: "Solicitud de Activación de Cuenta", // plain text body
     attachments: [
       {
-        path: "https://i.postimg.cc/DwkPJ400/QRUD.png",
+        // path: "https://i.postimg.cc/DwkPJ400/QRUD.png",
+        path: "https://qrud-backend-6ra0.onrender.com/logo.png",
         cid: "logo",
       },
     ],

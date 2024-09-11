@@ -32,7 +32,7 @@ const uploadFileToAWS = async (bucketName, folder, file) => {
       })
     );
 
-    fs.unlink(filePath, () => {
+    fs.unlink(path.join(__dirname, filePath), () => {
       console.log("ARCHIVO BORRADO");
     });
 
