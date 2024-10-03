@@ -61,7 +61,7 @@ const registroPublico = async (req, res) => {
     let visitor = {};
 
     if (visitorType?.name == "Transportistas") {
-      const driverFrom = await Driver.create(req.body);
+      const driverFrom = await Visitor.create(req.body);
       const fileNameINE = await uploadFileToAWS(
         "mexcal-storage",
         "transportistas",
@@ -80,7 +80,7 @@ const registroPublico = async (req, res) => {
         filename: fileNameLicense,
         visitor_id: driverFrom._id,
       });
-      await Driver.findOneAndUpdate(
+      await Visitor.findOneAndUpdate(
         { _id: driverFrom._id },
         {
           ine_file_id: fileReferenceINE._id,
@@ -88,10 +88,10 @@ const registroPublico = async (req, res) => {
         }
       );
 
-      visitor = {
-        ...driverFrom._doc,
-        name: driverFrom._doc.operator_name,
-      };
+      // visitor = {
+      //   ...driverFrom._doc,
+      //   name: driverFrom._doc.operator_name,
+      // };
     } else {
       const visitorForm = await Visitor.create({
         ...req.body,
@@ -136,15 +136,15 @@ const registroPublico = async (req, res) => {
         );
       }
 
-      visitor = {
-        // ...visitorForm._doc,
-        department: departament.name,
-        visitor_type: visitorType.name,
-      };
+      // visitor = {
+      //   // ...visitorForm._doc,
+      //   department: departament.name,
+      //   visitor_type: visitorType.name,
+      // };
     }
 
-    const data = visitor;
-    console.log(data, "VISITANTE");
+    // const data = visitor;
+    // console.log(data, "VISITANTE");
 
     // const qrData = JSON.stringify(data);
 
@@ -166,6 +166,8 @@ const registroPublico = async (req, res) => {
     //         .json({ err: "Credenciales de servidor invalidas", error: err });
     //     });
     // });
+
+    console.log("CAMION CREADO");
 
     return res.status(201).send({
       status: "success",

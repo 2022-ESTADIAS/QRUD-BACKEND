@@ -7,7 +7,7 @@ const VisitorSchema = Schema({
   },
   email: {
     type: String,
-    required: [true, "El emails es obligatorio"],
+    required: [true, "El email es obligatorio"],
     unique: true,
   },
   created_at: {
@@ -16,28 +16,28 @@ const VisitorSchema = Schema({
   },
   visit_date: {
     type: String,
-    required: [true, "La fecha de visita es requerida"],
+    // required: [true, "La fecha de visita es requerida"],
   },
   visit_company: {
     type: String,
   },
   contact_name: {
     type: String,
-    required: [true, "El contacto es obligatorio"],
+    // required: [true, "El contacto es obligatorio"],
   },
   department_id: {
     type: Types.ObjectId,
     ref: "Department",
-    required: [true, "La referencia del departamento es requerida"],
+    // required: [true, "La referencia del departamento es requerida"],
   },
   enter_device: {
     type: String,
-    required: [true, "El dispositivo es obligatorio"],
+    // required: [true, "El dispositivo es obligatorio"],
   },
   visitor_type_id: {
     type: SchemaTypes.ObjectId,
     ref: "Visitors_type",
-    required: [true, "La referencia del visitante es requerida"],
+    // required: [true, "La referencia del visitante es requerida"],
   },
   reason_id: {
     type: SchemaTypes.ObjectId,
@@ -53,7 +53,28 @@ const VisitorSchema = Schema({
   ine_file_id: {
     type: SchemaTypes.ObjectId,
     ref: "File",
-    // required: [true, "La referencia de la imagen es requerida"],
+  },
+  // DRIVER'S MODEL FIELDS
+
+  image_licence_file_id: {
+    type: SchemaTypes.ObjectId,
+    ref: "File",
+  },
+
+  office_name: {
+    type: String,
+  },
+  office_phone: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  license_number: {
+    type: String,
+  },
+  license_plates: {
+    type: String,
   },
 });
 
