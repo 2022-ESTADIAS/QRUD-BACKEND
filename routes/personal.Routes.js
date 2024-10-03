@@ -84,8 +84,6 @@ router.put(
 
 router.post(
   "/",
-  validarTokens,
-  hasRole(master),
   [
     check("email", "El correo no es válido").isEmail(),
     check("email").custom(emailExistPersonal),
@@ -95,7 +93,6 @@ router.post(
       "password",
       "El password es obligatorio y minimo 8 caracteres"
     ).isLength({ min: 8 }),
-    check("rol", "El rol es requerido").isMongoId(),
     validarCampos,
   ],
   PersonalPost

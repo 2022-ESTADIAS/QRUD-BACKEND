@@ -2,6 +2,7 @@ const bcryptjs = require("bcryptjs");
 const { PwdRgx } = require("../helpers/regex");
 
 const Personal = require("../models/personal.Model");
+const Rol = require("../models/role.Model");
 
 /**
  * @param {request} req
@@ -77,16 +78,21 @@ const PersonalGet = async (req = request, res = response) => {
 const PersonalPost = async (req, res = response) => {
   try {
     const salt = bcryptjs.genSaltSync();
-    const { nombre, telefono, email, password, rol } = req.body;
+    const { nombre, telefono, email, password } = req.body;
+    const rol = await Rol.findOne({
+      rol: "CLIENT_ROLE",
+    });
 
-    if (PwdRgx(password)) {
-      const personal = new Personal({ nombre, telefono, email, password, rol });
-      personal.password = bcryptjs.hashSync(password, salt);
-      await personal.save();
-      return res.status(201).json({ msg: "Personal creado exitosamente" });
-    } else {
-      return res.status(400).json({ msg: "formato incorrecto" });
-    }
+    const personal = new Personal({
+      nombre,
+      telefono,
+      email,
+      password,
+      rol: rol._id,
+    });
+    personal.password = bcryptjs.hashSync(password, salt);
+    await personal.save();
+    return res.status(201).json({ msg: "Personal creado exitosamente" });
   } catch (error) {
     console.log(error, "ERROR PERSONAL");
     return res.status(500).json({ err: "Error de servidor.", error });

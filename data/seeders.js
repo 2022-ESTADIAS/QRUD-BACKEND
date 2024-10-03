@@ -33,6 +33,11 @@ const reasons = [
   { name: "REALIZAR REPARACION O SERVICIO" },
 ];
 
+const roles = [
+  { name: "MASTER_ROLE", description: "master de la app" },
+  { name: "CLIENT_ROLE", description: "cliente de la empresa" },
+];
+
 server.conectarDB();
 
 const importData = async () => {
