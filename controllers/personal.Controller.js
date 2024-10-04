@@ -3,6 +3,7 @@ const { PwdRgx } = require("../helpers/regex");
 
 const Personal = require("../models/personal.Model");
 const Rol = require("../models/role.Model");
+const TruckAssignation = require("../models/mexcal/TruckAssignation");
 
 /**
  * @param {request} req
@@ -200,6 +201,32 @@ const PersonalActive = async (req, res = response) => {
   }
 };
 
+const AssignationTruck = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { drivers } = req.body;
+    const formatData = [];
+
+    console.log(id, "ID");
+    console.log(drivers, "DRIVERS");
+
+    for (const driver of drivers) {
+      formatData.push({
+        client_id: id,
+        visitor_id: driver,
+      });
+    }
+    console.log(formatData, "DATA FORMATEADA");
+
+    await TruckAssignation.insertMany(formatData);
+
+    return res.status(201).json({ msg: "Camiones asignados exitosamente" });
+  } catch (error) {
+    console.log(error, "ERROR BULK TRUCK ASSIGNATION");
+    return res.status(500).json({ err: "Error de servidor.", error });
+  }
+};
+
 module.exports = {
   PersonalGetAll,
   PersonalGet,
@@ -209,4 +236,5 @@ module.exports = {
   PersonalDeletePermanente,
   PersonalGetAllEliminados,
   PersonalActive,
+  AssignationTruck,
 };

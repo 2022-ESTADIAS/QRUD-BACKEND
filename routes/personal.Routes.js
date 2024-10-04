@@ -10,6 +10,7 @@ const {
   PersonalGetAllEliminados,
   PersonalDeletePermanente,
   PersonalActive,
+  AssignationTruck,
 } = require("../controllers/personal.Controller");
 const {
   changePwd,
@@ -26,10 +27,11 @@ const { hasRole } = require("../middlewares/validarRoles");
 const { validarTokens } = require("../middlewares/validarTokens");
 const router = Router();
 
-const { admin, master, aux } = {
+const { admin, master, aux, client } = {
   admin: "ADMIN_ROLE",
   master: "MASTER_ROLE",
   aux: "AUX_ROLE",
+  client: "CLIENT_ROLE",
 };
 
 //=================================INICIOPWD
@@ -134,6 +136,17 @@ router.get(
     validarCampos,
   ],
   PersonalActive
+);
+router.post(
+  "/truck-assignation/:id",
+  validarTokens,
+  hasRole(master),
+  [
+    check("id", "No es un Id válido").isMongoId(),
+    check("id").custom(personalExistID),
+    validarCampos,
+  ],
+  AssignationTruck
 );
 
 module.exports = router;
