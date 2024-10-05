@@ -8,12 +8,20 @@ const ModuleSchema = Schema(
     module_name: {
       type: String,
     },
+    english_name: {
+      type: String,
+    },
+
     routes: [
       {
         name: {
           type: String,
         },
         link: {
+          type: String,
+        },
+
+        english_name: {
           type: String,
         },
       },
