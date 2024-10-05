@@ -15,6 +15,7 @@ class Server {
     this.RoleRoutes = "/rol";
     this.AuthRoutes = "/auth";
     this.PublicRoutes = "/public";
+    this.moduleRoutes = "/module";
     //DB
     this.conectarDB();
     //Middlewares
@@ -44,6 +45,7 @@ class Server {
     this.app.use(this.AuthRoutes, require("../routes/auth.Routes"));
     this.app.use(this.PublicRoutes, require("../routes/public.Routes"));
     this.app.use(this.VisitorsRoutes, require("../routes/visitor.Routes"));
+    this.app.use(this.moduleRoutes, require("../routes/module.Routes"));
   }
 
   listen() {

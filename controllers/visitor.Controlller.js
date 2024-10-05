@@ -3,6 +3,7 @@ const Visitor = require("../models/mexcal/Visitor");
 const es = require("../lang/es.json");
 const en = require("../lang/en.json");
 const TruckAssignation = require("../models/mexcal/TruckAssignation");
+const { default: mongoose } = require("mongoose");
 
 const getAllVisitors = async (req, res) => {
   const serverError =
@@ -93,38 +94,51 @@ const getAllDriversByClientId = async (req, res) => {
     const page = +req.query.pageNumber || 1;
     const pageSize = 10;
 
-    console.log(id, "USER ID");
-
     let count, drivers;
 
     if (req.query.keyword) {
-      count = await TruckAssignation.countDocuments({
-        client_id: id,
+      const clientTrucksIds = [];
+      const visitorsIds = [];
+
+      const clientTrucks = await TruckAssignation.find({
         isActive: true,
-      }).populate({
-        path: "visitor_id",
-        match: {
-          name: {
-            $regex: req.query.keyword,
-            $options: "i",
-          },
+        client_id: id,
+      }).select("visitor_id");
+      for (const client of clientTrucks) {
+        clientTrucksIds.push(client.visitor_id);
+      }
+
+      const visitors = await Visitor.find({
+        _id: {
+          $in: clientTrucksIds,
+        },
+        name: {
+          $regex: req.query.keyword,
+        },
+      }).select("_id");
+      for (const visitor of visitors) {
+        visitorsIds.push(visitor._id);
+      }
+
+      count = await TruckAssignation.countDocuments({
+        isActive: true,
+        client_id: id,
+        visitor_id: {
+          $in: visitorsIds,
         },
       });
 
       drivers = await TruckAssignation.find({
         client_id: id,
         isActive: true,
+        visitor_id: {
+          $in: visitorsIds,
+        },
       })
-        .populate({
-          path: "visitor_id",
-          match: {
-            name: {
-              $regex: req.query.keyword,
-              $options: "i",
-            },
-          },
-        })
-        .select("name license_number license_plates email visit_company phone")
+        .populate(
+          "visitor_id",
+          "name license_number license_plates email visit_company phone"
+        )
         .sort([["_id", "desc"]])
         .limit(pageSize)
         .skip(pageSize * (page - 1));
