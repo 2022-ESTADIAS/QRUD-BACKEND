@@ -14,13 +14,34 @@ const TruckAssignation = require("../models/mexcal/TruckAssignation");
  */
 const PersonalGetAll = async (req, res) => {
   try {
-    let personal = await Personal.find({ isActivo: true }).populate({
-      path: "rol",
+    const page = +req.query.pageNumber || 1;
+    const pageSize = 10;
+    const keyword = req.query.keyword
+      ? {
+          nombre: { $regex: req.query.keyword },
+          isActivo: true,
+        }
+      : {
+          isActivo: true,
+        };
+
+    let personal = await Personal.find({ ...keyword })
+      .sort([["_id", "desc"]])
+      .populate({
+        path: "rol",
+      })
+      .limit(pageSize)
+      .skip(pageSize * (page - 1));
+
+    const count = await Personal.countDocuments({
+      ...keyword,
     });
 
     personal = personal.filter((persona) => persona.rol.rol != "MASTER_ROLE");
 
-    return res.status(200).json({ personal });
+    return res
+      .status(200)
+      .json({ personal, page, pages: Math.ceil(count / pageSize) });
   } catch (error) {
     return res.status(500).json({ err: "Error de servidor.", error });
   }
