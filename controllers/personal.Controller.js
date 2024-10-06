@@ -227,19 +227,56 @@ const AssignationTruck = async (req, res) => {
     const { id } = req.params;
     const { drivers } = req.body;
     const formatData = [];
+    const alreadyAssignedIds = [];
+    let newDrivers = [];
 
-    console.log(id, "ID");
-    console.log(drivers, "DRIVERS");
+    const trucksAlreadyAssigned = await TruckAssignation.find({
+      client_id: id,
+      visitor_id: {
+        $in: drivers,
+      },
+      isActive: true,
+    }).select("_id visitor_id");
 
-    for (const driver of drivers) {
-      formatData.push({
-        client_id: id,
-        visitor_id: driver,
-      });
+    if (trucksAlreadyAssigned.length > 0) {
+      for (const driver of trucksAlreadyAssigned) {
+        const newRegister = drivers.find(
+          (item) => item.toString() !== driver.visitor_id.toString()
+        );
+        if (newRegister) {
+          newDrivers.push(newRegister);
+        }
+
+        alreadyAssignedIds.push(driver._id);
+      }
+
+      await TruckAssignation.updateMany(
+        {
+          client_id: id,
+          _id: {
+            $in: alreadyAssignedIds,
+          },
+        },
+        {
+          isActive: false,
+        }
+      );
+      for (const driver of newDrivers) {
+        formatData.push({
+          client_id: id,
+          visitor_id: driver,
+        });
+      }
+    } else {
+      for (const driver of drivers) {
+        formatData.push({
+          client_id: id,
+          visitor_id: driver,
+        });
+      }
+
+      await TruckAssignation.insertMany(formatData);
     }
-    console.log(formatData, "DATA FORMATEADA");
-
-    await TruckAssignation.insertMany(formatData);
 
     return res.status(201).json({ msg: "Camiones asignados exitosamente" });
   } catch (error) {

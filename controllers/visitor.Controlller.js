@@ -177,9 +177,28 @@ const getAllDriversByClientId = async (req, res) => {
     });
   }
 };
+const getTrucksAssigned = async (req, res) => {
+  try {
+    const trucks = await TruckAssignation.find({
+      client_id: req.params.id,
+      isActive: true,
+    }).select("_id visitor_id");
+
+    return res.status(200).send({
+      trucks,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      err: serverError,
+      error,
+    });
+  }
+};
 
 module.exports = {
   getAllVisitors,
   getAllDrivers,
   getAllDriversByClientId,
+  getTrucksAssigned,
 };

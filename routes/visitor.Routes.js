@@ -4,6 +4,7 @@ const {
   getAllVisitors,
   getAllDrivers,
   getAllDriversByClientId,
+  getTrucksAssigned,
 } = require("../controllers/visitor.Controlller");
 const { hasRole } = require("../middlewares/validarRoles");
 const router = Router();
@@ -18,5 +19,11 @@ const { admin, master, aux, client } = {
 router.get("/", validarTokens, hasRole(master), getAllVisitors);
 router.get("/drivers", validarTokens, getAllDrivers);
 router.get("/trucks", validarTokens, getAllDriversByClientId);
+router.get(
+  "/assigned-trucks/:id",
+  validarTokens,
+  hasRole(master),
+  getTrucksAssigned
+);
 
 module.exports = router;
