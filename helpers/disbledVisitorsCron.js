@@ -1,6 +1,7 @@
 const Driver = require("../models/mexcal/Driver");
 const Visitor = require("../models/mexcal/Visitor");
 const VisitorsTypes = require("../models/mexcal/VisitorTypes");
+const fns = require("date-fns");
 
 const visitorsCron = async () => {
   const visitType = await VisitorsTypes.findOne({
