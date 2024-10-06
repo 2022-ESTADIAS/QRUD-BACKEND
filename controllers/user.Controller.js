@@ -146,39 +146,17 @@ const generarQRuser = async (req, res = response) => {
     req.headers.lang == "es" ? es.serverError : en.serverError;
   try {
     const { id } = req.params;
-    let user = {};
-    let userEmailSent = {};
-    const driver = await Driver.findById(id);
+    const usuario = await Visitor.findById(id);
 
-    if (driver) {
-      user = {
-        _id: driver._doc._id,
-      };
-      userEmailSent = {
-        name: driver?.operator_name,
-        email: driver.email,
-      };
-    } else {
-      const usuario = await Visitor.findById(id);
-
-      user = {
-        _id: usuario._doc._id,
-      };
-      userEmailSent = {
-        name: usuario.name,
-        email: usuario.email,
-      };
-    }
-
-    if (user.isActive == false) {
+    if (usuario.isActive == false) {
       return res.status(404).json({ msg: "usuario no esta activo" });
     }
 
-    const qrUser = JSON.stringify(user);
+    const qrUser = JSON.stringify(usuario._id);
 
     QRCode.toDataURL(qrUser, opt, function (err, url) {
       transport
-        .sendMail(qrEmail(userEmailSent?.email, userEmailSent?.name, url))
+        .sendMail(qrEmail(usuario?.email, usuario?.name, url))
         .then(async (_info) => {
           // usuario.linkqr = url;
           // usuario.qr = true;

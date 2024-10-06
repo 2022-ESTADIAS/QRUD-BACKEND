@@ -97,7 +97,7 @@ const registroPublico = async (req, res) => {
         ...req.body,
         hasVehicle: req.body.hasVehicle == "true" ? true : false,
       });
-      const departament = await Department.findById(req.body.department_id);
+      // const departament = await Department.findById(req.body.department_id);
 
       if (visitorType.name == "Proveedores") {
         const fileName = await uploadFileToAWS(
@@ -243,6 +243,7 @@ const getAllReasons = async (req, res) => {
     return res.status(500).json({ err: serverError, error });
   }
 };
+
 const visitorsEntries = async (req, res) => {
   const serverError =
     req.headers.lang == "es" ? es.serverError : en.serverError;
@@ -299,6 +300,7 @@ const visitorsEntries = async (req, res) => {
   }
 };
 
+//MODIFICAR
 const verifyActiveVisitor = async (req, res) => {
   const accessExpired =
     req.headers.lang == "es" ? es.errorAccess : en.errorAccess;
@@ -309,11 +311,8 @@ const verifyActiveVisitor = async (req, res) => {
       _id: id,
       isActive: true,
     });
-    const driver = await Driver.findOne({
-      _id: id,
-      isActive: true,
-    });
-    if (driver || visitor) {
+
+    if (visitor) {
       return res.status(200).send({
         status: "success",
         message: "visitante valido",
@@ -331,6 +330,7 @@ const verifyActiveVisitor = async (req, res) => {
   }
 };
 
+// MODIFICAR
 const getUserFromQRCode = async (req, res) => {
   const serverError =
     req.headers.lang == "es" ? es.serverError : en.serverError;
@@ -339,27 +339,29 @@ const getUserFromQRCode = async (req, res) => {
   try {
     const { id } = req.params;
     let user = {};
-    // const driver = await Driver.findById(id)
-    const driver = await Driver.findOne({
+    const visitorType = await VisitorsTypes.findOne({
+      name: "Transportistas",
+    });
+
+    const visitor = await Visitor.findOne({
       _id: id,
       isActive: true,
     })
       .populate("ine_file_id", "filename")
       .populate("image_licence_file_id", "filename");
 
-    if (driver) {
+    if (visitor.visitor_type_id.toString() == visitorType._id.toString()) {
       const ine = await getFileFromAWS(
         "mexcal-storage",
-        driver.ine_file_id.filename
+        visitor.ine_file_id.filename
       );
       const license = await getFileFromAWS(
         "mexcal-storage",
-        driver.image_licence_file_id.filename
+        visitor.image_licence_file_id.filename
       );
 
       user = {
-        ...driver._doc,
-        name: driver.operator_name,
+        ...visitor._doc,
         ine_field: ine,
         driver_licence_field: license,
       };
