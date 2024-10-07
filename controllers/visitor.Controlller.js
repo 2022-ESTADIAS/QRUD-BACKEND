@@ -178,6 +178,9 @@ const getAllDriversByClientId = async (req, res) => {
   }
 };
 const getTrucksAssigned = async (req, res) => {
+  const serverError =
+    req.headers.lang == "es" ? es.serverError : en.serverError;
+
   try {
     const trucks = await TruckAssignation.find({
       client_id: req.params.id,

@@ -304,6 +304,9 @@ const visitorsEntries = async (req, res) => {
 const verifyActiveVisitor = async (req, res) => {
   const accessExpired =
     req.headers.lang == "es" ? es.errorAccess : en.errorAccess;
+  const validVisitor =
+    req.headers.lang == "es" ? es.validVisitor : en.validVisitor;
+
   try {
     const { id } = req.params;
 
@@ -315,7 +318,7 @@ const verifyActiveVisitor = async (req, res) => {
     if (visitor) {
       return res.status(200).send({
         status: "success",
-        message: "visitante valido",
+        message: validVisitor,
         access: true,
       });
     } else {
@@ -336,6 +339,10 @@ const getUserFromQRCode = async (req, res) => {
     req.headers.lang == "es" ? es.serverError : en.serverError;
   const qrCodeError =
     req.headers.lang == "es" ? es.invalidQRCode : en.invalidQRCode;
+  const userSuccessfullyRecovered =
+    req.headers.lang == "es"
+      ? es.userSuccessfullyRecovered
+      : en.userSuccessfullyRecovered;
   try {
     const { id } = req.params;
     let user = {};
@@ -392,7 +399,7 @@ const getUserFromQRCode = async (req, res) => {
 
     return res.status(200).send({
       status: "success",
-      message: "usuario recuperado con exito!",
+      message: userSuccessfullyRecovered,
       user,
     });
   } catch (error) {

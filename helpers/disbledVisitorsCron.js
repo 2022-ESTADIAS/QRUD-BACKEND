@@ -7,13 +7,17 @@ const visitorsCron = async () => {
   const visitType = await VisitorsTypes.findOne({
     name: "Proveedores",
   });
+  const visitTypeDriver = await VisitorsTypes.findOne({
+    name: "Transportistas",
+  });
 
   const providers = await Visitor.find({
     isActive: true,
     visitor_type_id: visitType._id,
   });
-  const drivers = await Driver.find({
+  const drivers = await Visitor.find({
     isActive: true,
+    visitor_type_id: visitTypeDriver._id,
   });
 
   for (const provider of providers) {

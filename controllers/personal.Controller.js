@@ -4,6 +4,8 @@ const { PwdRgx } = require("../helpers/regex");
 const Personal = require("../models/personal.Model");
 const Rol = require("../models/role.Model");
 const TruckAssignation = require("../models/mexcal/TruckAssignation");
+const es = require("../lang/es.json");
+const en = require("../lang/en.json");
 
 /**
  * @param {request} req
@@ -98,6 +100,13 @@ const PersonalGet = async (req = request, res = response) => {
  * @description Se realiza la creación de Personal con ciertas validaciones tanto de correo y contraseña.
  */
 const PersonalPost = async (req, res = response) => {
+  const clientCreatedSuccessfully =
+    req.headers.lang == "es"
+      ? es.clientCreatedSuccessfully
+      : en.clientCreatedSuccessfully;
+  const serverError =
+    req.headers.lang == "es" ? es.serverError : en.serverError;
+
   try {
     const salt = bcryptjs.genSaltSync();
     const { nombre, telefono, email, password } = req.body;
@@ -114,10 +123,10 @@ const PersonalPost = async (req, res = response) => {
     });
     personal.password = bcryptjs.hashSync(password, salt);
     await personal.save();
-    return res.status(201).json({ msg: "Personal creado exitosamente" });
+    return res.status(201).json({ msg: clientCreatedSuccessfully });
   } catch (error) {
     console.log(error, "ERROR PERSONAL");
-    return res.status(500).json({ err: "Error de servidor.", error });
+    return res.status(500).json({ err: serverError, error });
   }
 };
 

@@ -11,5 +11,8 @@
   "unableToGenerateQRCode": "No fue posible generar el QR",
   "updatePassword": "Contraseña actualizada correctamente",
   "passwordDoesntMatch": "Las contraseñas no coinciden",
-  "invalidQRCode": "Codigo QR invalido"
+  "invalidQRCode": "Codigo QR invalido",
+  "validVisitor": "visitante Válido",
+  "userSuccessfullyRecovered": "Usuario recuperado con exito!",
+  "clientCreatedSuccessfully": "Cliente creado exitosamente!"
 }
