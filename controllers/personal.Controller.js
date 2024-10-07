@@ -248,15 +248,15 @@ const AssignationTruck = async (req, res) => {
     }).select("_id visitor_id");
 
     if (trucksAlreadyAssigned.length > 0) {
-      for (const driver of trucksAlreadyAssigned) {
-        const newRegister = drivers.find(
-          (item) => item.toString() !== driver.visitor_id.toString()
+      for (const driver of drivers) {
+        const newRegister = trucksAlreadyAssigned.find(
+          (item) => item.visitor_id.toString() == driver.toString()
         );
-        if (newRegister) {
-          newDrivers.push(newRegister);
+        if (!newRegister) {
+          newDrivers.push(driver);
+        } else {
+          alreadyAssignedIds.push(newRegister._id);
         }
-
-        alreadyAssignedIds.push(driver._id);
       }
 
       await TruckAssignation.updateMany(
@@ -283,9 +283,8 @@ const AssignationTruck = async (req, res) => {
           visitor_id: driver,
         });
       }
-
-      await TruckAssignation.insertMany(formatData);
     }
+    await TruckAssignation.insertMany(formatData);
 
     return res.status(201).json({ msg: "Camiones asignados exitosamente" });
   } catch (error) {
