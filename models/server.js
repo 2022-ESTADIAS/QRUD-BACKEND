@@ -16,6 +16,7 @@ class Server {
     this.AuthRoutes = "/auth";
     this.PublicRoutes = "/public";
     this.moduleRoutes = "/module";
+    this.truckRoutes = "/trucks";
     //DB
     this.conectarDB();
     //Middlewares
@@ -46,6 +47,7 @@ class Server {
     this.app.use(this.PublicRoutes, require("../routes/public.Routes"));
     this.app.use(this.VisitorsRoutes, require("../routes/visitor.Routes"));
     this.app.use(this.moduleRoutes, require("../routes/module.Routes"));
+    this.app.use(this.truckRoutes, require("../routes/truck.Routes"));
   }
 
   listen() {

@@ -241,16 +241,16 @@ const AssignationTruck = async (req, res) => {
 
     const trucksAlreadyAssigned = await TruckAssignation.find({
       client_id: id,
-      visitor_id: {
+      truck_id: {
         $in: drivers,
       },
       isActive: true,
-    }).select("_id visitor_id");
+    }).select("_id truck_id");
 
     if (trucksAlreadyAssigned.length > 0) {
       for (const driver of drivers) {
         const newRegister = trucksAlreadyAssigned.find(
-          (item) => item.visitor_id.toString() == driver.toString()
+          (item) => item.truck_id.toString() == driver.toString()
         );
         if (!newRegister) {
           newDrivers.push(driver);
@@ -273,14 +273,14 @@ const AssignationTruck = async (req, res) => {
       for (const driver of newDrivers) {
         formatData.push({
           client_id: id,
-          visitor_id: driver,
+          truck_id: driver,
         });
       }
     } else {
       for (const driver of drivers) {
         formatData.push({
           client_id: id,
-          visitor_id: driver,
+          truck_id: driver,
         });
       }
     }

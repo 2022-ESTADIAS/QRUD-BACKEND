@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "import": "node data/Seeders.js",
+    "import-client": "node data/clients-seeder.js",
     "start": "node app.js"
   },
   "keywords": [],

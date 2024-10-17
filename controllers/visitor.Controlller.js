@@ -4,6 +4,7 @@ const es = require("../lang/es.json");
 const en = require("../lang/en.json");
 const TruckAssignation = require("../models/mexcal/TruckAssignation");
 const { default: mongoose } = require("mongoose");
+const Truck = require("../models/mexcal/Truck");
 
 const getAllVisitors = async (req, res) => {
   const serverError =
@@ -103,12 +104,12 @@ const getAllDriversByClientId = async (req, res) => {
       const clientTrucks = await TruckAssignation.find({
         isActive: true,
         client_id: id,
-      }).select("visitor_id");
+      }).select("truck_id");
       for (const client of clientTrucks) {
-        clientTrucksIds.push(client.visitor_id);
+        clientTrucksIds.push(client.truck_id);
       }
 
-      const visitors = await Visitor.find({
+      const visitors = await Truck.find({
         _id: {
           $in: clientTrucksIds,
         },
@@ -123,7 +124,7 @@ const getAllDriversByClientId = async (req, res) => {
       count = await TruckAssignation.countDocuments({
         isActive: true,
         client_id: id,
-        visitor_id: {
+        truck_id: {
           $in: visitorsIds,
         },
       });
@@ -131,14 +132,11 @@ const getAllDriversByClientId = async (req, res) => {
       drivers = await TruckAssignation.find({
         client_id: id,
         isActive: true,
-        visitor_id: {
+        truck_id: {
           $in: visitorsIds,
         },
       })
-        .populate(
-          "visitor_id",
-          "name license_number license_plates email visit_company phone"
-        )
+        .populate("truck_id", "name email visit_company phone")
         .sort([["_id", "desc"]])
         .limit(pageSize)
         .skip(pageSize * (page - 1));
@@ -152,10 +150,7 @@ const getAllDriversByClientId = async (req, res) => {
         client_id: id,
         isActive: true,
       })
-        .populate(
-          "visitor_id",
-          "name license_number license_plates email visit_company phone"
-        )
+        .populate("truck_id", "name email company")
         .sort([["_id", "desc"]])
         .limit(pageSize)
         .skip(pageSize * (page - 1));
@@ -185,7 +180,7 @@ const getTrucksAssigned = async (req, res) => {
     const trucks = await TruckAssignation.find({
       client_id: req.params.id,
       isActive: true,
-    }).select("_id visitor_id");
+    }).select("_id truck_id");
 
     return res.status(200).send({
       trucks,

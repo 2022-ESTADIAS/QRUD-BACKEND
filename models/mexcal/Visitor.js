@@ -70,12 +70,6 @@ const VisitorSchema = Schema({
   phone: {
     type: String,
   },
-  license_number: {
-    type: String,
-  },
-  license_plates: {
-    type: String,
-  },
 });
 
 VisitorSchema.methods.toJSON = function () {

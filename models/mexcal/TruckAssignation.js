@@ -12,9 +12,9 @@ const TruckAssignationSchema = Schema(
       type: Boolean,
       default: true,
     },
-    visitor_id: {
+    truck_id: {
       type: Types.ObjectId,
-      ref: "Visitor",
+      ref: "Truck",
       required: [true, "La referencia del visitante es requerida"],
     },
   },
