@@ -150,7 +150,7 @@ const getAllDriversByClientId = async (req, res) => {
         client_id: id,
         isActive: true,
       })
-        .populate("truck_id", "name email company")
+        .populate("truck_id")
         .sort([["_id", "desc"]])
         .limit(pageSize)
         .skip(pageSize * (page - 1));

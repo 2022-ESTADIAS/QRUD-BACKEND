@@ -1,6 +1,19 @@
 const es = require("../lang/es.json");
 const en = require("../lang/en.json");
 const Truck = require("../models/mexcal/Truck");
+const QRCode = require("qrcode");
+const { qrEmail, transport } = require("../helpers/qrEmail");
+
+const opt = {
+  errorCorrectionLevel: "L",
+  width: 300,
+  scale: 1,
+
+  // color: {
+  //   // dark: '#593e73 ',  // Blue dots
+  // //   light: '#ffffff' // Transparent background
+  // }
+};
 
 const createTruck = async (req, res) => {
   const serverError =
@@ -161,10 +174,78 @@ const deleteTruck = async (req, res) => {
   }
 };
 
+const generateTruckQR = async (req, res) => {
+  const serverError =
+    req.headers.lang == "es" ? es.serverError : en.serverError;
+  const sendingEmail =
+    req.headers.lang == "es" ? es.qrCodeSentToEmail : en.qrCodeSentToEmail;
+  const sendingEmailError =
+    req.headers.lang == "es"
+      ? es.unableToGenerateQRCode
+      : en.unableToGenerateQRCode;
+
+  try {
+    const usuario = await Truck.findById(req.params.id);
+
+    const qrUser = JSON.stringify(usuario._id);
+
+    QRCode.toDataURL(qrUser, opt, function (err, url) {
+      transport
+        .sendMail(qrEmail(usuario?.email, usuario?.name, url))
+        .then(async (_info) => {
+          return res.status(200).send({
+            status: "success",
+            msg: sendingEmail,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.status(500).json({ err: sendingEmailError, error: err });
+        });
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      err: serverError,
+      error,
+    });
+  }
+};
+
+const getTruckFromQR = async (req, res) => {
+  const serverError =
+    req.headers.lang == "es" ? es.serverError : en.serverError;
+  try {
+    const truck = await Truck.findOne({
+      _id: req.params.id,
+      isActive: true,
+    });
+
+    if (!truck) {
+      return res.status(400).send({
+        message: "El camión no existe",
+      });
+    }
+
+    return res.status(200).send({
+      message: "Camion encontrado",
+      truck,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      err: serverError,
+      error,
+    });
+  }
+};
+
 module.exports = {
   createTruck,
   getAllTrucks,
   getOneTruck,
   updateTruck,
   deleteTruck,
+  generateTruckQR,
+  getTruckFromQR,
 };
