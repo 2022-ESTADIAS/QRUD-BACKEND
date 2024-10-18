@@ -227,9 +227,14 @@ const getTruckFromQR = async (req, res) => {
       });
     }
 
-    return res.status(200).send({
-      message: "Camion encontrado",
-      truck,
+    const qrUser = JSON.stringify(truck._id);
+
+    QRCode.toDataURL(qrUser, opt, function (err, url) {
+      return res.status(200).send({
+        message: "Camion encontrado",
+        truck,
+        qr: url,
+      });
     });
   } catch (error) {
     console.log(error);
