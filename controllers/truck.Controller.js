@@ -19,10 +19,11 @@ const createTruck = async (req, res) => {
   const serverError =
     req.headers.lang == "es" ? es.serverError : en.serverError;
   try {
-    await Truck.create(req.body);
+    const truck = await Truck.create(req.body);
 
     return res.status(201).send({
       message: "Camión creado con exito",
+      truck,
     });
   } catch (error) {
     console.log(error);
@@ -40,7 +41,7 @@ const getAllTrucks = async (req, res) => {
   const keyword = req.query.keyword
     ? {
         // name: { $regex: req.query.keyword, $options: "i" },
-        name: { $regex: req.query.keyword },
+        vin: { $regex: req.query.keyword },
         isActive: true,
       }
     : {
