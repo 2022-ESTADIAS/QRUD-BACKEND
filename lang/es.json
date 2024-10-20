@@ -14,5 +14,10 @@
   "invalidQRCode": "Codigo QR invalido",
   "validVisitor": "visitante Válido",
   "userSuccessfullyRecovered": "Usuario recuperado con exito!",
-  "clientCreatedSuccessfully": "Cliente creado exitosamente!"
+  "clientCreatedSuccessfully": "Cliente creado exitosamente!",
+  "truckCreatedSuccessfully": "Camión creado con exito!",
+  "truckNotFound": "El camión no existe",
+  "emailAlreadyInUsed": "El correo ya esta en uso",
+  "truckUpdatedSuccessfully": "Camion actualizado con exito!",
+  "truckDeletedSuccessfully": "Camion eliminado con exito!"
 }

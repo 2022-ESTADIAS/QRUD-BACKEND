@@ -18,11 +18,16 @@ const opt = {
 const createTruck = async (req, res) => {
   const serverError =
     req.headers.lang == "es" ? es.serverError : en.serverError;
+  const truckCreatedSuccessfully =
+    req.headers.lang == "es"
+      ? es.truckCreatedSuccessfully
+      : en.truckCreatedSuccessfully;
+
   try {
     const truck = await Truck.create(req.body);
 
     return res.status(201).send({
-      message: "Camión creado con exito",
+      message: truckCreatedSuccessfully,
       truck,
     });
   } catch (error) {
@@ -76,6 +81,8 @@ const getAllTrucks = async (req, res) => {
 const getOneTruck = async (req, res) => {
   const serverError =
     req.headers.lang == "es" ? es.serverError : en.serverError;
+  const trucknotFound =
+    req.headers.lang == "es" ? es.truckNotFound : en.truckNotFound;
   try {
     const truck = await Truck.findOne({
       _id: req.params.id,
@@ -84,7 +91,7 @@ const getOneTruck = async (req, res) => {
 
     if (!truck) {
       return res.status(400).send({
-        message: "El camión no existe",
+        message: trucknotFound,
       });
     }
 
@@ -103,6 +110,14 @@ const getOneTruck = async (req, res) => {
 const updateTruck = async (req, res) => {
   const serverError =
     req.headers.lang == "es" ? es.serverError : en.serverError;
+  const trucknotFound =
+    req.headers.lang == "es" ? es.truckNotFound : en.truckNotFound;
+  const emailAlreadyInUsed =
+    req.headers.lang == "es" ? es.emailAlreadyInUsed : en.emailAlreadyInUsed;
+  const truckUpdatedSuccessfully =
+    req.headers.lang == "es"
+      ? es.truckUpdatedSuccessfully
+      : en.truckUpdatedSuccessfully;
   try {
     const truck = await Truck.findById(req.params.id);
     const truckEmailValidation = await Truck.find({
@@ -114,7 +129,7 @@ const updateTruck = async (req, res) => {
       truckEmailValidation._id.toString() !== truck._id.toString()
     ) {
       return res.status(400).send({
-        message: "El correo ya esta en uso",
+        message: emailAlreadyInUsed,
       });
     }
 
@@ -128,12 +143,12 @@ const updateTruck = async (req, res) => {
 
     if (!truck) {
       return res.status(400).send({
-        message: "El camión no existe",
+        message: trucknotFound,
       });
     }
 
     return res.status(200).send({
-      message: "Camion actualizado con exito!",
+      message: truckUpdatedSuccessfully,
     });
   } catch (error) {
     console.log(error);
@@ -146,6 +161,12 @@ const updateTruck = async (req, res) => {
 const deleteTruck = async (req, res) => {
   const serverError =
     req.headers.lang == "es" ? es.serverError : en.serverError;
+  const trucknotFound =
+    req.headers.lang == "es" ? es.truckNotFound : en.truckNotFound;
+  const truckDeletedSuccessfully =
+    req.headers.lang == "es"
+      ? es.truckDeletedSuccessfully
+      : en.truckDeletedSuccessfully;
   try {
     const truck = await Truck.findOneAndUpdate(
       {
@@ -159,12 +180,12 @@ const deleteTruck = async (req, res) => {
 
     if (!truck) {
       return res.status(400).send({
-        message: "El camión no existe",
+        message: trucknotFound,
       });
     }
 
     return res.status(200).send({
-      message: "Camion eliminado con exito!",
+      message: truckDeletedSuccessfully,
     });
   } catch (error) {
     console.log(error);
@@ -216,6 +237,8 @@ const generateTruckQR = async (req, res) => {
 const getTruckFromQR = async (req, res) => {
   const serverError =
     req.headers.lang == "es" ? es.serverError : en.serverError;
+  const trucknotFound =
+    req.headers.lang == "es" ? es.truckNotFound : en.truckNotFound;
   try {
     const truck = await Truck.findOne({
       _id: req.params.id,
@@ -224,7 +247,7 @@ const getTruckFromQR = async (req, res) => {
 
     if (!truck) {
       return res.status(400).send({
-        message: "El camión no existe",
+        message: trucknotFound,
       });
     }
 

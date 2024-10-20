@@ -14,5 +14,10 @@
   "invalidQRCode": "Invalid QR Code",
   "validVisitor": "Valid Visitor",
   "userSuccessfullyRecovered": "User successfully recovered!",
-  "clientCreatedSuccessfully": "Client created successfully!"
+  "clientCreatedSuccessfully": "Client created successfully!",
+  "truckCreatedSuccessfully": "Truck created successfully!",
+  "truckNotFound": "truck not found",
+  "emailAlreadyInUsed": "Email already in used",
+  "truckUpdatedSuccessfully": "Truck updated successfully!",
+  "truckDeletedSuccessfully": "Truck deleted successfully!"
 }
