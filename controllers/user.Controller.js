@@ -156,7 +156,7 @@ const generarQRuser = async (req, res = response) => {
 
     QRCode.toDataURL(qrUser, opt, function (err, url) {
       transport
-        .sendMail(qrEmail(usuario?.email, usuario?.name, url))
+        .sendMail(qrEmail(usuario?.email, usuario?.name, url, req.headers.lang))
         .then(async (_info) => {
           // usuario.linkqr = url;
           // usuario.qr = true;

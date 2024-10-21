@@ -1,0 +1,13 @@
+{
+  "qrGenerating": "Generating QR",
+  "welcome": "Welcome",
+  "templateDescription": "Welcome to our MexCal Truckline data system, scan the QR code to verify your data.",
+  "emailDescription": "Welcome user to the MexCal Truckline system we give you the QR code you have requested",
+  "changePasswordEmail": "Changing password",
+  "changePasswordNotification": "Password change notification",
+  "changePasswordDescription": "To reset your QRUD password, click on the link below",
+  "changePasswordLink": "Link.",
+  "changePasswordPD": "If you don't want to reset your password, you can ignore this message; someone probably typed your username or email address by mistake.",
+  "changePasswordThanks": "¡Thanks!",
+  "changePasswordRequest": "Password change request"
+}

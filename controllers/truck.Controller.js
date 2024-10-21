@@ -223,7 +223,7 @@ const generateTruckQR = async (req, res) => {
 
     QRCode.toDataURL(qrUser, opt, function (err, url) {
       transport
-        .sendMail(qrEmail(usuario?.email, usuario?.name, url))
+        .sendMail(qrEmail(usuario?.email, usuario?.name, url, req.headers.lang))
         .then(async (_info) => {
           return res.status(200).send({
             status: "success",

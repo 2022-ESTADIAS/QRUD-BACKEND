@@ -97,9 +97,11 @@ const forgotPwd = async (req, res) => {
     //TODO: RENOVAR ENLACE
     const link = `${process.env.FRONTEND_HOST}/#/personal/email-pwd?token=${resetToken}&id=${user.id}`;
 
-    transport.sendMail(passwordEmail(email, link)).then((_info) => {
-      res.status(200).json({ msg: emailSentSuccessfully });
-    });
+    transport
+      .sendMail(passwordEmail(email, link, req.headers.lang))
+      .then((_info) => {
+        res.status(200).json({ msg: emailSentSuccessfully });
+      });
   } catch (error) {
     return res.status(500).json({ err: serverError, error });
   }
