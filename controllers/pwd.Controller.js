@@ -60,12 +60,21 @@ const changePwd = async (req, res) => {
  * Si este no existe, manda error "Usuario no encontrado".
  */
 const forgotPwd = async (req, res) => {
+  const serverError =
+    req.headers.lang == "es" ? es.serverError : en.serverError;
+  const userNotFound =
+    req.headers.lang == "es" ? es.userNotFound : en.userNotFound;
+  const emailSentSuccessfully =
+    req.headers.lang == "es"
+      ? es.emailSentSuccessfully
+      : en.emailSentSuccessfully;
+
   try {
     const { email } = req.body;
     const user = await Personal.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({ msg: "usuario no encontrado" });
+      return res.status(404).json({ msg: userNotFound });
     }
 
     let token = await Token.findOne({ userId: user.id });
@@ -89,10 +98,10 @@ const forgotPwd = async (req, res) => {
     const link = `${process.env.FRONTEND_HOST}/#/personal/email-pwd?token=${resetToken}&id=${user.id}`;
 
     transport.sendMail(passwordEmail(email, link)).then((_info) => {
-      res.status(200).json({ msg: "Correo enviado exitosamente" });
+      res.status(200).json({ msg: emailSentSuccessfully });
     });
   } catch (error) {
-    return res.status(500).json({ err: "Error de servidor.", error });
+    return res.status(500).json({ err: serverError, error });
   }
 };
 

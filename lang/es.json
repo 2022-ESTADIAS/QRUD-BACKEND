@@ -19,5 +19,7 @@
   "truckNotFound": "El camión no existe",
   "emailAlreadyInUsed": "El correo ya esta en uso",
   "truckUpdatedSuccessfully": "Camion actualizado con exito!",
-  "truckDeletedSuccessfully": "Camion eliminado con exito!"
+  "truckDeletedSuccessfully": "Camion eliminado con exito!",
+  "userNotFound": "usuario no encontrado",
+  "emailSentSuccessfully": "Correo enviado exitosamente"
 }

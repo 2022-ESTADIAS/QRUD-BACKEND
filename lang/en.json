@@ -19,5 +19,7 @@
   "truckNotFound": "truck not found",
   "emailAlreadyInUsed": "Email already in used",
   "truckUpdatedSuccessfully": "Truck updated successfully!",
-  "truckDeletedSuccessfully": "Truck deleted successfully!"
+  "truckDeletedSuccessfully": "Truck deleted successfully!",
+  "userNotFound": "User not found",
+  "emailSentSuccessfully": "Email sent successfully!"
 }
