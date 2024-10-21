@@ -21,5 +21,10 @@
   "truckUpdatedSuccessfully": "Truck updated successfully!",
   "truckDeletedSuccessfully": "Truck deleted successfully!",
   "userNotFound": "User not found",
-  "emailSentSuccessfully": "Email sent successfully!"
+  "emailSentSuccessfully": "Email sent successfully!",
+  "forgotPasswordTokenValidation": "invalid or expired token",
+  "forgotPasswordInvalidToken": "token does not match",
+  "forgotPasswordChangeSuccessfully": "Password has been changed successfully.",
+  "forgotPasswordNotMatch": "passwords do not match",
+  "forgotPasswordInvalidFormat": "incorrect format"
 }

@@ -114,6 +114,29 @@ const forgotPwd = async (req, res) => {
  * Minimo 8 caracteres, 1 mayuscula, 1 minuscula, 1 simbolo y un numero.
  */
 const forgotPwd2 = async (req, res = response) => {
+  const serverError =
+    req.headers.lang == "es" ? es.serverError : en.serverError;
+  const forgotPasswordTokenValidation =
+    req.headers.lang == "es"
+      ? es.forgotPasswordTokenValidation
+      : en.forgotPasswordTokenValidation;
+  const forgotPasswordInvalidToken =
+    req.headers.lang == "es"
+      ? es.forgotPasswordInvalidToken
+      : en.forgotPasswordInvalidToken;
+  const forgotPasswordChangeSuccessfully =
+    req.headers.lang == "es"
+      ? es.forgotPasswordChangeSuccessfully
+      : en.forgotPasswordChangeSuccessfully;
+  const forgotPasswordNotMatch =
+    req.headers.lang == "es"
+      ? es.forgotPasswordNotMatch
+      : en.forgotPasswordNotMatch;
+  const forgotPasswordInvalidFormat =
+    req.headers.lang == "es"
+      ? es.forgotPasswordInvalidFormat
+      : en.forgotPasswordInvalidFormat;
+
   try {
     const salt = bcryptjs.genSaltSync();
 
@@ -125,13 +148,13 @@ const forgotPwd2 = async (req, res = response) => {
     const tokenID = passwordResetToken.id;
 
     if (!passwordResetToken) {
-      return res.status(404).json({ msg: "token invalido o expirado" });
+      return res.status(404).json({ msg: forgotPasswordTokenValidation });
     }
 
     const isValid = await bcryptjs.compare(token, passwordResetToken.token);
 
     if (!isValid) {
-      return res.status(400).json({ msg: "token no coincide" });
+      return res.status(400).json({ msg: forgotPasswordInvalidToken });
     } else {
       if (PwdRgx(newpwd) && PwdRgx(again)) {
         if (newpwd == again) {
@@ -145,16 +168,17 @@ const forgotPwd2 = async (req, res = response) => {
 
           return res
             .status(200)
-            .json({ msg: "Se ha cambiado la contraseña correctamente." });
+            .json({ msg: forgotPasswordChangeSuccessfully });
         } else {
-          return res.status(400).json({ msg: "las contraseñas no coinciden" });
+          return res.status(400).json({ msg: forgotPasswordNotMatch });
         }
       } else {
-        return res.status(400).json({ msg: "formato incorrecto" });
+        return res.status(400).json({ msg: forgotPasswordInvalidFormat });
       }
     }
   } catch (error) {
-    return res.status(500).json({ err: "Error de servidor.", error });
+    console.log(error, "error");
+    return res.status(500).json({ err: serverError, error });
   }
 };
 
