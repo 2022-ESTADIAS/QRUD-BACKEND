@@ -8,11 +8,21 @@ const opt = {
   errorCorrectionLevel: "L",
   width: 300,
   scale: 1,
+  color: {
+    // //opt 1
+    // dark: "#0a486d", // Blue dots
+    // light: "#a5cc0f", // Transparent background
 
-  // color: {
-  //   // dark: '#593e73 ',  // Blue dots
-  // //   light: '#ffffff' // Transparent background
-  // }
+    //opt 2
+    // dark: "#a5cc0f", // Blue dots
+    // light: "#0a486d", // Transparent background
+
+    //opt 3
+    // dark: "#a5cc0f", // Blue dots
+
+    // opt 4
+    dark: "#0a486d", // Blue dots
+  },
 };
 
 const createTruck = async (req, res) => {

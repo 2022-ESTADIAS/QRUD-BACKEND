@@ -86,7 +86,7 @@ const forgotPwd = async (req, res) => {
       createdAt: Date.now(),
     }).save();
     //TODO: RENOVAR ENLACE
-    const link = `https://qrud.proyectosalm.com/#/personal/email-pwd?token=${resetToken}&id=${user.id}`;
+    const link = `${process.env.FRONTEND_HOST}/#/personal/email-pwd?token=${resetToken}&id=${user.id}`;
 
     transport.sendMail(passwordEmail(email, link)).then((_info) => {
       res.status(200).json({ msg: "Correo enviado exitosamente" });
