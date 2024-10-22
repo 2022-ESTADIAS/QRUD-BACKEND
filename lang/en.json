@@ -26,5 +26,7 @@
   "forgotPasswordInvalidToken": "token does not match",
   "forgotPasswordChangeSuccessfully": "Password has been changed successfully.",
   "forgotPasswordNotMatch": "passwords do not match",
-  "forgotPasswordInvalidFormat": "incorrect format"
+  "forgotPasswordInvalidFormat": "incorrect format",
+  "deleteVisitorSucccessfully": "Visitor successfully deleted",
+  "deleteVisitorNotFound": "The visitor does not exist"
 }

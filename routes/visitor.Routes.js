@@ -5,6 +5,7 @@ const {
   getAllDrivers,
   getAllDriversByClientId,
   getTrucksAssigned,
+  deleteVisitor,
 } = require("../controllers/visitor.Controlller");
 const { hasRole } = require("../middlewares/validarRoles");
 const router = Router();
@@ -17,6 +18,7 @@ const { admin, master, aux, client } = {
 };
 
 router.get("/", validarTokens, hasRole(master), getAllVisitors);
+router.delete("/:id", validarTokens, hasRole(master), deleteVisitor);
 router.get("/drivers", validarTokens, getAllDrivers);
 router.get("/trucks", validarTokens, getAllDriversByClientId);
 router.get(

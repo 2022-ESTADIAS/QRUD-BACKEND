@@ -194,9 +194,47 @@ const getTrucksAssigned = async (req, res) => {
   }
 };
 
+const deleteVisitor = async (req, res) => {
+  const serverError =
+    req.headers.lang == "es" ? es.serverError : en.serverError;
+  const deleteVisitorSucccessfully =
+    req.headers.lang == "es"
+      ? es.deleteVisitorSucccessfully
+      : en.deleteVisitorSucccessfully;
+  const deleteVisitorNotFound =
+    req.headers.lang == "es"
+      ? es.deleteVisitorNotFound
+      : en.deleteVisitorNotFound;
+  try {
+    const visitor = await Visitor.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        isActive: true,
+      },
+      {
+        isActive: false,
+      }
+    );
+
+    if (!visitor) {
+      throw new Error(deleteVisitorNotFound);
+    }
+    return res.status(200).send({
+      message: deleteVisitorSucccessfully,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      err: serverError,
+      error,
+    });
+  }
+};
+
 module.exports = {
   getAllVisitors,
   getAllDrivers,
   getAllDriversByClientId,
   getTrucksAssigned,
+  deleteVisitor,
 };

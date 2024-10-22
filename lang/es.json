@@ -26,5 +26,7 @@
   "forgotPasswordInvalidToken": "token no coincide",
   "forgotPasswordChangeSuccessfully": "Se ha cambiado la contraseña correctamente.",
   "forgotPasswordNotMatch": "las contraseñas no coinciden",
-  "forgotPasswordInvalidFormat": "formato incorrecto"
+  "forgotPasswordInvalidFormat": "formato incorrecto",
+  "deleteVisitorSucccessfully": "Visitante eliminado con exito",
+  "deleteVisitorNotFound": "El visitante no exite"
 }
