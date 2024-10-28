@@ -63,12 +63,12 @@ const registroPublico = async (req, res) => {
     if (visitorType?.name == "Transportistas") {
       const driverFrom = await Visitor.create(req.body);
       const fileNameINE = await uploadFileToAWS(
-        "mexcal-storage",
+        "mexcal-storage2",
         "transportistas",
         req.files.ine_field[0]
       );
       const fileNameLicense = await uploadFileToAWS(
-        "mexcal-storage",
+        "mexcal-storage2",
         "transportistas",
         req.files.driver_licence_field[0]
       );
@@ -101,7 +101,7 @@ const registroPublico = async (req, res) => {
 
       if (visitorType.name == "Proveedores") {
         const fileName = await uploadFileToAWS(
-          "mexcal-storage",
+          "mexcal-storage2",
           "proveedores",
           req.files.ine_field[0]
         );
@@ -118,11 +118,11 @@ const registroPublico = async (req, res) => {
         );
       } else {
         const fileName = await uploadFileToAWS(
-          "mexcal-storage",
+          "mexcal-storage2",
           "visitantes",
           req.files.ine_field[0]
         );
-        // await getFileFromAWS("mexcal-storage", fileName);
+        // await getFileFromAWS("mexcal-storage2", fileName);
 
         const fileReference = await File.create({
           filename: fileName,
@@ -359,11 +359,11 @@ const getUserFromQRCode = async (req, res) => {
 
     if (visitor.visitor_type_id.toString() == visitorType._id.toString()) {
       const ine = await getFileFromAWS(
-        "mexcal-storage",
+        "mexcal-storage2",
         visitor.ine_file_id.filename
       );
       const license = await getFileFromAWS(
-        "mexcal-storage",
+        "mexcal-storage2",
         visitor.image_licence_file_id.filename
       );
 
@@ -386,7 +386,7 @@ const getUserFromQRCode = async (req, res) => {
         throw new Error(qrCodeError);
       }
       const ine = await getFileFromAWS(
-        "mexcal-storage",
+        "mexcal-storage2",
         usuario.ine_file_id.filename
       );
       user = {
