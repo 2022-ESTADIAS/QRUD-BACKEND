@@ -159,8 +159,10 @@ const generarQRuser = async (req, res = response) => {
         .sendMail(qrEmail(usuario?.email, usuario?.name, url, req.headers.lang))
         .then(async (_info) => {
           // usuario.linkqr = url;
-          // usuario.qr = true;
-          // await usuario.save();
+
+          usuario.isQrGenerated = true;
+          await usuario.save();
+
           //Ocupar para debug
           // console.log(info.response)
           return res.status(200).send({

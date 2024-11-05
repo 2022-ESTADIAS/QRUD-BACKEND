@@ -54,6 +54,12 @@ const VisitorSchema = Schema({
     type: SchemaTypes.ObjectId,
     ref: "File",
   },
+
+  isQrGenerated: {
+    type: Boolean,
+    default: false,
+  },
+
   // DRIVER'S MODEL FIELDS
 
   image_licence_file_id: {

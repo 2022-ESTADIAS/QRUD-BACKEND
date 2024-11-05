@@ -16,9 +16,11 @@ const getAllVisitors = async (req, res) => {
         // name: { $regex: req.query.keyword, $options: "i" },
         name: { $regex: req.query.keyword },
         isActive: true,
+        isQrGenerated: false,
       }
     : {
         isActive: true,
+        isQrGenerated: false,
       };
   try {
     const count = await Visitor.countDocuments({
@@ -29,6 +31,7 @@ const getAllVisitors = async (req, res) => {
     })
       .sort([["_id", "desc"]])
       .populate("visitor_type_id", "name")
+      .populate("department_id", "name")
       .limit(pageSize)
       .skip(pageSize * (page - 1));
 
