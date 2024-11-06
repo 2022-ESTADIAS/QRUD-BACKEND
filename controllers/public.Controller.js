@@ -60,6 +60,15 @@ const registroPublico = async (req, res) => {
     const visitorType = await VisitorsTypes.findById(req.body.visitor_type_id);
     let visitor = {};
 
+    const emailExists = await Visitor.findOne({
+      isActive: true,
+      email: req.body.email,
+    });
+
+    if (emailExists) {
+      throw new Error("el email ya fue registrado");
+    }
+
     if (visitorType?.name == "Transportistas") {
       const driverFrom = await Visitor.create(req.body);
       const fileNameINE = await uploadFileToAWS(
